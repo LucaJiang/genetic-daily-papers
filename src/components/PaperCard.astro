@@ -57,7 +57,8 @@ const number = String(index).padStart(2, '0');
         src={figureSrc}
         data-fallback={figure.url}
         alt={figure.alt}
-        loading="lazy"
+        loading="eager"
+        fetchpriority={index <= 2 ? 'high' : 'auto'}
         decoding="async"
         onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback}else{this.hidden=true;this.parentElement.classList.add('is-missing')}"
       />
