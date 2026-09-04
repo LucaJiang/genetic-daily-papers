@@ -1,16 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-const entries = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
+const entries = (await getCollection('daily'))
+  .filter((entry) => entry.data.papers.length > 0)
+  .sort((a, b) => +b.data.date - +a.data.date);
 const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
 }).format(date);
 ---
 <Base title="Archive · Genetic Daily Papers">
-  <section class="hero">
+  <section class="hero hero--v4">
     <div class="eyebrow">Archive</div>
     <h1>历史日报</h1>
-    <p>按日期回看论文筛选、资源更新和算法加速观察。每一期都保留当时的版本日期与编辑判断。</p>
+    <p>按日期回看论文摘要、详细解读、数据发布与算法加速内容。</p>
   </section>
   <div class="archive-grid">
     {entries.map((entry) => (
@@ -18,7 +20,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
         <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
         <h2>{entry.data.title}</h2>
         <p>{entry.data.summary}</p>
-        <div class="topic-card__footer"><span>{entry.data.papers.length} 篇精读</span><span>打开 →</span></div>
+        <div class="topic-card__footer"><span>{entry.data.papers.length} 篇</span><span>打开 →</span></div>
       </a>
     ))}
   </div>
