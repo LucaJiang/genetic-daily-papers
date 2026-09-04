@@ -1,46 +1,76 @@
 ---
 import '../styles/global.css';
+
 const {
   title = 'Genetic Daily Papers',
-  description = '面向统计遗传学、单细胞计算基因组学与科研计算方法的每日论文雷达。'
+  description = '面向统计遗传学、单细胞计算方法与算法加速的每日论文雷达。',
 } = Astro.props;
+
 const path = Astro.url.pathname;
-const nav = [
+const navItems = [
   ['/', 'Today'],
-  ['/archive', 'Archive'],
-  ['/topics', 'Topics'],
-  ['/resources', 'Resources']
+  ['/archive/', 'Archive'],
+  ['/topics/', 'Topics'],
+  ['/resources/', 'Resources'],
 ];
+const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
 ---
+<!doctype html>
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#07111f" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="theme-color" content="#071522" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <title>{title}</title>
+    <script is:inline>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true,
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        },
+      };
+    </script>
+    <script is:inline async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
   </head>
   <body>
-    <header class="site-header">
-      <div class="wrap header-inner">
-        <a class="brand" href="/" aria-label="Genetic Daily Papers home">
-          <span class="brand-mark">G</span>
-          <span><strong>Genetic Daily Papers</strong><small>Computational Genomics Radar</small></span>
-        </a>
-        <nav aria-label="Primary navigation">
-          {nav.map(([href, label]) => (
-            <a href={href} class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}>{label}</a>
-          ))}
-        </nav>
-      </div>
-    </header>
-    <main class="wrap"><slot /></main>
-    <footer class="site-footer">
-      <div class="wrap footer-inner">
-        <span>Curated for statistical genetics, single-cell genomics, computational methods and research resources.</span>
-        <span>Preprints are not peer reviewed.</span>
-      </div>
-    </footer>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="wrap site-header__inner">
+          <a class="brand" href="/" aria-label="Genetic Daily Papers 首页">
+            <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span>
+              <strong>Genetic Daily Papers</strong>
+              <small>METHODS · GENETICS · SINGLE CELL</small>
+            </span>
+          </a>
+          <nav class="main-nav" aria-label="主导航">
+            {navItems.map(([href, label]) => (
+              <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+            ))}
+          </nav>
+        </div>
+      </header>
+      <main class="wrap main-content"><slot /></main>
+      <footer class="site-footer">
+        <div class="wrap site-footer__inner">
+          <div>
+            <strong>Genetic Daily Papers</strong>
+            <p>以统计推断、实验设计与计算可复现性为中心的论文筛选和技术解读。</p>
+          </div>
+          <div class="site-footer__links">
+            <a href="/archive/">历史归档</a>
+            <a href="/topics/">研究主题</a>
+            <a href="/resources/">资源监测</a>
+          </div>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
