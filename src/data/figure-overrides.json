@@ -1,0 +1,196 @@
+{
+  "cigma-cell-type-specific-eqtl": [
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10577-6/MediaObjects/41586_2026_10577_Fig3_HTML.png",
+      "alt": "OneK1K real-data results from CIGMA, including cis and trans eQTL variance components, cell-type-specific eGenes and examples at CTLA4 and SMDT1",
+      "kind": "real-data",
+      "label": "真实数据：OneK1K 中的共享与细胞类型特异 eQTL（Figure 3）",
+      "caption": "先看 a：cis 调控以共享成分为主，而 trans 调控的细胞类型特异成分更高；b 给出 10,288 个基因的检验结果；c、d 展示 CTLA4 和 SMDT1 的具体方差分解；e、f 分别说明调控距离与跨细胞类型相关性。",
+      "credit": "Chen et al., Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10577-6/figures/3",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10577-6/MediaObjects/41586_2026_10577_Fig4_HTML.png",
+      "alt": "Real-data associations between CIGMA eQTL specificity, gene constraint, enhancer number, network connectivity and complex-trait heritability enrichment",
+      "kind": "real-data",
+      "label": "真实数据：eQTL 特异性与基因特征及复杂性状遗传力（Figure 4）",
+      "caption": "a 比较 eQTL 特异性与 LOEUF、增强子数量和共表达网络连接度；b 显示高细胞类型特异性的基因在血液相关性状中的遗传力富集；c 汇总随特异性变化的功能通路。",
+      "credit": "Chen et al., Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10577-6/figures/4",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10577-6/MediaObjects/41586_2026_10577_Fig1_HTML.png",
+      "alt": "CIGMA workflow from donor-by-cell-type pseudobulk expression to shared and cell-type-specific eQTL variance components",
+      "kind": "workflow",
+      "label": "方法流程（Figure 1）",
+      "caption": "输入是 donor × cell type 的 pseudobulk 表达和配对基因型。模型把每个变异效应分成跨细胞类型共享项和细胞类型特异项，再在基因层面汇总为共享与特异遗传方差。",
+      "credit": "Chen et al., Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10577-6/figures/1",
+      "license": "原图未修改"
+    }
+  ],
+  "rare-variant-nonadditivity": [
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41467-026-76151-w/MediaObjects/41467_2026_76151_Fig2_HTML.png",
+      "alt": "UK Biobank real-data results showing nonlinear gene dosage effects on plasma proteins",
+      "kind": "real-data",
+      "label": "真实数据：蛋白水平的非线性基因剂量效应（Figure 2）",
+      "caption": "重点比较杂合携带者与双等位基因携带者的观测效应是否符合加性直线。偏离加性并不只表现为完全隐性，也可表现为部分隐性或其他非线性剂量关系。",
+      "credit": "Lassen et al., Nature Communications (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41467-026-76151-w/figures/2",
+      "license": "CC BY 4.0，原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41467-026-76151-w/MediaObjects/41467_2026_76151_Fig1_HTML.png",
+      "alt": "Orthogonal allelic recoding framework for additive and nonadditive rare-variant effects",
+      "kind": "workflow",
+      "label": "方法：正交遗传编码（Figure 1）",
+      "caption": "保留 0、1、2 剂量的加性编码，同时构造一个与截距和加性编码正交的第二变量，用于检验无法由线性剂量关系解释的效应。",
+      "credit": "Lassen et al., Nature Communications (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41467-026-76151-w/figures/1",
+      "license": "CC BY 4.0，原图未修改"
+    }
+  ],
+  "brain-context-lncRNA-eqtl": [
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41467-026-77304-7/MediaObjects/41467_2026_77304_Fig2_HTML.png",
+      "alt": "Real cortical RNA-seq results for cellular-context-dependent lncRNA eQTL mapping",
+      "kind": "real-data",
+      "label": "真实数据：细胞背景依赖的 lncRNA eQTL（Figure 2）",
+      "caption": "该图展示大样本 cortical RNA-seq 中由 genotype × cell proportion 交互检出的 lncRNA 调控信号，并比较扩展注释与既有注释或单核 QTL 资源的覆盖。",
+      "credit": "Jia et al., Nature Communications (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41467-026-77304-7/figures/2",
+      "license": "CC BY-NC-ND 4.0，原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41467-026-77304-7/MediaObjects/41467_2026_77304_Fig1_HTML.png",
+      "alt": "Study workflow for expanded lncRNA annotation, cell-proportion interaction eQTL mapping and GWAS colocalization",
+      "kind": "workflow",
+      "label": "分析流程（Figure 1）",
+      "caption": "研究先扩展脑组织 lncRNA 注释，再从 bulk cortex 估计细胞组成，检验 genotype × cell proportion 交互，最后与脑相关 GWAS 信号进行共定位。",
+      "credit": "Jia et al., Nature Communications (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41467-026-77304-7/figures/1",
+      "license": "CC BY-NC-ND 4.0，原图未修改"
+    }
+  ],
+  "scigma-spatial-multiomics": [
+    {
+      "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs41588-026-02706-8/MediaObjects/41588_2026_2706_Fig2_HTML.png",
+      "alt": "SCIGMA real-data analysis of paired spatial epigenome and transcriptome in mouse brain",
+      "kind": "real-data",
+      "label": "真实数据：小鼠脑空间 ATAC–RNA 整合（Figure 2）",
+      "caption": "先比较联合表示恢复的脑区与组织解剖是否一致，再看 ATAC 与 RNA 各自的标记是否被保留；跨随机运行的稳定性比单次 UMAP 的视觉效果更重要。",
+      "credit": "Chang, Fleischmann & Ma, Nature Genetics (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41588-026-02706-8/figures/2",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs41588-026-02706-8/MediaObjects/41588_2026_2706_Fig4_HTML.png",
+      "alt": "SCIGMA real-data analysis of ovarian and cervical cancer Xenium Prime datasets",
+      "kind": "real-data",
+      "label": "真实数据：Xenium Prime 肿瘤空间异质性（Figure 4）",
+      "caption": "图中比较 RNA 与形态图像整合后的肿瘤亚区、标记基因和模态贡献。阅读时同时检查不确定性较高的区域是否对应重构误差、模态冲突或真实肿瘤异质性。",
+      "credit": "Chang, Fleischmann & Ma, Nature Genetics (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41588-026-02706-8/figures/4",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs41588-026-02706-8/MediaObjects/41588_2026_2706_Fig1_HTML.png",
+      "alt": "SCIGMA workflow with spatial and feature graphs, graph-attention encoders, cross-modality attention and reconstruction decoders",
+      "kind": "workflow",
+      "label": "方法流程（Figure 1）",
+      "caption": "每个模态分别构建空间邻接图与特征相似图，经模态特异 GAT 编码；跨模态 attention 和对比损失形成联合表示，解码器用于保留各模态信号。",
+      "credit": "Chang, Fleischmann & Ma, Nature Genetics (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41588-026-02706-8/figures/1",
+      "license": "原图未修改"
+    }
+  ],
+  "spatial-atac-hi-c": [
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41592-026-03217-4/MediaObjects/41592_2026_3217_Fig3_HTML.png",
+      "alt": "Real mouse-brain Spatial-ATAC-Hi-C results showing cell-type-specific chromatin compartments and loops",
+      "kind": "real-data",
+      "label": "真实数据：小鼠脑中的细胞类型特异三维染色质结构（Figure 3）",
+      "caption": "图中把空间 Hi-C 与 ATAC 信号联合起来，展示细胞类型特异的 A/B compartment 和远端 chromatin loops；Satb2、Gpr88 等实例还由独立单核 3D genome 数据支持。",
+      "credit": "Wang et al., Nature Methods (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41592-026-03217-4/figures/3",
+      "license": "CC BY-NC-ND 4.0，原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41592-026-03217-4/MediaObjects/41592_2026_3217_Fig5_HTML.png",
+      "alt": "Real glioblastoma Spatial-ATAC-Hi-C results showing spatial CNV, oncogene amplification and chromatin-loop heterogeneity",
+      "kind": "real-data",
+      "label": "真实数据：胶质母细胞瘤的空间 CNV 与染色质互作（Figure 5）",
+      "caption": "先看 chr7、chr10 和局部扩增是否在 bulk 与单像素层面一致，再看 EGFR、MDM2、CDK4 扩增和 cluster-specific loops 如何对应空间分区。",
+      "credit": "Wang et al., Nature Methods (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41592-026-03217-4/figures/5",
+      "license": "CC BY-NC-ND 4.0，原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41592-026-03217-4/MediaObjects/41592_2026_3217_Fig1_HTML.png",
+      "alt": "Spatial-ATAC-Hi-C experimental workflow and technical validation",
+      "kind": "workflow",
+      "label": "实验流程与技术验证（Figure 1）",
+      "caption": "流程依次包括固定、酶切、原位连接、Tn5 tagmentation 和二维微流控条形码。下半部分用相邻切片的 Hi-C 与 ATAC 数据检查信号一致性。",
+      "credit": "Wang et al., Nature Methods (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41592-026-03217-4/figures/1",
+      "license": "CC BY-NC-ND 4.0，原图未修改"
+    }
+  ],
+  "malva-sequence-search": [
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10975-w/MediaObjects/41586_2026_10975_Fig5_HTML.png",
+      "alt": "Real-data sequence-based single-cell analysis with Malva, including neighbourhood preservation, clustering and spatial marker sequences",
+      "kind": "real-data",
+      "label": "真实数据：无需预定义基因注释的细胞表示与空间标记序列（Figure 5）",
+      "caption": "图中比较 sequence-bucket 与 gene-count 表示的邻域和聚类，并在肿瘤空间数据中组装 cluster-specific 序列。重点看哪些结构与 gene-based 分析一致，哪些只由序列表示揭示。",
+      "credit": "León-Periñán, Karaiskos & Rajewsky, Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10975-w/figures/5",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10975-w/MediaObjects/41586_2026_10975_Fig4_HTML.png",
+      "alt": "Real-data benchmark of Malva somatic-mutation detection across 280 single-cell cancer samples",
+      "kind": "real-data",
+      "label": "真实数据：跨 16 类癌症的体细胞突变检索（Figure 4）",
+      "caption": "与 scTML 的匹配突变调用比较，图中给出不同癌种的 sensitivity 与 specificity，并检验变异出现细胞数和基因组位置对检出率的影响。",
+      "credit": "León-Periñán, Karaiskos & Rajewsky, Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10975-w/figures/4",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41586-026-10975-w/MediaObjects/41586_2026_10975_Fig1_HTML.png",
+      "alt": "Malva sequence-query workflow across single-cell atlases",
+      "kind": "workflow",
+      "label": "查询流程（Figure 1）",
+      "caption": "用户输入核酸序列、基因名或自然语言查询，Malva 在序列索引中返回细胞、样本与空间位置，并提供表达分布、覆盖曲线和空间图。",
+      "credit": "León-Periñán, Karaiskos & Rajewsky, Nature (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41586-026-10975-w/figures/1",
+      "license": "原图未修改"
+    }
+  ],
+  "omicspred": [
+    {
+      "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs41588-026-02726-4/MediaObjects/41588_2026_2726_Fig3_HTML.png",
+      "alt": "Real multi-omic and multi-ancestry PheWAS results generated with OmicsPred scores in the Million Veteran Program",
+      "kind": "real-data",
+      "label": "真实数据：Million Veteran Program 的多组学 PheWAS（Figure 3）",
+      "caption": "该图展示遗传预测的 RNA、蛋白和代谢物与临床表型之间的关联。阅读时应区分跨组学一致性、祖源间可重复性与单个模型的预测性能。",
+      "credit": "Foguet et al., Nature Genetics (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41588-026-02726-4/figures/3",
+      "license": "原图未修改"
+    },
+    {
+      "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs41588-026-02726-4/MediaObjects/41588_2026_2726_Fig1_HTML.png",
+      "alt": "OmicsPred data model linking training cohorts, tissues, platforms, molecular traits, genetic scores and PheWAS results",
+      "kind": "resource",
+      "label": "数据库结构（Figure 1）",
+      "caption": "中心是 prediction-model dataset；周围连接训练队列、组织、平台、祖源、分子性状、变异权重、性能指标和下游 PheWAS。使用权重前应先核对这些元数据。",
+      "credit": "Foguet et al., Nature Genetics (2026)",
+      "sourceUrl": "https://www.nature.com/articles/s41588-026-02726-4/figures/1",
+      "license": "原图未修改"
+    }
+  ]
+}
