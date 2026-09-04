@@ -16,6 +16,9 @@ export type PaperFigure = {
 };
 
 const overrides = rawOverrides as Record<string, PaperFigure[]>;
+const overrideByNormalizedId = new Map(
+  Object.entries(overrides).map(([id, figures]) => [id.toLowerCase(), figures]),
+);
 const kindRank: Record<FigureKind, number> = {
   'real-data': 0,
   validation: 1,
@@ -36,7 +39,7 @@ export function figureKindLabel(kind?: FigureKind): string {
 }
 
 export function figuresForPaper(paper: CollectionEntry<'papers'>): PaperFigure[] {
-  const configured = overrides[paper.id];
+  const configured = overrideByNormalizedId.get(paper.id.toLowerCase());
   const figures = configured?.length
     ? configured
     : paper.data.figures.length
