@@ -11,22 +11,36 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allPapers = await getCollection('papers');
-const papers = entry.data.papers.map((id: string) => allPapers.find((paper) => paper.id === id)).filter(Boolean);
-const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(date);
+const paperById = new Map(allPapers.map((paper) => [paper.id, paper]));
+const missing = entry.data.papers.filter((id: string) => !paperById.has(id));
+if (missing.length > 0) {
+  throw new Error(`Daily issue ${entry.id} references missing paper pages: ${missing.join(', ')}`);
+}
+const papers = entry.data.papers.map((id: string) => paperById.get(id)!);
+const date = entry.data.date.toISOString().slice(0, 10);
+const formatDate = (value: Date) => new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+}).format(value);
 ---
 <Base title={`${entry.data.title} · Genetic Daily Papers`} description={entry.data.summary}>
-  <a class="back-link" href="/archive/">← Archive</a>
-  <section class="hero hero--v4">
-    <div class="eyebrow">Daily Radar</div>
+  <a class="back-link" href="/archive/">← 历史日报</a>
+
+  <header class="daily-header">
+    <div class="daily-header__date"><time datetime={date}>{formatDate(entry.data.date)}</time></div>
     <h1>{entry.data.title}</h1>
     <p>{entry.data.summary}</p>
-    <div class="hero__meta"><span>{formatDate(entry.data.date)}</span><span>{papers.length} 篇</span></div>
-  </section>
+    <div class="daily-header__count"><strong>{papers.length}</strong><span>篇论文</span></div>
+  </header>
 
-  <section class="issue-intro issue-intro--body"><Content /></section>
+  <section class="daily-note"><Content /></section>
 
-  <section class="section">
-    <div class="section-heading"><div><h2>论文</h2></div></div>
-    <div class="paper-list">{papers.map((paper, index) => paper && <PaperCard paper={paper} featured={index === 0} />)}</div>
+  <section class="daily-paper-section" aria-labelledby="daily-paper-title">
+    <div class="daily-section-title">
+      <h2 id="daily-paper-title">本期论文</h2>
+      <span>{papers.length}</span>
+    </div>
+    <div class="paper-entry-list">
+      {papers.map((paper, index) => <PaperCard paper={paper} index={index + 1} total={papers.length} />)}
+    </div>
   </section>
 </Base>
