@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const entries = (await getCollection('daily')).sort((a,b)=>+b.data.date-+a.data.date);
+const latest = entries[0];
+---
+<Base title="Genetic Daily Papers"><section class="hero"><div class="eyebrow">Daily Paper Radar</div><h1>Today’s research worth your attention</h1><p>Statistical genetics, single-cell genomics, computational methods, research resources, and GPU/HPC.</p></section>{latest ? <section class="card paper"><div class="meta">{latest.data.date.toISOString().slice(0,10)}</div><h2><a href={`/daily/${latest.id}`}>{latest.data.title}</a></h2><p>{latest.data.summary}</p>{latest.data.topics.map(t=><span class="tag">{t}</span>)}</section> : <section class="card"><h2>No issue published yet</h2><p>The first daily radar will appear here.</p></section>}</Base>
