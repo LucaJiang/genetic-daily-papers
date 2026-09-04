@@ -1,0 +1,9 @@
+---
+const { priority } = Astro.props;
+const labels: Record<string, string> = {
+  'must-read': 'MUST READ',
+  'worth-reading': 'WORTH READING',
+  skim: 'SKIM',
+};
+---
+<span class={`priority priority--${priority}`}>{labels[priority] ?? priority}</span>
