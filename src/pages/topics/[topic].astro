@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import PaperCard from '../../components/PaperCard.astro';
+import { getCollection } from 'astro:content';
+import { topics } from '../../data/topics';
+
+export function getStaticPaths() {
+  return topics.map((topic) => ({ params: { topic: topic.slug }, props: { topic } }));
+}
+
+const { topic } = Astro.props;
+const papers = (await getCollection('papers'))
+  .filter((paper) => paper.data.topics.includes(topic.slug))
+  .sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title={`${topic.label} · Genetic Daily Papers`} description={topic.description}>
+  <a class="back-link" href="/topics/">← 返回全部主题</a>
+  <section class="hero">
+    <div class="eyebrow">Research Area</div>
+    <h1>{topic.label}</h1>
+    <p>{topic.description}</p>
+    <div class="hero__meta"><span>{papers.length} 篇论文</span><span>持续更新</span></div>
+  </section>
+  {papers.length ? (
+    <div class="paper-list">{papers.map((paper, index) => <PaperCard paper={paper} featured={index === 0} />)}</div>
+  ) : (
+    <section class="empty-state"><h2>该专题暂未收录论文</h2><p>后续日报匹配到该主题时会自动出现。</p></section>
+  )}
+</Base>
