@@ -18,254 +18,210 @@ topics:
 peerReviewed: false
 ---
 
-<div class="notice">本页严格区分“作者公开报告的结果”与“编辑性统计解读”。当前可核实材料包括预印本元数据及作者公开的方法摘要；在无法从索引稳定提取的数值或具体实验配置上，不作推测性补全。</div>
+<div class="notice">本文把作者明确报告的经验规律与本站的统计学解读分开。具体 exponent、最优学习率和架构配置应以原文表格、补充材料及复现实验为准；下面的方程主要用于说明 estimand 与验证逻辑，不把有限实验区间内的拟合曲线当作普适定律。</div>
 
-## 编辑结论
+## 1. 研究问题：单细胞模型的“规模”究竟指什么
 
-这篇论文值得读，不是因为它再次证明“loss 随 compute 下降”，而是因为它问了三个更有操作性的问题：
-
-1. 单细胞表达数据上的 scaling relationship 是否稳定；
-2. 最优 learning rate 是否随 model size 和 depth 有系统变化；
-3. 当 compute budget 增加时，最优 architecture 是否也应该改变。
-
-作者公开报告：scRNA-seq foundation model 中可以观察到 scaling laws，但不同 model formulations 的规律并不一致；最优学习率系统依赖模型规模和深度；architecture 应随 scale/compute 改变；语言模型中的某些经验关系在单细胞场景下幅度不同，且至少一个关系方向相反。
-
-这意味着单细胞 foundation model 的“scale”不能只用 parameter count 表示。更合理的研究对象是：
+在语言模型中，scaling law 常被写成测试损失随训练计算量下降的幂律：
 
 $$
-\mathcal R(C,N,D,\eta,\mathcal A,\mathcal O),
+L(C)=L_\infty+A C^{-\alpha},
 $$
 
-其中 $C$ 是 compute，$N$ 是参数规模，$D$ 是训练数据量，$\eta$ 是 learning rate，$\mathcal A$ 是 architecture，$\mathcal O$ 是 objective/formulation。任何只改变 $N$、却不联合调整其余量的实验，都可能把超参数失配误认为“scaling 失败”。
+其中 $C$ 是训练 compute，$L_\infty$ 是不可约损失，$\alpha$ 描述边际收益衰减。本文的问题不是简单检验 log–log 图能否近似直线，而是考察：
 
-## 1. 什么是这里的 scaling law？
+1. 单细胞表达数据中是否存在可重复的 loss–compute 规律；
+2. 规律是否跨 model formulation 保持；
+3. 最优学习率是否随参数规模、深度和 compute 系统变化；
+4. 增加 compute 时，架构是否也必须同步改变；
+5. 预训练损失下降能否转化为 downstream biological utility。
 
-经验 scaling law 常被写成：
+这几个问题不能混为一谈。即使某个 pretraining objective 的 held-out loss 可以平滑外推，也不意味着 cell-type annotation、rare-state detection、perturbation prediction 或 regulatory inference 会按同一 exponent 改善。
 
-$$
-L(C)=L_{\infty}+A C^{-\alpha},
-$$
+## 2. Scaling law 的统计对象
 
-或分别考察模型规模和数据规模：
-
-$$
-L(N)=L_{\infty}+A_N N^{-\alpha_N},
-\qquad
-L(D)=L_{\infty}+A_D D^{-\alpha_D}.
-$$
-
-这里的 $L$ 通常是 held-out pretraining loss，$L_{\infty}$ 表示在该 formulation 下不可约的近似下界。幂律关系最实用的目的不是画一条直线，而是回答：
-
-> 在当前 regime 中，把 compute 增加 $k$ 倍，预期 loss 能下降多少？
-
-若 $\alpha$ 可以从小规模 runs 中稳定估计，研究者就能在执行昂贵训练前评估 marginal return。
-
-但对单细胞表达数据，至少有四个特殊问题：
-
-- genes 没有像自然语言 token 那样唯一且有意义的顺序；
-- count matrix 高度稀疏，并受 library size 和 measurement process 影响；
-- cell distribution 由 tissue、donor、disease 与 protocol 混合形成；
-- pretraining loss 未必与 downstream scientific estimand 对齐。
-
-因此，能否观察到平滑 scaling，不仅依赖 compute，还依赖数据表示与 objective。
-
-## 2. 为什么 model formulation 是 effect modifier
-
-作者强调 scaling law 并非在所有 formulation 中同样出现。统计上，可以把 scaling exponent 写成 formulation-specific：
+更准确的写法应显式条件于模型 formulation：
 
 $$
 L_f(C)=L_{\infty,f}+A_f C^{-\alpha_f},
 $$
 
-其中 $f$ 表示模型表示、目标函数或 architecture family。若不同 $f$ 的 $\alpha_f$ 和 $L_{\infty,f}$ 差异显著，单一“single-cell scaling exponent”就没有普适意义。
+其中 $f$ 表示 tokenizer、gene ordering、objective、normalization、architecture family 和数据混合方式。若不同 $f$ 的 $\alpha_f$、$L_{\infty,f}$ 或可拟合区间明显不同，就不存在一个脱离 formulation 的“单细胞 scaling exponent”。
 
-这类差异可能来自：
+单细胞表达矩阵与自然语言有三个关键差异：
 
-1. **tokenization/ordering bias**：把无自然顺序的 genes 强行当序列；
-2. **loss weighting**：高表达 genes 或大量零值主导 objective；
-3. **normalization leakage**：目标函数主要拟合 library size 或 batch；
-4. **capacity mismatch**：architecture inductive bias 与 expression geometry 不匹配；
-5. **data mixture**：新增数据量同时改变组织/物种/平台构成，使 $D$ 不再是单纯样本量。
+- genes 没有唯一自然顺序；
+- count distribution 高度稀疏，并受 library size 与 measurement process 影响；
+- cells 来自 donor、tissue、disease、platform 的分层混合，而不是同质 token stream。
 
-所以一个 scaling experiment 必须先明确：穵竟在 scale 什么，以及 loss 的哪些部分在改善。
+因此，扩大数据规模 $D$ 往往同时改变数据组成。若大规模训练集引入更多组织或平台，loss 的变化混合了 sample size、domain diversity 与 measurement heterogeneity，不能只解释为 $D$ 的因果效应。
 
-## 3. 学习率、深度与模型规模必须联合考虑
+## 3. 最优学习率不是常数
 
-作者公开指出，最优 learning rate 系统依赖 model size 与 depth。这点很重要，因为常见的 benchmark 错误是：
-
-- 固定同一 learning rate；
-- 改变参数量或层数；
-- 将训练不稳定或欠优化解释为大模型没有收益。
-
-更合理的目标是估计：
+作者重点讨论最优 learning rate 随模型规模和深度变化。概念上可写为
 
 $$
-\eta^{\star} = h(N, H, C, B, \mathcal O),
+\eta^*=h(N,H,C,B,\mathcal O),
 $$
 
-其中 $H$ 是 depth，$B$ 是 batch/token budget。对每个规模都进行完全独立的大范围 tuning 成本很高，因此 scaling recipe 的价值在于从小实验中拟合 $h(\cdot)$，而不是反复进行无结构 grid search。
+其中 $N$ 是参数量，$H$ 是深度，$B$ 是 batch/token budget，$\mathcal O$ 是 optimizer 与 objective。固定一个学习率比较不同规模模型，可能把 optimization mismatch 错当作 scaling failure；反过来，如果对每个模型进行不等量调参，也可能把 tuning budget 错当作 architecture advantage。
 
-但需要防止“winner's curse”：若对同一 validation set 反复选择学习率和 architecture，最终 loss 会乐观偏倚。最好使用三层数据划分：
+公平设计至少需要：
 
-1. training data 拟合参数；
-2. tuning data 估计 recipe；
-3. untouched extrapolation scale 检验 recipe 是否真能预测更大 run。
+1. 对每个规模预先规定相近的 tuning budget；
+2. tuning set 与最终 extrapolation set 分离；
+3. 报告多个随机种子；
+4. 记录 divergence、gradient clipping、warm-up 与 effective batch；
+5. 将 optimizer state 和 mixed precision 纳入 memory/compute 核算。
 
-## 4. Architecture 应随 compute 改变
+若学习率由同一 held-out scale 反复选择，再用该 scale 验证 scaling law，会产生 winner's curse。更稳妥的是三层划分：训练小规模 runs、估计 recipe 的 tuning scales、完全未触碰的 extrapolation scale。
 
-作者认为 compute 增加时，最优 architecture 本身也应变化。这意味着 compute-optimal frontier 不是简单的“固定网络、只放大宽度”。可以把问题写成：
+## 4. 为什么架构必须随 compute 改变
+
+固定网络深度、只增加宽度或参数量，并不保证沿 compute-optimal frontier 前进。合理目标是
 
 $$
-(\mathcal A^{\star},N^{\star},D^{\star},\eta^{\star})
-=
-\arg\min_{\mathcal A,N,D,\eta}
-L(\mathcal A,N,D,\eta)
-\quad\text{s.t.}\qquad\operatorname{FLOPs}\le C.
+(\mathcal A^*,N^*,D^*,\eta^*)=
+\arg\min_{\mathcal A,N,D,\eta}L(\mathcal A,N,D,\eta)
+\quad\text{s.t.}\quad \operatorname{Cost}(\mathcal A,N,D)\le C.
 $$
 
-在单细胞数据中，architecture selection 还应显式考虑：
+对于单细胞数据，architecture choice 还要考虑：
 
-- set/permutation invariance；
-- dense 与 sparse input；
-- gene vocabulary 的跨数据集一致性；
-- encoder/decoder 是否主要花 compute 重建零值；
-- attention 的 $O(G^2)$ 成本是否有足够信息回报；
-- batch size 与显存对 optimizer noise scale 的影响。
+- set/permutation invariance 是否合理；
+- sparse count 是否被过早 densify；
+- gene vocabulary 是否跨数据集一致；
+- encoder/decoder 是否主要花 compute 重建大量零值；
+- attention 的 $O(G^2)$ 成本是否带来相称的信息回报；
+- batch size 对 optimizer noise scale 与 rare-cell representation 的影响。
 
-这也是它与“算法加速”栏目的关系：更快 kernel 只是降低给定 architecture 的运行成本；而 compute-optimal design 决定应该把节省的预算投到 model size、data、depth 还是更多独立重复。
+因此，“更大模型”不能只用 parameter count 定义。两个参数量相近的模型，若 tokenization、sequence length、sparsity 和 activation memory 不同，其实际 FLOPs 与 wall-clock 成本可以相差很大。
 
-## 5. 如何验证 scaling law 不是视觉错觉
-
-在 log–log 图上出现近似直线并不足够。建议至少检查：
+## 5. 怎样验证 scaling law 不是视觉错觉
 
 ### 5.1 Held-out scale extrapolation
 
-用小规模 runs 拟合 $\alpha$，预测一个更大且完全未用于拟合的 run：
+先用较小 compute runs 拟合 $L(C)$，再预测一个更大且未参与拟合的 run：
 
 $$
-\widehat L(C_{\text{large}})
+\widehat L(C_{\mathrm{large}})
 \quad\text{vs.}\quad
-L_{\text{observed}}(C_{\text{large}}).
+L_{\mathrm{observed}}(C_{\mathrm{large}}).
 $$
 
-真正有价值的是预测误差，而不只是 in-sample $R^2$。
+真正有意义的是预测误差和不确定区间，而不是 in-sample $R^2$。
 
-### 5.2 不确定性
+### 5.2 Seed-level uncertainty
 
-每个 compute point 应有多个随机种子。由于昂贵 runs 数量通常很少，$\widehat\alpha$ 的区间可能很宽。应通过 nonlinear regression、bootstrap 或 hierarchical model 量化：
+昂贵 runs 通常随机种子很少，导致 exponent 区间很宽。应对每个 compute point 报告 seed-level variation，并用 nonlinear regression、bootstrap 或 hierarchical model 传播不确定性：
 
 $$
-\widehat\alpha \pm \text{uncertainty}.
+L_{frs}=L_{\infty,f}+A_f C_r^{-\alpha_f}+u_{fr}+\epsilon_{frs},
 $$
+
+其中 $r$ 是 compute level，$s$ 是 seed，$u_{fr}$ 表示 scale-specific deviation。
 
 ### 5.3 Regime change
 
-小模型到中模型的规律未必延伸到更大规模。optimization instability、data saturation 或 architecture bottleneck 都可能导致分段 scaling。需要比较：
+小模型到中模型的规律未必延伸到更大规模。optimization instability、data saturation 或 architecture bottleneck 都可能造成 piecewise scaling。应比较：
 
-- 单幂律；
+- 单一幂律；
 - 分段幂律；
-- 含 irreducible floor 的模型；
+- 带不可约 floor 的模型；
 - 非参数 trend。
 
-### 5.4 Compute 的定义
-
-GPU-hours 受硬件、kernel 和 utilization 影响；理论 FLOPs 又可能忽略稀疏性和通信。至少应同时报告：
-
-- estimated FLOPs；
-- wall-clock；
-- accelerator type；
-- peak memory；
-- achieved throughput/utilization；
-- preprocessing 与 I/O 成本。
+模型选择应基于 held-out predictive performance，而不是只看哪条曲线最平滑。
 
 ## 6. Pretraining loss 不等于 biological utility
 
-这是阅读时必须保留的主线。即使
+这是本文必须与 scFoundry 一起阅读的原因。Scaling recipes 主要回答 optimization scaling；scFoundry 检验这些表示在近百个数据集和多类任务中是否转化为实际增益。
+
+可能出现
 
 $$
-L_{\text{pretrain}}(C)
-=
-L_\infty+A C^{-\alpha}
-$$
-
-非常稳定，也不保证下游效用满足同样规律：
-
-$$
-U_{\text{downstream}}(C)
-\not\equiv
-\phi\bigl(L_{\text{pretrain}}(C)\bigr).
+L_{\mathrm{pretrain}}(C)\downarrow,
+\qquad
+\Delta_{\mathrm{downstream}}(C)\approx 0,
 $$
 
 原因包括：
 
-- objective 改善来自更好预测 housekeeping genes；
+- objective 主要改善 housekeeping genes 的重建；
 - downstream task 依赖 rare genes 或 context-specific interactions；
-- loss 的微小改善低于 biological/measurement noise；
-- linear probe 无法提取预训练中隐含的信息；
-- benchmark 已接近 ceiling；
-- 预训练 corpus 与测试数据 overlap。
+- linear probe 无法读取预训练中隐含的信息；
+- benchmark 已接近简单 baseline 的 ceiling；
+- 训练语料与测试集重叠或高度相似；
+- cell composition 改善 loss，却没有增加目标生物过程的信息。
 
-因此，这篇论文应与 scFoundry/practical-boundaries 一起看。前者回答 optimization scaling，后者检验这些表示是否在下游任务产生可重复增益。
+因此 scaling paper 应同时报告至少一组与预训练损失不同层次的 downstream learning curves，而不是把 lower loss 直接写成 stronger biological representation。
 
-## 7. 对算法加速研究的启发
+## 7. 从算法加速角度应报告什么
 
-从性能优化角度，论文最值得借鉴的是把 hardware optimization 放在更完整的 objective 中。假设某个 kernel 将 step time 减少 30%，有三种不同价值：
+本文最值得算法研究者借鉴的不是某个绝对 speedup，而是把性能问题放回 fixed-budget frontier。推荐同时报告：
 
-1. 同一模型更快结束；
-2. 固定 wall-clock 下训练更多 tokens/cells；
-3. 沿新的 compute-optimal frontier 改变 model/data allocation。
+1. estimated FLOPs 与实际 wall-clock；
+2. accelerator 型号、GPU 数、数值精度和通信拓扑；
+3. peak device memory 与 optimizer-state memory；
+4. cells/s、nonzero counts/s 或 tokens/s；
+5. data preprocessing、I/O 与 host-to-device transfer；
+6. GPU utilization、kernel occupancy 与 data-loader stalls；
+7. 固定 wall-clock 下的 held-out loss；
+8. 固定 compute/data 下的 downstream utility。
 
-只有第三种能回答“算法优化是否改变了可达到的统计性能”。因此建议报告：
-
-$$
-\text{quality at fixed wall-clock}
-\qquad\text{and}\qquad
-\text{quality at fixed compute/data},
-$$
-
-而不只报告 step/s。
-
-对�5细胞模型还需要拆分包括：
-
-- CPU preprocessing；
-- host-to-device transfer；
-- sparse-to-dense conversion；
-- attention/MLP kernels；
-- data-loader stalls；
-- distributed communication；
-- validation 与 checkpoint I/O。
-
-这个 2 倍 kernel speedup 可能在端到端训练中只带来很小收益，也可能通过允许更大 batch 改变优化 regime；两者必须实测。
-
-## 8. 对统计遗传学模型的类比
-
-Scaling 的思想也霂用于 QTL/fine-mapping，但“样本量”必须按独立遗传单位理解。込侈 sc-eQTL 中，增加 cells 不等价于增加 donors：
+单个 kernel 的 2× speedup 不一定改善 compute-optimal model。如果优化只让同一架构更快结束，可能应该把节省的预算重新分配给更多数据、不同深度或更充分的 tuning。真正的算法加速问题是：
 
 $$
-N_{\text{cells}} \uparrow
-\qquad\not\Rightarrow\quad
-N_{\text{genotype-independent}} \uparrow.
+\max_{\mathcal A,N,D,\eta}\ U_{\mathrm{science}}
+\quad\text{s.t.}\quad
+\operatorname{WallClock}\le T,
+\quad
+\operatorname{Memory}\le M.
 $$
 
-可以研究：
+其中 $U_{\mathrm{science}}$ 应是下游科学效用，而不只是 training throughput。
 
-- donor 数增加时 association power 如何 scale；
-- 每 donor 细胞数增加时 context resolution 如何 scale；
-- 变异数、细胞状态复杂度和 inference compute 如何共同增长；
-- summary-statistic approximation 的误差何时开始主导；
-- GPU/parallelization 是否真正扩大可分析 locus/context 数，而非只增加重复细胞。
+## 8. 对统计遗传学的直接启示
 
-这类“statistical scaling law”比单纯的模型参数扩张更贴近生物统计问题。
+单细胞 QTL 研究也容易把“细胞数扩大”误写成“样本量扩大”。但 genotype-independent sample size 的主要上限仍是 donor 数：
 
-## 9. 局限与应检查的细节
+$$
+N_{\mathrm{cells}}\gg N_{\mathrm{donors}}
+\quad\not\Rightarrow\quad
+N_{\mathrm{genetic\,independent}}\gg N_{\mathrm{donors}}.
+$$
 
-1. scaling exponent 是否有 seed-level uncertainty；
-2. formulation 间是否使用相同数据、token budget 和调参预算；
-3. 结果是否依赖特定 expression representation；
-4. 大规模验证点是否真正 out-of-sample；
-5. loss 改善集中在哪类 genes/cells；
-6. compute 是否包含数据处理和低利用率区间；
-7. downstream task 是否随 pretraining loss 同步改善；
-8. 更复杂 architecture 的收益是否超过工程复杂度和复现成本。
+更多 cells 提高每个 donor 的 cell-state resolution 和 expression estimation precision，却不会创造新的独立遗传重复。因此统计遗传学中的 scaling law 应分别建模：
 
-**最终判断**：这篇论文的贡献是提供一个更可证伪的 scFM 训练设计框架。它支持“某些 formulation 下可预测地 scale”，但同时反对把 LLM recipe 机械迁移到单细胞数据。对于准备投入大量 GPU 预算的人，这是一篇应在训练前读、而不是训练后用来解释结果的论文。
+- donors 增加对 association power 的影响；
+- 每个 donor 的 cells 增加对 phenotype measurement error 的影响；
+- contexts/bases 增加对 multiple testing 与 effect heterogeneity 的影响；
+- loci、genes 与 cell states 增加对 compute/memory 的影响。
+
+例如可写一个分层饱和模型：
+
+$$
+\operatorname{Var}(\widehat\beta)
+\approx
+\frac{\sigma^2_{\mathrm{between}}}{N_{\mathrm{donors}}}
++
+\frac{\sigma^2_{\mathrm{within}}}{N_{\mathrm{donors}}\,\bar m},
+$$
+
+其中 $\bar m$ 是每个 donor 的有效细胞数。第二项可随细胞数下降，第一项不会。GPU 加速若只让每个 donor 处理更多 cells，可能很快遇到第一项主导的统计饱和。
+
+## 9. 复现与审稿检查表
+
+1. scaling exponent 是否有 seed-level 置信区间；
+2. formulation、tokenization 与数据混合是否固定；
+3. 每个规模是否使用相近的 tuning budget；
+4. 是否存在完全未参与拟合的 held-out compute scale；
+5. 是否比较单一与分段 scaling；
+6. loss 改善集中在哪些 genes/cell states；
+7. downstream utility 是否同步改善；
+8. compute 是否包括 preprocessing、I/O 与 validation；
+9. wall-clock、FLOPs、memory 和 throughput 是否同时报告；
+10. 结果是否跨 dataset、donor、tissue 与 platform 外部验证；
+11. 大模型增益是否超过简单 baseline 与其不确定区间；
+12. 预训练数据是否可能包含测试集或近重复样本。
+
+**综合判断：**这篇工作提供了一个值得验证的 scFM 训练设计框架：在特定 formulation 和有限 regime 内，loss 可以呈现可外推的 compute scaling，最优 learning rate 和 architecture 也会随规模改变。但其结论不应被简化成“单细胞大模型越大越好”。最可靠的使用方式是把 scaling recipe 当作预算分配工具，再用 scFoundry 类的多数据集、分 supervision regime benchmark 检验这些优化收益是否转化为可重复的生物学效用。
