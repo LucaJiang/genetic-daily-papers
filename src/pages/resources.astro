@@ -1,19 +1,52 @@
 ---
 import Base from '../layouts/Base.astro';
-const resources=[
-  {title:'GWAS Catalog',kind:'GWAS / summary statistics',body:'Curated GWAS studies, top associations, full summary statistics and REST API access.',href:'https://www.ebi.ac.uk/gwas/'},
-  {title:'GTEx Portal',kind:'eQTL / expression',body:'Bulk tissue expression and QTL resources, plus current single-cell data access.',href:'https://gtexportal.org/'},
-  {title:'eQTL Catalogue',kind:'eQTL / sQTL',body:'Uniformly processed expression and splicing QTL datasets; release notes are monitored for new workflows and studies.',href:'https://www.ebi.ac.uk/eqtl/'},
-  {title:'Open Targets Platform',kind:'genetics / credible sets',body:'Target–disease evidence integrating GWAS studies, variants, credible sets and functional evidence.',href:'https://platform.opentargets.org/'},
-  {title:'rapids-singlecell',kind:'GPU / single-cell',body:'AnnData-first GPU acceleration built on CuPy and NVIDIA RAPIDS for common Scanpy-style workflows.',href:'https://rapids-singlecell.readthedocs.io/en/stable/'},
-  {title:'bioRxiv',kind:'preprints',body:'Primary source for daily computational genomics, genetics and bioinformatics preprint monitoring.',href:'https://www.biorxiv.org/'}
+const groups = [
+  {
+    title: 'GWAS / QTL 资源监测',
+    description: '不只记录“数据库更新了”，而是核对 study、ancestry、summary statistics、credible set、API 与下载格式是否发生实质变化。',
+    links: [
+      ['GWAS Catalog', 'https://www.ebi.ac.uk/gwas/'],
+      ['GTEx Portal', 'https://gtexportal.org/'],
+      ['eQTL Catalogue', 'https://www.ebi.ac.uk/eqtl/'],
+      ['Open Targets Genetics', 'https://genetics.opentargets.org/'],
+    ],
+  },
+  {
+    title: '算法加速观察',
+    description: '从瓶颈形态出发：哪些算子真正占时、是否利用稀疏结构、CPU↔GPU 搬运是否抵消收益、显存上限与多 GPU 扩展是否公平比较。',
+    links: [
+      ['rapids-singlecell', 'https://rapids-singlecell.readthedocs.io/'],
+      ['NVIDIA RAPIDS', 'https://rapids.ai/'],
+      ['CuPy', 'https://cupy.dev/'],
+      ['JAX', 'https://jax.readthedocs.io/'],
+      ['Triton', 'https://triton-lang.org/'],
+    ],
+  },
+  {
+    title: '软件与可复现基础设施',
+    description: '跟踪论文代码、容器、工作流、版本兼容性和 benchmark 实现，避免把“代码公开”等同于“结果可复现”。',
+    links: [
+      ['scverse', 'https://scverse.org/'],
+      ['Bioconda', 'https://bioconda.github.io/'],
+      ['Nextflow', 'https://www.nextflow.io/'],
+      ['Snakemake', 'https://snakemake.github.io/'],
+    ],
+  },
 ];
 ---
 <Base title="Resources · Genetic Daily Papers">
-  <section class="hero"><div class="eyebrow">Resources</div><h1>数据库与软件雷达</h1><p>这里保存我们长期跟踪的官方入口；具体 release / API 变化会进入对应日期的 Daily Radar。</p></section>
-  <div class="grid">
-    {resources.map(r=><a class="card resource-link" href={r.href} target="_blank" rel="noreferrer">
-      <div class="eyebrow">{r.kind}</div><h2>{r.title}</h2><p>{r.body}</p><span class="external">Open official resource ↗</span>
-    </a>)}
+  <section class="hero">
+    <div class="eyebrow">Resource Watch</div>
+    <h1>数据、软件与算法加速</h1>
+    <p>资源更新按可分析性和方法学影响筛选，而不是简单罗列版本号。</p>
+  </section>
+  <div class="resource-grid">
+    {groups.map((group) => (
+      <section class="resource-card">
+        <h2>{group.title}</h2>
+        <p>{group.description}</p>
+        <ul>{group.links.map(([label, url]) => <li><a href={url} target="_blank" rel="noreferrer">{label} ↗</a></li>)}</ul>
+      </section>
+    ))}
   </div>
 </Base>
