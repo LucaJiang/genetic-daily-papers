@@ -42,7 +42,6 @@ const date = paper.data.date.toISOString().slice(0, 10);
       </a>
       <figcaption>
         {paper.data.figure.caption} 图源：{paper.data.figure.credit}。
-        {paper.data.figure.license && <>许可：{paper.data.figure.license}。</>}
         <a href={paper.data.figure.sourceUrl} target="_blank" rel="noreferrer">查看原图 ↗</a>
       </figcaption>
     </figure>
