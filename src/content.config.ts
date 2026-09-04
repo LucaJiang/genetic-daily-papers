@@ -4,6 +4,7 @@ import { glob } from 'astro/loaders';
 const figureSchema = z.object({
   url: z.string().url(),
   alt: z.string(),
+  label: z.string().optional(),
   caption: z.string(),
   credit: z.string(),
   sourceUrl: z.string().url(),
@@ -33,12 +34,15 @@ const papers = defineCollection({
     doi: z.string().optional(),
     paperUrl: z.string().url(),
     codeUrl: z.string().url().optional(),
+    resourceUrl: z.string().url().optional(),
     priority: z.enum(['must-read', 'worth-reading', 'skim']),
     summary: z.string(),
     whyItMatters: z.string(),
+    keyResults: z.array(z.string()).default([]),
     topics: z.array(z.string()).default([]),
     peerReviewed: z.boolean().default(false),
     figure: figureSchema.optional(),
+    figures: z.array(figureSchema).default([]),
   }),
 });
 

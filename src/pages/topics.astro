@@ -6,18 +6,14 @@ const papers = await getCollection('papers');
 const count = (slug: string) => papers.filter((paper) => paper.data.topics.includes(slug)).length;
 ---
 <Base title="Topics · Genetic Daily Papers">
-  <section class="hero">
-    <div class="eyebrow">Browse by research area</div>
-    <h1>按研究主题浏览</h1>
-    <p>主题页会自动聚合所有相关论文。每个分类现在都可以进入，并随着日报积累持续更新。</p>
-  </section>
-  <div class="topic-grid">
+  <section class="hero hero--v4"><div class="eyebrow">Topics</div><h1>按研究方向浏览</h1></section>
+  <div class="topic-grid topic-grid--v4">
     {topics.map((topic) => (
       <a class="topic-card" href={`/topics/${topic.slug}/`}>
-        <span class="topic-card__count">{count(topic.slug)} PAPERS</span>
+        <span class="topic-card__count">{count(topic.slug)}</span>
         <h2>{topic.label}</h2>
         <p>{topic.description}</p>
-        <div class="topic-card__footer"><span>查看专题</span><span>→</span></div>
+        <div class="topic-card__footer"><span>查看论文</span><span>→</span></div>
       </a>
     ))}
   </div>

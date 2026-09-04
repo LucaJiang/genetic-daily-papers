@@ -14,59 +14,73 @@ const { Content } = await render(paper);
 const issues = await getCollection('daily');
 const issue = issues.find((entry) => entry.data.papers.includes(paper.id));
 const date = paper.data.date.toISOString().slice(0, 10);
+const figures = paper.data.figures.length ? paper.data.figures : paper.data.figure ? [paper.data.figure] : [];
 ---
 <Base title={`${paper.data.shortTitle ?? paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}>
-  {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← 返回 {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
+  {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
 
-  <header class="paper-hero">
+  <header class="paper-hero paper-hero--v4">
     <div class="paper-hero__topline">
       <PriorityBadge priority={paper.data.priority} />
       <span>{paper.data.source}</span><span>·</span><time datetime={date}>{date}</time>
       {paper.data.version && <><span>·</span><span>{paper.data.version}</span></>}
-      <span>·</span><span>{paper.data.peerReviewed ? '同行评议论文' : '预印本，尚未完成期刊同行评议'}</span>
     </div>
     <h1>{paper.data.title}</h1>
     <p class="paper-hero__authors">{paper.data.authors}</p>
-    <p class="paper-hero__summary"><strong>一句话结论：</strong>{paper.data.summary}</p>
+    <p class="paper-hero__summary">{paper.data.summary}</p>
     <div class="paper-actions">
       <a class="button button--primary" href={paper.data.paperUrl} target="_blank" rel="noreferrer">原文 ↗</a>
       {paper.data.codeUrl && <a class="button" href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
+      {paper.data.resourceUrl && <a class="button" href={paper.data.resourceUrl} target="_blank" rel="noreferrer">资源 ↗</a>}
       {paper.data.doi && <a class="button" href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">DOI ↗</a>}
     </div>
   </header>
 
-  {paper.data.figure && (
-    <figure class="paper-figure">
-      <a href={paper.data.figure.sourceUrl} target="_blank" rel="noreferrer">
-        <img src={paper.data.figure.url} alt={paper.data.figure.alt} loading="lazy" referrerpolicy="no-referrer" />
-      </a>
-      <figcaption>
-        {paper.data.figure.caption} 图源：{paper.data.figure.credit}。
-        <a href={paper.data.figure.sourceUrl} target="_blank" rel="noreferrer">查看原图 ↗</a>
-      </figcaption>
-    </figure>
+  {figures.length > 0 && (
+    <section class="figure-section" aria-labelledby="figure-section-title">
+      <div class="section-heading"><div><h2 id="figure-section-title">论文图解</h2></div></div>
+      <div class:list={['paper-figure-grid', { 'paper-figure-grid--single': figures.length === 1 }]}> 
+        {figures.map((figure, index) => (
+          <figure class:list={['paper-figure', { 'paper-figure--lead': index === 0 }]}> 
+            <a class="paper-figure__image" href={figure.sourceUrl} target="_blank" rel="noreferrer">
+              <span class="image-fallback">打开原图 ↗</span>
+              <img src={figure.url} alt={figure.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
+            </a>
+            <figcaption>
+              <strong>{figure.label ?? `Figure ${index + 1}`}</strong>
+              <span>{figure.caption}</span>
+              <small>图源：{figure.credit}{figure.license ? ` · ${figure.license}` : ''} · <a href={figure.sourceUrl} target="_blank" rel="noreferrer">原图</a></small>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
   )}
 
-  <div class="paper-layout">
+  <div class="paper-layout paper-layout--v4">
     <article class="paper-body"><Content /></article>
     <aside class="paper-aside">
       <section class="aside-card">
-        <h2>Why it matters</h2>
+        <h2>阅读重点</h2>
         <p>{paper.data.whyItMatters}</p>
       </section>
+      {paper.data.keyResults.length > 0 && (
+        <section class="aside-card">
+          <h2>主要结果</h2>
+          <ul>{paper.data.keyResults.map((result) => <li>{result}</li>)}</ul>
+        </section>
+      )}
       <section class="aside-card">
-        <h2>Research areas</h2>
-        <div class="tag-list">
-          {paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}
-        </div>
+        <h2>主题</h2>
+        <div class="tag-list">{paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}</div>
       </section>
-      <section class="aside-card">
-        <h2>Bibliography</h2>
+      <section class="aside-card bibliography-card">
+        <h2>文献信息</h2>
         <dl>
-          <dt>发布日期</dt><dd>{date}</dd>
-          <dt>来源</dt><dd>{paper.data.source}{paper.data.version ? ` · ${paper.data.version}` : ''}</dd>
+          <dt>日期</dt><dd>{date}</dd>
+          <dt>来源</dt><dd>{paper.data.source}</dd>
           {paper.data.doi && <><dt>DOI</dt><dd>{paper.data.doi}</dd></>}
-          <dt>审稿状态</dt><dd>{paper.data.peerReviewed ? '已同行评议' : '预印本'}</dd>
+          <dt>状态</dt><dd>{paper.data.peerReviewed ? '已同行评议' : '预印本'}</dd>
         </dl>
       </section>
     </aside>

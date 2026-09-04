@@ -11,28 +11,22 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allPapers = await getCollection('papers');
-const papers = entry.data.papers
-  .map((id: string) => allPapers.find((paper) => paper.id === id))
-  .filter(Boolean);
-const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
-}).format(date);
+const papers = entry.data.papers.map((id: string) => allPapers.find((paper) => paper.id === id)).filter(Boolean);
+const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(date);
 ---
 <Base title={`${entry.data.title} · Genetic Daily Papers`} description={entry.data.summary}>
-  <a class="back-link" href="/archive/">← 返回历史归档</a>
-  <section class="hero">
-    <div class="eyebrow">Daily Radar · {entry.data.date.toISOString().slice(0, 10)}</div>
+  <a class="back-link" href="/archive/">← Archive</a>
+  <section class="hero hero--v4">
+    <div class="eyebrow">Daily Radar</div>
     <h1>{entry.data.title}</h1>
     <p>{entry.data.summary}</p>
-    <div class="hero__meta"><span>{formatDate(entry.data.date)}</span><span>{papers.length} 篇重点论文</span><span>统计与计算方法导向</span></div>
+    <div class="hero__meta"><span>{formatDate(entry.data.date)}</span><span>{papers.length} 篇</span></div>
   </section>
 
-  <section class="issue-intro"><Content /></section>
+  <section class="issue-intro issue-intro--body"><Content /></section>
 
   <section class="section">
-    <div class="section-heading"><div><h2>论文摘要</h2><p>点击卡片进入方法、模型、实验设计、局限与延伸分析。</p></div></div>
-    <div class="paper-list">
-      {papers.map((paper, index) => paper && <PaperCard paper={paper} featured={index === 0} />)}
-    </div>
+    <div class="section-heading"><div><h2>论文</h2></div></div>
+    <div class="paper-list">{papers.map((paper, index) => paper && <PaperCard paper={paper} featured={index === 0} />)}</div>
   </section>
 </Base>
