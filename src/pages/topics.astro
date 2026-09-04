@@ -1,0 +1,5 @@
+---
+import Base from '../layouts/Base.astro';
+const topics=['Single-cell & spatial','Statistical genetics','GWAS / QTL','Fine-mapping & colocalization','Functional annotation','Foundation models','Regulatory sequence models','GPU / HPC'];
+---
+<Base title="Topics · Genetic Daily Papers"><section class="hero"><div class="eyebrow">Topics</div><h1>Browse by research area</h1></section><div class="grid">{topics.map(t=><div class="card"><h2>{t}</h2><p>Topic-specific archive and filtering will populate automatically as daily issues accumulate.</p></div>)}</div></Base>
