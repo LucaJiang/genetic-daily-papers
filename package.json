@@ -1,10 +1,11 @@
 {
   "name": "genetic-daily-papers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/cache-figures.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview"
   },
