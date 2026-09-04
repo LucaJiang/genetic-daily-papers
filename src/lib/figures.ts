@@ -38,6 +38,11 @@ export function figureKindLabel(kind?: FigureKind): string {
   }
 }
 
+export function figureTitle(figure: PaperFigure, index: number): string {
+  const label = figure.label ?? `Figure ${index + 1}`;
+  return label.replace(/^(真实数据|方法流程|模拟|数据库|验证|方法)[：:]\s*/u, '');
+}
+
 export function figuresForPaper(paper: CollectionEntry<'papers'>): PaperFigure[] {
   const configured = overrideByNormalizedId.get(paper.id.toLowerCase());
   const figures = configured?.length
