@@ -32,8 +32,6 @@ const formatDate = (value: Date) => new Intl.DateTimeFormat('zh-CN', {
     <div class="daily-header__count"><strong>{papers.length}</strong><span>篇论文</span></div>
   </header>
 
-  <section class="daily-note"><Content /></section>
-
   <section class="daily-paper-section" aria-labelledby="daily-paper-title">
     <div class="daily-section-title">
       <h2 id="daily-paper-title">本期论文</h2>
@@ -43,4 +41,6 @@ const formatDate = (value: Date) => new Intl.DateTimeFormat('zh-CN', {
       {papers.map((paper, index) => <PaperCard paper={paper} index={index + 1} total={papers.length} />)}
     </div>
   </section>
+
+  <section class="daily-note"><Content /></section>
 </Base>
