@@ -1,5 +1,46 @@
 ---
 import '../styles/global.css';
-const { title = 'Genetic Daily Papers', description = 'Daily paper radar for statistical genetics and single-cell computational genomics.' } = Astro.props;
+const {
+  title = 'Genetic Daily Papers',
+  description = '面向统计遗传学、单细胞计算基因组学与科研计算方法的每日论文雷达。'
+} = Astro.props;
+const path = Astro.url.pathname;
+const nav = [
+  ['/', 'Today'],
+  ['/archive', 'Archive'],
+  ['/topics', 'Topics'],
+  ['/resources', 'Resources']
+];
 ---
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/><meta name="description" content={description}/><title>{title}</title></head><body><header><div class="wrap"><strong>Genetic Daily Papers</strong><nav><a href="/">Today</a><a href="/archive">Archive</a><a href="/topics">Topics</a><a href="/resources">Resources</a></nav></div></header><main class="wrap"><slot /></main><footer class="wrap">Curated daily for statistical genetics, single-cell genomics, computational methods and research resources.</footer></body></html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#07111f" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Genetic Daily Papers home">
+          <span class="brand-mark">G</span>
+          <span><strong>Genetic Daily Papers</strong><small>Computational Genomics Radar</small></span>
+        </a>
+        <nav aria-label="Primary navigation">
+          {nav.map(([href, label]) => (
+            <a href={href} class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}>{label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main class="wrap"><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <span>Curated for statistical genetics, single-cell genomics, computational methods and research resources.</span>
+        <span>Preprints are not peer reviewed.</span>
+      </div>
+    </footer>
+  </body>
+</html>
