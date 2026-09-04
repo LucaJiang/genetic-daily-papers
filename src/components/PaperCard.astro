@@ -2,7 +2,6 @@
 import type { CollectionEntry } from 'astro:content';
 import PriorityBadge from './PriorityBadge.astro';
 import { topicLabel } from '../data/topics';
-import { figureAssetUrl, figureKindLabel, figuresForPaper } from '../lib/figures';
 
 interface Props {
   paper: CollectionEntry<'papers'>;
@@ -12,9 +11,6 @@ interface Props {
 
 const { paper, index, total } = Astro.props;
 const date = paper.data.date.toISOString().slice(0, 10);
-const figures = figuresForPaper(paper);
-const figure = figures.find((item) => item.kind === 'real-data') ?? figures[0];
-const figureSrc = figure ? figureAssetUrl(figure.url) : undefined;
 const number = String(index).padStart(2, '0');
 ---
 <article class="paper-entry">
@@ -49,20 +45,4 @@ const number = String(index).padStart(2, '0');
       <a class="paper-entry__link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">→</span></a>
     </div>
   </div>
-
-  {figure && figureSrc && (
-    <a class="paper-entry__figure" href={`/papers/${paper.id}/#figures`} aria-label={`查看 ${paper.data.shortTitle ?? paper.data.title} 的论文图`}>
-      <span class="paper-entry__figure-fallback">查看论文图</span>
-      <img
-        src={figureSrc}
-        data-fallback={figure.url}
-        alt={figure.alt}
-        loading="eager"
-        fetchpriority={index <= 2 ? 'high' : 'auto'}
-        decoding="async"
-        onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback}else{this.hidden=true;this.parentElement.classList.add('is-missing')}"
-      />
-      <span class="paper-entry__figure-label">{figureKindLabel(figure.kind)}</span>
-    </a>
-  )}
 </article>
