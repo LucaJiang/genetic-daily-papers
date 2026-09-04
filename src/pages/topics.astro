@@ -1,5 +1,29 @@
 ---
 import Base from '../layouts/Base.astro';
-const topics=['Single-cell & spatial','Statistical genetics','GWAS / QTL','Fine-mapping & colocalization','Functional annotation','Foundation models','Regulatory sequence models','GPU / HPC'];
+import { getCollection } from 'astro:content';
+const entries=(await getCollection('daily')).sort((a,b)=>+b.data.date-+a.data.date);
+const topics=[
+  {key:'single-cell',title:'Single-cell & spatial',desc:'单细胞、空间组学、多组学与 statistical single-cell methods。'},
+  {key:'statistical-genetics',title:'Statistical genetics',desc:'GWAS、遗传统计模型、因果推断与复杂性状方法。'},
+  {key:'QTL',title:'QTL / eQTL / sQTL / pQTL',desc:'QTL mapping、context-dependent QTL、TWAS 与 molecular traits。'},
+  {key:'foundation-models',title:'Foundation models',desc:'Single-cell foundation models、virtual cells、representation learning。'},
+  {key:'perturbation',title:'Perturbation modeling',desc:'CRISPR / drug perturbation、counterfactual prediction 与 dynamics。'},
+  {key:'GPU-HPC',title:'GPU / HPC',desc:'CUDA、RAPIDS、CuPy、JAX、PyTorch、Triton 与大规模科学计算。'},
+  {key:'resources',title:'Data & database updates',desc:'GWAS Catalog、GTEx、eQTL Catalogue、Open Targets 等资源更新。'}
+];
 ---
-<Base title="Topics · Genetic Daily Papers"><section class="hero"><div class="eyebrow">Topics</div><h1>Browse by research area</h1></section><div class="grid">{topics.map(t=><div class="card"><h2>{t}</h2><p>Topic-specific archive and filtering will populate automatically as daily issues accumulate.</p></div>)}</div></Base>
+<Base title="Topics · Genetic Daily Papers">
+  <section class="hero"><div class="eyebrow">Topics</div><h1>按研究方向浏览</h1><p>随着每日 issue 累积，这里会自动汇总包含相应主题的历史雷达。</p></section>
+  <div class="grid">
+    {topics.map(t=>{
+      const matched=entries.filter(e=>e.data.topics.includes(t.key));
+      return <section class="card">
+        <span class="topic-count">{matched.length}</span>
+        <div class="eyebrow">{t.key}</div>
+        <h2>{t.title}</h2>
+        <p>{t.desc}</p>
+        {matched.slice(0,3).map(e=><p class="meta"><a href={`/daily/${e.id}`}>{e.data.date.toISOString().slice(0,10)} · {e.data.title}</a></p>)}
+      </section>
+    })}
+  </div>
+</Base>
