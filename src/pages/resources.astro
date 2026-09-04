@@ -1,0 +1,5 @@
+---
+import Base from '../layouts/Base.astro';
+const groups=[['GWAS / QTL resources','GWAS Catalog, GTEx, eQTL Catalogue, Open Targets Genetics and other major releases.'],['GPU / HPC watch','RAPIDS, rapids-singlecell, CuPy, JAX, PyTorch, Triton, sparse kernels and multi-GPU tooling.'],['Software releases','Method packages, APIs and reproducible implementations relevant to statistical genetics and single-cell analysis.']];
+---
+<Base title="Resources · Genetic Daily Papers"><section class="hero"><div class="eyebrow">Resources</div><h1>Data and software radar</h1></section><div class="grid">{groups.map(([title,body])=><section class="card"><h2>{title}</h2><p>{body}</p></section>)}</div></Base>
