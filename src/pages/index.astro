@@ -1,7 +1,54 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 const entries = (await getCollection('daily')).sort((a,b)=>+b.data.date-+a.data.date);
 const latest = entries[0];
+const recent = entries.slice(1,5);
+let Content;
+if (latest) ({ Content } = await render(latest));
 ---
-<Base title="Genetic Daily Papers"><section class="hero"><div class="eyebrow">Daily Paper Radar</div><h1>Today’s research worth your attention</h1><p>Statistical genetics, single-cell genomics, computational methods, research resources, and GPU/HPC.</p></section>{latest ? <section class="card paper"><div class="meta">{latest.data.date.toISOString().slice(0,10)}</div><h2><a href={`/daily/${latest.id}`}>{latest.data.title}</a></h2><p>{latest.data.summary}</p>{latest.data.topics.map(t=><span class="tag">{t}</span>)}</section> : <section class="card"><h2>No issue published yet</h2><p>The first daily radar will appear here.</p></section>}</Base>
+<Base title="Genetic Daily Papers · Daily Paper Radar">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Daily Paper Radar</div>
+        <h1>每天只留下真正值得读的论文。</h1>
+        <p>关注统计遗传学、单细胞与空间组学、QTL / fine-mapping、foundation models、regulatory sequence models，以及 GPU / HPC 科研计算。</p>
+      </div>
+      <div class="issue-stat" aria-label="Radar summary">
+        <div><strong>{entries.length}</strong><span>Issues</span></div>
+        <div><strong>3–6</strong><span>Daily picks</span></div>
+      </div>
+    </div>
+  </section>
+
+  {latest ? (
+    <>
+      <article class="paper">
+        <div class="issue-head">
+          <div class="eyebrow">Latest issue · {latest.data.date.toISOString().slice(0,10)}</div>
+          <h1>{latest.data.title}</h1>
+          <p class="meta">{latest.data.summary}</p>
+          <div>{latest.data.topics.map(t => <span class="tag">{t}</span>)}</div>
+        </div>
+        <Content />
+      </article>
+      {recent.length > 0 && (
+        <section class="recent-strip">
+          <h2>Recent issues</h2>
+          <div class="recent-list">
+            {recent.map(e => (
+              <a class="recent-item" href={`/daily/${e.id}`}>
+                <span class="meta">{e.data.date.toISOString().slice(0,10)}</span>
+                <strong>{e.data.title}</strong>
+                <span class="meta">{e.data.summary}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  ) : (
+    <section class="card"><h2>No issue published yet</h2><p>The first daily radar will appear here.</p></section>
+  )}
+</Base>
