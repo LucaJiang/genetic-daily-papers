@@ -1,5 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
-const groups=[['GWAS / QTL resources','GWAS Catalog, GTEx, eQTL Catalogue, Open Targets Genetics and other major releases.'],['GPU / HPC watch','RAPIDS, rapids-singlecell, CuPy, JAX, PyTorch, Triton, sparse kernels and multi-GPU tooling.'],['Software releases','Method packages, APIs and reproducible implementations relevant to statistical genetics and single-cell analysis.']];
+const resources=[
+  {title:'GWAS Catalog',kind:'GWAS / summary statistics',body:'Curated GWAS studies, top associations, full summary statistics and REST API access.',href:'https://www.ebi.ac.uk/gwas/'},
+  {title:'GTEx Portal',kind:'eQTL / expression',body:'Bulk tissue expression and QTL resources, plus current single-cell data access.',href:'https://gtexportal.org/'},
+  {title:'eQTL Catalogue',kind:'eQTL / sQTL',body:'Uniformly processed expression and splicing QTL datasets; release notes are monitored for new workflows and studies.',href:'https://www.ebi.ac.uk/eqtl/'},
+  {title:'Open Targets Platform',kind:'genetics / credible sets',body:'Target–disease evidence integrating GWAS studies, variants, credible sets and functional evidence.',href:'https://platform.opentargets.org/'},
+  {title:'rapids-singlecell',kind:'GPU / single-cell',body:'AnnData-first GPU acceleration built on CuPy and NVIDIA RAPIDS for common Scanpy-style workflows.',href:'https://rapids-singlecell.readthedocs.io/en/stable/'},
+  {title:'bioRxiv',kind:'preprints',body:'Primary source for daily computational genomics, genetics and bioinformatics preprint monitoring.',href:'https://www.biorxiv.org/'}
+];
 ---
-<Base title="Resources · Genetic Daily Papers"><section class="hero"><div class="eyebrow">Resources</div><h1>Data and software radar</h1></section><div class="grid">{groups.map(([title,body])=><section class="card"><h2>{title}</h2><p>{body}</p></section>)}</div></Base>
+<Base title="Resources · Genetic Daily Papers">
+  <section class="hero"><div class="eyebrow">Resources</div><h1>数据库与软件雷达</h1><p>这里保存我们长期跟踪的官方入口；具体 release / API 变化会进入对应日期的 Daily Radar。</p></section>
+  <div class="grid">
+    {resources.map(r=><a class="card resource-link" href={r.href} target="_blank" rel="noreferrer">
+      <div class="eyebrow">{r.kind}</div><h2>{r.title}</h2><p>{r.body}</p><span class="external">Open official resource ↗</span>
+    </a>)}
+  </div>
+</Base>
