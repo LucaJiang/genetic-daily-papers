@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PriorityBadge from './PriorityBadge.astro';
+import { topicLabel } from '../data/topics';
+
+interface Props {
+  paper: CollectionEntry<'papers'>;
+  featured?: boolean;
+}
+
+const { paper, featured = false } = Astro.props;
+const date = paper.data.date.toISOString().slice(0, 10);
+---
+<article class:list={['paper-card', { 'paper-card--featured': featured }]}> 
+  <div class="paper-card__topline">
+    <PriorityBadge priority={paper.data.priority} />
+    <span class="paper-card__meta">{paper.data.source} · {date}</span>
+  </div>
+  <h2 class="paper-card__title">
+    <a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a>
+  </h2>
+  <p class="paper-card__summary">{paper.data.summary}</p>
+  <div class="paper-card__why">
+    <span>为什么值得读</span>
+    <p>{paper.data.whyItMatters}</p>
+  </div>
+  <div class="paper-card__footer">
+    <div class="tag-list" aria-label="研究主题">
+      {paper.data.topics.slice(0, 4).map((topic) => (
+        <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>
+      ))}
+    </div>
+    <a class="text-link" href={`/papers/${paper.id}/`}>阅读全文 <span aria-hidden="true">→</span></a>
+  </div>
+</article>
