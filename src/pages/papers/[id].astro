@@ -44,7 +44,7 @@ const figures = paper.data.figures.length ? paper.data.figures : paper.data.figu
           <figure class:list={['paper-figure', { 'paper-figure--lead': index === 0 }]}> 
             <a class="paper-figure__image" href={figure.sourceUrl} target="_blank" rel="noreferrer">
               <span class="image-fallback">打开原图 ↗</span>
-              <img src={figure.url} alt={figure.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
+              <img src={figure.url} alt={figure.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" onerror="this.remove()" />
             </a>
             <figcaption>
               <strong>{figure.label ?? `Figure ${index + 1}`}</strong>

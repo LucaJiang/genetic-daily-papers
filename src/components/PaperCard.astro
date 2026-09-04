@@ -17,7 +17,7 @@ const figure = paper.data.figures[0] ?? paper.data.figure;
     {figure && (
       <a class="paper-card__image" href={`/papers/${paper.id}/`} aria-label={`查看 ${paper.data.shortTitle ?? paper.data.title} 的详细解读`}>
         <span class="image-fallback">查看论文图</span>
-        <img src={figure.url} alt={figure.alt} loading="lazy" decoding="async" />
+        <img src={figure.url} alt={figure.alt} loading="lazy" decoding="async" onerror="this.remove()" />
       </a>
     )}
     <div class="paper-card__content">
