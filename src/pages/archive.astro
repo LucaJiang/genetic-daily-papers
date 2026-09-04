@@ -1,0 +1,6 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const entries=(await getCollection('daily')).sort((a,b)=>+b.data.date-+a.data.date);
+---
+<Base title="Archive · Genetic Daily Papers"><section class="hero"><div class="eyebrow">Archive</div><h1>Past daily radars</h1></section><div class="grid">{entries.map(e=><article class="card"><div class="meta">{e.data.date.toISOString().slice(0,10)}</div><h2><a href={`/daily/${e.id}`}>{e.data.title}</a></h2><p>{e.data.summary}</p></article>)}</div></Base>
