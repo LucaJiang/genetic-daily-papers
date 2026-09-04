@@ -4,6 +4,7 @@ import { glob } from 'astro/loaders';
 const figureSchema = z.object({
   url: z.string().url(),
   alt: z.string(),
+  kind: z.enum(['real-data', 'validation', 'workflow', 'simulation', 'resource']).optional(),
   label: z.string().optional(),
   caption: z.string(),
   credit: z.string(),
