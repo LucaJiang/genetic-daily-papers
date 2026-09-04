@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PriorityBadge from '../../components/PriorityBadge.astro';
 import { getCollection, render } from 'astro:content';
 import { topicLabel } from '../../data/topics';
+import { figureAssetUrl, figureKindLabel, figuresForPaper } from '../../lib/figures';
 
 export async function getStaticPaths() {
   const papers = await getCollection('papers');
@@ -11,78 +12,92 @@ export async function getStaticPaths() {
 
 const { paper } = Astro.props;
 const { Content } = await render(paper);
-const issues = await getCollection('daily');
+const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
 const issue = issues.find((entry) => entry.data.papers.includes(paper.id));
 const date = paper.data.date.toISOString().slice(0, 10);
-const figures = paper.data.figures.length ? paper.data.figures : paper.data.figure ? [paper.data.figure] : [];
+const figures = figuresForPaper(paper);
 ---
 <Base title={`${paper.data.shortTitle ?? paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}>
-  {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
+  <div class="article-shell">
+    {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
 
-  <header class="paper-hero paper-hero--v4">
-    <div class="paper-hero__topline">
-      <PriorityBadge priority={paper.data.priority} />
-      <span>{paper.data.source}</span><span>·</span><time datetime={date}>{date}</time>
-      {paper.data.version && <><span>·</span><span>{paper.data.version}</span></>}
-    </div>
-    <h1>{paper.data.title}</h1>
-    <p class="paper-hero__authors">{paper.data.authors}</p>
-    <p class="paper-hero__summary">{paper.data.summary}</p>
-    <div class="paper-actions">
-      <a class="button button--primary" href={paper.data.paperUrl} target="_blank" rel="noreferrer">原文 ↗</a>
-      {paper.data.codeUrl && <a class="button" href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
-      {paper.data.resourceUrl && <a class="button" href={paper.data.resourceUrl} target="_blank" rel="noreferrer">资源 ↗</a>}
-      {paper.data.doi && <a class="button" href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">DOI ↗</a>}
-    </div>
-  </header>
-
-  {figures.length > 0 && (
-    <section class="figure-section" aria-labelledby="figure-section-title">
-      <div class="section-heading"><div><h2 id="figure-section-title">论文图解</h2></div></div>
-      <div class:list={['paper-figure-grid', { 'paper-figure-grid--single': figures.length === 1 }]}> 
-        {figures.map((figure, index) => (
-          <figure class:list={['paper-figure', { 'paper-figure--lead': index === 0 }]}> 
-            <a class="paper-figure__image" href={figure.sourceUrl} target="_blank" rel="noreferrer">
-              <span class="image-fallback">打开原图 ↗</span>
-              <img src={figure.url} alt={figure.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" onerror="this.remove()" />
-            </a>
-            <figcaption>
-              <strong>{figure.label ?? `Figure ${index + 1}`}</strong>
-              <span>{figure.caption}</span>
-              <small>图源：{figure.credit}{figure.license ? ` · ${figure.license}` : ''} · <a href={figure.sourceUrl} target="_blank" rel="noreferrer">原图</a></small>
-            </figcaption>
-          </figure>
-        ))}
+    <header class="paper-header">
+      <div class="paper-header__meta">
+        <PriorityBadge priority={paper.data.priority} />
+        <span>{paper.data.source}</span>
+        <span>·</span>
+        <time datetime={date}>{date}</time>
+        {paper.data.version && <><span>·</span><span>{paper.data.version}</span></>}
       </div>
-    </section>
-  )}
+      <h1>{paper.data.title}</h1>
+      <p class="paper-header__authors">{paper.data.authors}</p>
+      <p class="paper-header__summary">{paper.data.summary}</p>
+      <div class="paper-actions">
+        <a class="button button--primary" href={paper.data.paperUrl} target="_blank" rel="noreferrer">原文 ↗</a>
+        {paper.data.codeUrl && <a class="button" href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
+        {paper.data.resourceUrl && <a class="button" href={paper.data.resourceUrl} target="_blank" rel="noreferrer">资源 ↗</a>}
+      </div>
+    </header>
 
-  <div class="paper-layout paper-layout--v4">
-    <article class="paper-body"><Content /></article>
-    <aside class="paper-aside">
-      <section class="aside-card">
-        <h2>阅读重点</h2>
-        <p>{paper.data.whyItMatters}</p>
+    {paper.data.keyResults.length > 0 && (
+      <section class="result-summary" aria-labelledby="result-summary-title">
+        <h2 id="result-summary-title">主要结果</h2>
+        <div class="result-summary__grid">
+          {paper.data.keyResults.map((result, index) => (
+            <div><span>{String(index + 1).padStart(2, '0')}</span><p>{result}</p></div>
+          ))}
+        </div>
       </section>
-      {paper.data.keyResults.length > 0 && (
-        <section class="aside-card">
-          <h2>主要结果</h2>
-          <ul>{paper.data.keyResults.map((result) => <li>{result}</li>)}</ul>
-        </section>
-      )}
-      <section class="aside-card">
-        <h2>主题</h2>
-        <div class="tag-list">{paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}</div>
+    )}
+
+    {figures.length > 0 && (
+      <section id="figures" class="paper-figures" aria-labelledby="paper-figures-title">
+        <div class="article-section-title">
+          <h2 id="paper-figures-title">论文图</h2>
+          <span>真实数据优先</span>
+        </div>
+        <div class="paper-figure-stack">
+          {figures.map((figure, index) => {
+            const localUrl = figureAssetUrl(figure.url);
+            return (
+              <figure class="paper-figure-v5">
+                <a class="paper-figure-v5__image" href={figure.sourceUrl} target="_blank" rel="noreferrer">
+                  <span class="paper-figure-v5__fallback">图片未加载，打开原图 ↗</span>
+                  <img
+                    src={localUrl}
+                    data-fallback={figure.url}
+                    alt={figure.alt}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback}else{this.hidden=true;this.parentElement.classList.add('is-missing')}"
+                  />
+                </a>
+                <figcaption>
+                  <span class={`figure-kind figure-kind--${figure.kind ?? 'real-data'}`}>{figureKindLabel(figure.kind)}</span>
+                  <div>
+                    <h3>{figure.label ?? `Figure ${index + 1}`}</h3>
+                    <p>{figure.caption}</p>
+                    <small>{figure.credit}{figure.license ? ` · ${figure.license}` : ''} · <a href={figure.sourceUrl} target="_blank" rel="noreferrer">原图</a></small>
+                  </div>
+                </figcaption>
+              </figure>
+            );
+          })}
+        </div>
       </section>
-      <section class="aside-card bibliography-card">
+    )}
+
+    <article class="paper-article"><Content /></article>
+
+    <footer class="paper-footer-meta">
+      <div>
         <h2>文献信息</h2>
-        <dl>
-          <dt>日期</dt><dd>{date}</dd>
-          <dt>来源</dt><dd>{paper.data.source}</dd>
-          {paper.data.doi && <><dt>DOI</dt><dd>{paper.data.doi}</dd></>}
-          <dt>状态</dt><dd>{paper.data.peerReviewed ? '已同行评议' : '预印本'}</dd>
-        </dl>
-      </section>
-    </aside>
+        <p>{paper.data.authors}. <em>{paper.data.title}</em>. {paper.data.source}, {date}.</p>
+        {paper.data.doi && <p>DOI: <a href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">{paper.data.doi}</a></p>}
+      </div>
+      <div class="tag-list">
+        {paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}
+      </div>
+    </footer>
   </div>
 </Base>
