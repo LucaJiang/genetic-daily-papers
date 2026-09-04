@@ -2,42 +2,66 @@
 import type { CollectionEntry } from 'astro:content';
 import PriorityBadge from './PriorityBadge.astro';
 import { topicLabel } from '../data/topics';
+import { figureAssetUrl, figureKindLabel, figuresForPaper } from '../lib/figures';
 
 interface Props {
   paper: CollectionEntry<'papers'>;
-  featured?: boolean;
+  index: number;
+  total: number;
 }
 
-const { paper, featured = false } = Astro.props;
+const { paper, index, total } = Astro.props;
 const date = paper.data.date.toISOString().slice(0, 10);
-const figure = paper.data.figures[0] ?? paper.data.figure;
+const figures = figuresForPaper(paper);
+const figure = figures.find((item) => item.kind === 'real-data') ?? figures[0];
+const figureSrc = figure ? figureAssetUrl(figure.url) : undefined;
+const number = String(index).padStart(2, '0');
 ---
-<article class:list={['paper-card', 'paper-card--v4', { 'paper-card--featured': featured }]}> 
-  <div class="paper-card__layout">
-    {figure && (
-      <a class="paper-card__image" href={`/papers/${paper.id}/`} aria-label={`查看 ${paper.data.shortTitle ?? paper.data.title} 的详细解读`}>
-        <span class="image-fallback">查看论文图</span>
-        <img src={figure.url} alt={figure.alt} loading="lazy" decoding="async" onerror="this.remove()" />
-      </a>
+<article class="paper-entry">
+  <div class="paper-entry__number" aria-hidden="true">
+    <strong>{number}</strong>
+    <span>/ {String(total).padStart(2, '0')}</span>
+  </div>
+
+  <div class="paper-entry__content">
+    <div class="paper-entry__meta">
+      <PriorityBadge priority={paper.data.priority} />
+      <span>{paper.data.source}</span>
+      <span>·</span>
+      <time datetime={date}>{date}</time>
+    </div>
+
+    <h2><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a></h2>
+    <p class="paper-entry__summary">{paper.data.summary}</p>
+
+    {paper.data.keyResults.length > 0 && (
+      <ul class="paper-entry__results">
+        {paper.data.keyResults.slice(0, 2).map((result) => <li>{result}</li>)}
+      </ul>
     )}
-    <div class="paper-card__content">
-      <div class="paper-card__topline">
-        <PriorityBadge priority={paper.data.priority} />
-        <span class="paper-card__meta">{paper.data.source} · {date}</span>
+
+    <div class="paper-entry__footer">
+      <div class="tag-list" aria-label="研究主题">
+        {paper.data.topics.slice(0, 4).map((topic) => (
+          <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>
+        ))}
       </div>
-      <h2 class="paper-card__title"><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a></h2>
-      <p class="paper-card__summary">{paper.data.summary}</p>
-      {paper.data.keyResults.length > 0 && (
-        <ul class="paper-card__results">
-          {paper.data.keyResults.slice(0, 2).map((result) => <li>{result}</li>)}
-        </ul>
-      )}
-      <div class="paper-card__footer">
-        <div class="tag-list" aria-label="研究主题">
-          {paper.data.topics.slice(0, 4).map((topic) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}
-        </div>
-        <a class="text-link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">→</span></a>
-      </div>
+      <a class="paper-entry__link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">→</span></a>
     </div>
   </div>
+
+  {figure && figureSrc && (
+    <a class="paper-entry__figure" href={`/papers/${paper.id}/#figures`} aria-label={`查看 ${paper.data.shortTitle ?? paper.data.title} 的论文图`}>
+      <span class="paper-entry__figure-fallback">查看论文图</span>
+      <img
+        src={figureSrc}
+        data-fallback={figure.url}
+        alt={figure.alt}
+        loading="lazy"
+        decoding="async"
+        onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback}else{this.hidden=true;this.parentElement.classList.add('is-missing')}"
+      />
+      <span class="paper-entry__figure-label">{figureKindLabel(figure.kind)}</span>
+    </a>
+  )}
 </article>
