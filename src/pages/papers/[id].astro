@@ -1,9 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
+import FigureGallery from '../../components/FigureGallery.astro';
 import PriorityBadge from '../../components/PriorityBadge.astro';
 import { getCollection, render } from 'astro:content';
 import { topicLabel } from '../../data/topics';
-import { figureAssetUrl, figureKindLabel, figureTitle, figuresForPaper } from '../../lib/figures';
+import { figuresForPaper } from '../../lib/figures';
 
 export async function getStaticPaths() {
   const papers = await getCollection('papers');
@@ -16,6 +17,8 @@ const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.d
 const issue = issues.find((entry) => entry.data.papers.includes(paper.id));
 const date = paper.data.date.toISOString().slice(0, 10);
 const figures = figuresForPaper(paper);
+const resultFigures = figures.filter((figure) => ['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
+const methodFigures = figures.filter((figure) => !['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
 ---
 <Base title={`${paper.data.shortTitle ?? paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}>
   <div class="article-shell">
@@ -50,42 +53,11 @@ const figures = figuresForPaper(paper);
       </section>
     )}
 
-    {figures.length > 0 && (
-      <section id="figures" class="paper-figures" aria-labelledby="paper-figures-title">
-        <div class="article-section-title"><h2 id="paper-figures-title">论文图</h2></div>
-        <div class="paper-figure-stack">
-          {figures.map((figure, index) => {
-            const localUrl = figureAssetUrl(figure.url);
-            return (
-              <figure class="paper-figure-v5">
-                <a class="paper-figure-v5__image" href={figure.sourceUrl} target="_blank" rel="noreferrer">
-                  <span class="paper-figure-v5__fallback">图片未加载，打开原图 ↗</span>
-                  <img
-                    src={localUrl}
-                    data-fallback={figure.url}
-                    alt={figure.alt}
-                    loading="eager"
-                    fetchpriority={index === 0 ? 'high' : 'auto'}
-                    decoding="async"
-                    onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback}else{this.hidden=true;this.parentElement.classList.add('is-missing')}"
-                  />
-                </a>
-                <figcaption>
-                  <span class={`figure-kind figure-kind--${figure.kind ?? 'real-data'}`}>{figureKindLabel(figure.kind)}</span>
-                  <div>
-                    <h3>{figureTitle(figure, index)}</h3>
-                    <p>{figure.caption}</p>
-                    <small>{figure.credit}{figure.license ? ` · ${figure.license}` : ''} · <a href={figure.sourceUrl} target="_blank" rel="noreferrer">原图</a></small>
-                  </div>
-                </figcaption>
-              </figure>
-            );
-          })}
-        </div>
-      </section>
-    )}
+    <FigureGallery id="result-figures" title="关键结果图" figures={resultFigures} />
 
     <article class="paper-article"><Content /></article>
+
+    <FigureGallery id="method-figures" title="方法与验证图" figures={methodFigures} />
 
     <footer class="paper-footer-meta">
       <div>
