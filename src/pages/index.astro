@@ -3,7 +3,9 @@ import Base from '../layouts/Base.astro';
 import PaperCard from '../components/PaperCard.astro';
 import { getCollection } from 'astro:content';
 
-const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
+const issues = (await getCollection('daily'))
+  .filter((entry) => entry.data.papers.length > 0)
+  .sort((a, b) => +b.data.date - +a.data.date);
 const allPapers = await getCollection('papers');
 const latest = issues[0];
 const papers = latest ? latest.data.papers.map((id) => allPapers.find((paper) => paper.id === id)).filter(Boolean) : [];
