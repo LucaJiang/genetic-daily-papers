@@ -1,10 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+
 const releases = [
+  {
+    date: '2026-09-01',
+    title: 'OmicsPred',
+    body: 'Nature Genetics 发表的多组学遗传预测模型资源，统一收录转录组、蛋白组和代谢组权重及训练样本、祖源、平台和预测性能元数据。',
+    href: 'https://www.omicspred.org/',
+  },
   {
     date: '2026-05-28',
     title: 'GTEx V11 bulk RNA-seq data',
-    body: 'Adult GTEx RNA-seq 数据更新到 GENCODE 47。V11 没有增加 donor 或 sample；主要变化是表达定量与 QTL 文件按新注释重新处理，并提供 eQTL、sQTL 和 apaQTL 的 SuSiE fine-mapping 文件。',
+    body: 'Adult GTEx RNA-seq 数据更新到 GENCODE 47。V11 没有增加 donor 或 sample；表达和 QTL 文件按新注释重新处理，并提供 eQTL、sQTL 与 apaQTL 的 SuSiE fine-mapping 文件。',
     href: 'https://gtexportal.org/home/downloads/adult-gtex/overview',
   },
   {
@@ -19,16 +26,10 @@ const releases = [
     body: '非人灵长类发育 GTEx 首次发布，覆盖 rhesus macaque 与 common marmoset，为跨物种发育调控比较提供数据入口。',
     href: 'https://www.gtexportal.org/',
   },
-  {
-    date: '2026-09-01',
-    title: 'OmicsPred',
-    body: 'Nature Genetics 发表的多组学遗传预测模型资源，统一收录转录组、蛋白组和代谢组权重及训练样本、祖源、平台和预测性能元数据。',
-    href: 'https://www.omicspred.org/',
-  },
-];
+].sort((a, b) => b.date.localeCompare(a.date));
 ---
 <Base title="Data releases · Genetic Daily Papers">
-  <section class="hero hero--v4"><div class="eyebrow">Data releases</div><h1>数据发布</h1><p>GWAS、QTL 和多组学资源的新数据与数据库论文。</p></section>
+  <section class="hero"><div class="eyebrow">Data releases</div><h1>数据发布</h1><p>GWAS、QTL 和多组学资源的新数据与数据库论文。</p></section>
   <div class="release-list">
     {releases.map((release) => (
       <article class="release-card">
