@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/rss": "^4.0.12",
+    "@types/node": "^22.15.0",
     "astro": "^5.13.5",
     "katex": "^0.16.22",
     "rehype-katex": "^7.0.1",
