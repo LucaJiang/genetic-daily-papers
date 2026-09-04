@@ -4,31 +4,32 @@ function plainText(node) {
   return Array.isArray(node.children) ? node.children.map(plainText).join('') : '';
 }
 
-const replacements = [
-  [/^Figure\s*1\s*应该怎样读$/i, '方法流程'],
-  [/^Figure\s*2\s*应该怎样读$/i, '真实数据结果'],
-  [/^共定位结果应该怎样解释$/, '共定位结果'],
+const fileRules = [
+  [/cigma-cell-type-specific-eqtl/, 'Figure 2 应该怎样读', '置换检验与模拟校准'],
+  [/spatial-atac-hi-c/, 'Figure 2 应该怎样读', '小鼠脑真实数据：空间分区与模态一致性'],
+  [/rare-variant-nonadditivity/, 'Figure 1 应该怎样读', '非加性遗传编码'],
+  [/malva-sequence-search/, 'Figure 1 应该怎样读', '查询流程与输出'],
+  [/scigma-spatial-multiomics/, 'Figure 1 应该怎样读', '模型结构：空间图与跨模态注意力'],
+  [/brain-context-lncRNA-eqtl|brain-context-lncrna-eqtl/i, '共定位结果应该怎样解释', '共定位结果'],
 ];
 
 export default function remarkCleanHeadings() {
   return (tree, file) => {
     const path = String(file?.path ?? '');
+
     for (const node of tree.children ?? []) {
       if (node.type !== 'heading') continue;
       const text = plainText(node).trim();
-      let replacement;
 
-      if (/cigma-cell-type-specific-eqtl/.test(path) && text === 'Figure 2 应该怎样读') {
-        replacement = '模拟与校准';
-      } else if (/spatial-atac-hi-c/.test(path) && text === 'Figure 2 应该怎样读') {
-        replacement = '小鼠脑真实数据';
-      } else if (/rare-variant-nonadditivity/.test(path) && text === 'Figure 1 应该怎样读') {
-        replacement = '正交遗传编码';
-      } else {
-        const matched = replacements.find(([pattern]) => pattern.test(text));
-        replacement = matched?.[1];
+      const matchedRule = fileRules.find(([pathPattern, source]) => pathPattern.test(path) && source === text);
+      let replacement = matchedRule?.[2];
+
+      if (!replacement) {
+        const genericFigure = text.match(/^Figure\s*(\d+[A-Za-z]?)\s*应该怎样读$/i);
+        if (genericFigure) replacement = `Figure ${genericFigure[1]}`;
       }
 
+      if (!replacement && text === '共定位结果应该怎样解释') replacement = '共定位结果';
       if (replacement) node.children = [{ type: 'text', value: replacement }];
     }
   };
