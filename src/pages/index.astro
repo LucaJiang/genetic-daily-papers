@@ -1,54 +1,46 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection, render } from 'astro:content';
-const entries = (await getCollection('daily')).sort((a,b)=>+b.data.date-+a.data.date);
-const latest = entries[0];
-const recent = entries.slice(1,5);
-let Content;
-if (latest) ({ Content } = await render(latest));
+import PaperCard from '../components/PaperCard.astro';
+import { getCollection } from 'astro:content';
+
+const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
+const allPapers = await getCollection('papers');
+const latest = issues[0];
+const papers = latest
+  ? latest.data.papers.map((id) => allPapers.find((paper) => paper.id === id)).filter(Boolean)
+  : [];
+const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+}).format(date);
 ---
-<Base title="Genetic Daily Papers · Daily Paper Radar">
+<Base>
   <section class="hero">
-    <div class="hero-grid">
-      <div>
-        <div class="eyebrow">Daily Paper Radar</div>
-        <h1>每天只留下真正值得读的论文。</h1>
-        <p>关注统计遗传学、单细胞与空间组学、QTL / fine-mapping、foundation models、regulatory sequence models，以及 GPU / HPC 科研计算。</p>
-      </div>
-      <div class="issue-stat" aria-label="Radar summary">
-        <div><strong>{entries.length}</strong><span>Issues</span></div>
-        <div><strong>3–6</strong><span>Daily picks</span></div>
-      </div>
-    </div>
+    <div class="eyebrow">Daily Paper Radar</div>
+    <h1>不是论文列表，而是方法学筛选。</h1>
+    <p>聚焦统计遗传学、单细胞计算方法、QTL 与 fine-mapping、调控模型，以及从算子和系统瓶颈出发的算法加速。</p>
+    {latest && <div class="hero__meta"><span>{formatDate(latest.data.date)}</span><span>{papers.length} 篇重点解读</span><span>每日更新</span></div>}
   </section>
 
   {latest ? (
     <>
-      <article class="paper">
-        <div class="issue-head">
-          <div class="eyebrow">Latest issue · {latest.data.date.toISOString().slice(0,10)}</div>
-          <h1>{latest.data.title}</h1>
-          <p class="meta">{latest.data.summary}</p>
-          <div>{latest.data.topics.map(t => <span class="tag">{t}</span>)}</div>
+      <section class="issue-intro">
+        <div class="eyebrow">Latest Issue</div>
+        <h2>{latest.data.title}</h2>
+        <p>{latest.data.summary}</p>
+        <a class="text-link" href={`/daily/${latest.id}/`}>查看当日完整摘要与资源更新 →</a>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div><h2>今日精选</h2><p>Daily 页保留摘要；每篇论文进入独立的技术精读页。</p></div>
+          <a href={`/daily/${latest.id}/`}>当日目录 →</a>
         </div>
-        <Content />
-      </article>
-      {recent.length > 0 && (
-        <section class="recent-strip">
-          <h2>Recent issues</h2>
-          <div class="recent-list">
-            {recent.map(e => (
-              <a class="recent-item" href={`/daily/${e.id}`}>
-                <span class="meta">{e.data.date.toISOString().slice(0,10)}</span>
-                <strong>{e.data.title}</strong>
-                <span class="meta">{e.data.summary}</span>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+        <div class="paper-list">
+          {papers.map((paper, index) => paper && <PaperCard paper={paper} featured={index === 0} />)}
+        </div>
+      </section>
     </>
   ) : (
-    <section class="card"><h2>No issue published yet</h2><p>The first daily radar will appear here.</p></section>
+    <section class="empty-state"><h2>尚未发布日报</h2><p>第一期 Paper Radar 将显示在这里。</p></section>
   )}
 </Base>
