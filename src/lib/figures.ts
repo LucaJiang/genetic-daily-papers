@@ -30,17 +30,26 @@ const kindRank: Record<FigureKind, number> = {
 export function figureKindLabel(kind?: FigureKind): string {
   switch (kind) {
     case 'real-data': return '真实数据';
-    case 'validation': return '验证';
+    case 'validation': return '技术验证';
     case 'workflow': return '方法流程';
-    case 'simulation': return '模拟';
-    case 'resource': return '数据库';
+    case 'simulation': return '模拟研究';
+    case 'resource': return '数据库结构';
     default: return '论文图';
   }
 }
 
+export function figureReference(figure: PaperFigure, index: number): string {
+  const match = figure.label?.match(/Figure\s*(\d+[A-Za-z]?)/i);
+  return match ? `Figure ${match[1]}` : `Figure ${index + 1}`;
+}
+
 export function figureTitle(figure: PaperFigure, index: number): string {
   const label = figure.label ?? `Figure ${index + 1}`;
-  return label.replace(/^(真实数据|方法流程|模拟|数据库|验证|方法)[：:]\s*/u, '');
+  return label
+    .replace(/^(真实数据|方法流程|模拟|数据库|验证|方法)[：:]\s*/u, '')
+    .replace(/^Figure\s*\d+[A-Za-z]?\s*[·:：-]\s*/i, '')
+    .replace(/\s*[（(]Figure\s*\d+[A-Za-z]?[）)]\s*$/i, '')
+    .trim();
 }
 
 export function figuresForPaper(paper: CollectionEntry<'papers'>): PaperFigure[] {
