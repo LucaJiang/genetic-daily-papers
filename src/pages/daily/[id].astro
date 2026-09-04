@@ -1,7 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
-export async function getStaticPaths(){const entries=await getCollection('daily');return entries.map(entry=>({params:{id:entry.id},props:{entry}}));}
-const { entry }=Astro.props;const { Content }=await render(entry);
+export async function getStaticPaths(){
+  const entries=await getCollection('daily');
+  return entries.map(entry=>({params:{id:entry.id},props:{entry}}));
+}
+const { entry }=Astro.props;
+const { Content }=await render(entry);
 ---
-<Base title={`${entry.data.title} · Genetic Daily Papers`}><article class="paper"><div class="eyebrow">Daily Radar · {entry.data.date.toISOString().slice(0,10)}</div><h1>{entry.data.title}</h1><p class="meta">{entry.data.summary}</p><p>{entry.data.topics.map(t=><span class="tag">{t}</span>)}</p><Content /></article></Base>
+<Base title={`${entry.data.title} · Genetic Daily Papers`} description={entry.data.summary}>
+  <article class="paper">
+    <div class="issue-head">
+      <div class="eyebrow">Daily Radar · {entry.data.date.toISOString().slice(0,10)}</div>
+      <h1>{entry.data.title}</h1>
+      <p class="meta">{entry.data.summary}</p>
+      <div>{entry.data.topics.map(t=><span class="tag">{t}</span>)}</div>
+    </div>
+    <Content />
+  </article>
+</Base>
