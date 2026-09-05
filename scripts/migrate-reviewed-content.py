@@ -13,4 +13,6 @@ for path in paths:
     text=re.sub(r'(?m)^## Figure\s*\d+(?:\s*/\s*\d+)?\s*应该怎样读\s*$',f'## {label}',text)
     text=text.replace('## 最值得带走的结论','## 小结')
     path.write_text(text)
+ab=root/'papers/ab-prs-adaptive-finetuning.md'
+if ab.exists(): ab.write_text(ab.read_text().replace('与昨日收录的罕见变异','与此前收录的罕见变异'))
 print('Reviewed legacy issues retained; no other drafts published.')
