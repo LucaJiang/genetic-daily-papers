@@ -2,4 +2,14 @@ import {basename} from 'node:path';
 import {figuresFor,figureHTML} from '../lib/review-figures.mjs';
 const plain=n=>n?.value??(n?.children??[]).map(plain).join('');
 const cleanTitle=s=>s.replace(/^Figure\s*\d+(?:\s*\/\s*\d+)?\s*应该怎样读$/iu,'图示结果').replace(/^最值得带走的结论$/u,'小结');
-export default function remarkReviewFigures(){return (tree,file)=>{const meta=file.data?.astro?.frontmatter??{};const slug=meta.figureSet??basename(String(file.path??''),'.md').toLowerCase();for(const n of tree.children??[]){if(n.type==='heading'){const t=plain(n),c=cleanTitle(t);if(c!==t)n.children=[{type:'text',value:c}];}}if(!meta.paperUrl)return;const figs=figuresFor(meta,slug),byId=new Map(figs.map(f=>[f.id,f]));let explicit=0;tree.children=tree.children.map(n=>{const m=n.type==='paragraph'&&plain(n).trim().match(/^\[\[figure:([\w-]+)\]\]$/);if(!m)return n;const f=byId.get(m[1]);if(!f)throw new Error(`Unknown figure ${m[1]} in ${slug}`);explicit++;return {type:'html',value:figureHTML(f)};});if(explicit)return;const real=figs.filter(f=>['real-data','resource','validation'].includes(f.kind)).slice(0,2);if(!real.length)return;const heading=tree.children.findIndex(n=>n.type==='heading'&&/实证结果|主要结果|性能结果|Benchmark|PheWAS|肿瘤应用/.test(plain(n)));let at=heading>=0?heading+1:tree.children.findIndex(n=>n.type==='heading'&&/参考|局限|小结/.test(plain(n)));if(at<0)at=tree.children.length;if(heading>=0&&tree.children[at]?.type==='paragraph')at++;tree.children.splice(at,0,...real.map(f=>({type:'html',value:figureHTML(f)})));};}
+export default function remarkReviewFigures(){return (tree,file)=>{
+ const meta=file.data?.astro?.frontmatter??{};const slug=meta.figureSet??basename(String(file.path??''),'.md').toLowerCase();
+ for(const n of tree.children??[]){if(n.type==='heading'){const t=plain(n),c=cleanTitle(t);if(c!==t)n.children=[{type:'text',value:c}];}}
+ if(!meta.paperUrl)return;
+ const figs=figuresFor(meta,slug),byId=new Map(figs.map(f=>[f.id,f]));let explicit=0;
+ tree.children=tree.children.map(n=>{if(n.type!=='paragraph')return n;const text=plain(n).trim(),id=text.match(/^\[\[figure:([\w-]+)\]\]$/),ordinal=text.match(/^\[figure:(\d+)\]$/);if(!id&&!ordinal)return n;const f=id?byId.get(id[1]):figs[Number(ordinal[1])-1];if(!f)throw new Error(`Unknown figure ${text} in ${slug}`);explicit++;return {type:'html',value:figureHTML(f)};});
+ if(explicit)return;
+ const real=figs.filter(f=>['real-data','resource','validation'].includes(f.kind)).slice(0,2);if(!real.length)return;
+ const heading=tree.children.findIndex(n=>n.type==='heading'&&/实证结果|主要结果|性能结果|Benchmark|PheWAS|肿瘤应用/.test(plain(n)));let at=heading>=0?heading+1:tree.children.findIndex(n=>n.type==='heading'&&/参考|局限|小结/.test(plain(n)));if(at<0)at=tree.children.length;if(heading>=0&&tree.children[at]?.type==='paragraph')at++;
+ tree.children.splice(at,0,...real.map(f=>({type:'html',value:figureHTML(f)})));
+};}

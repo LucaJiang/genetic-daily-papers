@@ -4,7 +4,7 @@ import {join,basename} from 'node:path';
 import {createHash} from 'node:crypto';
 import {parse} from 'yaml';
 import {figuresFor,assetFor} from '../src/lib/review-figures.mjs';
-const allowed=new Set(['www.nature.com','nature.com','media.springernature.com','static-content.springer-cdn.com']);
+const allowed=new Set(['www.nature.com','nature.com','media.springernature.com','static-content.springer-cdn.com','www.medrxiv.org','medrxiv.org']);
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&#x2F;/gi,'/').replace(/&#39;/g,"'").replace(/&quot;/g,'"');
 const fullSize=url=>url.replace(/\/m\d+\//,'/full/').replace(/\/lw\d+\//,'/full/');
 async function get(url,depth=0){if(depth>5)throw new Error('Too many redirects');const u=new URL(url);if(u.protocol!=='https:'||!allowed.has(u.hostname))throw new Error(`Unexpected image host ${u.hostname}`);const r=await fetch(u,{redirect:'manual',signal:AbortSignal.timeout(30000),headers:{'User-Agent':'GeneticDailyPapers/1.0 (academic reading site; licensed figures)'}});if(r.status>=300&&r.status<400){const loc=r.headers.get('location');if(!loc)throw new Error('Redirect without Location');return get(new URL(loc,u).href,depth+1);}if(!r.ok)throw new Error(`HTTP ${r.status} ${url}`);return {r,url:u.href};}

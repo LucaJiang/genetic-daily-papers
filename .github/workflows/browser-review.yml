@@ -2,7 +2,7 @@ name: Browser review
 on:
   push:
     branches: [publish-reviewed-2026-09-05]
-    paths: ['.github/workflows/browser-review.yml', 'src/**']
+    paths: ['.github/workflows/browser-review.yml', 'src/**', 'scripts/**']
 permissions:
   contents: read
 jobs:
@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: python scripts/migrate-reviewed-legacy.py
       - run: npm ci --no-audit --no-fund
       - run: npm run build
       - name: Install browser test harness and CJK fonts
@@ -35,7 +36,8 @@ jobs:
           threading.Thread(target=server.serve_forever,daemon=True).start()
           exe=shutil.which('google-chrome') or shutil.which('chromium')
           if not exe:subprocess.run(['python','-m','playwright','install','--with-deps','chromium'],check=True)
-          routes=['/','/daily/2026-09-03/','/daily/2026-09-04/','/daily/2026-09-05/','/papers/ibd-blood-gut-eqtl/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/','/papers/cigma-cell-type-specific-eqtl/','/topics/','/topics/QTL/','/topics/polygenic-prediction/','/topics/foundation-models/','/archive/','/resources/']
+          reviews=['/papers/ibd-blood-gut-eqtl/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/','/papers/sce2g-enhancer-gene/','/papers/ldspec-correlated-effects/','/papers/aou-anvil-reference-panel/']
+          routes=['/','/daily/2026-09-03/','/daily/2026-09-04/','/daily/2026-09-05/',*reviews,'/papers/cigma-cell-type-specific-eqtl/','/topics/','/topics/QTL/','/topics/polygenic-prediction/','/topics/foundation-models/','/archive/','/resources/']
           async def test():
               results=[]
               async with async_playwright() as pw:
@@ -45,19 +47,19 @@ jobs:
                       for route in routes:
                           response=await page.goto('http://127.0.0.1:8765'+route,wait_until='networkidle')
                           await page.evaluate('''async()=>{for(const img of document.images)img.loading='eager';await document.fonts.ready;await Promise.all(Array.from(document.images).map(img=>img.complete?Promise.resolve():new Promise(r=>{img.onload=r;img.onerror=r;setTimeout(r,6000)})));}''')
-                          data=await page.evaluate('''()=>({title:document.title,width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,cards:document.querySelectorAll('[data-paper-id]').length,briefs:document.querySelectorAll('[data-brief-id]').length,math:document.querySelectorAll('.katex').length,mathErrors:document.querySelectorAll('.katex-error').length,rawFigures:document.body.innerText.includes('[[figure:'),images:Array.from(document.images).map(i=>({src:i.getAttribute('src'),w:i.naturalWidth,h:i.naturalHeight})),brokenAnchors:Array.from(document.querySelectorAll('a[href^="#"]')).filter(a=>a.hash&&!document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a=>a.hash)})''')
+                          data=await page.evaluate('''()=>({title:document.title,width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,cards:document.querySelectorAll('[data-paper-id]').length,briefs:document.querySelectorAll('[data-brief-id]').length,math:document.querySelectorAll('.katex').length,mathErrors:document.querySelectorAll('.katex-error').length,rawFigures:/\[\[?figure:/.test(document.body.innerText),images:Array.from(document.images).map(i=>({src:i.getAttribute('src'),w:i.naturalWidth,h:i.naturalHeight})),brokenAnchors:Array.from(document.querySelectorAll('a[href^="#"]')).filter(a=>a.hash&&!document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a=>a.hash)})''')
                           errors=[]
                           if response.status!=200:errors.append(f'HTTP {response.status}')
                           if data['scrollWidth']>width+1 or data['bodyWidth']>width+1:errors.append('horizontal overflow')
                           if data['mathErrors'] or data['rawFigures']:errors.append('render error')
                           if any(i['w']==0 for i in data['images']):errors.append('image not loaded')
                           if data['brokenAnchors']:errors.append('broken anchors')
-                          expected={'/':3,'/daily/2026-09-03/':3,'/daily/2026-09-04/':4,'/daily/2026-09-05/':3}.get(route)
+                          expected={'/':6,'/daily/2026-09-03/':3,'/daily/2026-09-04/':4,'/daily/2026-09-05/':6}.get(route)
                           if expected is not None and data['cards']!=expected:errors.append('card count mismatch')
                           if route in ['/','/daily/2026-09-05/'] and data['briefs']!=1:errors.append('brief count mismatch')
-                          if route in routes[4:7] and len(data['images'])!=2:errors.append('new review must contain 2 actual figures')
-                          if route in ['/papers/cigma-cell-type-specific-eqtl/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/'] and data['math']==0:errors.append('math not rendered')
-                          if width in [1440,390] and route in ['/','/daily/2026-09-03/','/daily/2026-09-05/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/','/papers/cigma-cell-type-specific-eqtl/','/topics/']:
+                          if route in reviews and len(data['images'])!=2:errors.append('review must contain 2 actual figures')
+                          if route in ['/papers/cigma-cell-type-specific-eqtl/',*reviews[1:]] and data['math']==0:errors.append('math not rendered')
+                          if width in [1440,390] and (route in reviews or route in ['/','/daily/2026-09-03/','/daily/2026-09-05/','/papers/cigma-cell-type-specific-eqtl/','/topics/']):
                               name=(route.strip('/').replace('/','-') or 'home')+f'-{width}.png'
                               await page.screenshot(path='browser-qa/'+name,full_page=True)
                           results.append({'route':route,'viewport':width,'errors':errors,**data})
