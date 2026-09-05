@@ -26,4 +26,8 @@ const active=(p:string)=>p==='/'?Astro.url.pathname==='/':Astro.url.pathname.sta
  });
  viewer?.addEventListener('click',(event)=>{if(event.target===viewer)viewer.close();});
 </script>
+<style is:global>
+ h1, .paper-card h2 { text-wrap: balance; }
+ .latest-summary { max-width: 850px; color: var(--muted); font-size: 14px; line-height: 1.85; margin: 0 0 20px; }
+</style>
 </body></html>
