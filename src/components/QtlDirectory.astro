@@ -1,0 +1,22 @@
+---
+interface Props {
+  groups: { id: string; shortTitle: string; records: { id: string; name: string; navLabel?: string }[] }[];
+}
+const { groups } = Astro.props;
+---
+<nav class="qtl-directory-nav" aria-label="QTL 资源目录">
+  {groups.map(group => <div class="directory-group">
+    <a class="directory-category" href={`#${group.id}`}><span>{group.shortTitle}</span><span class="directory-count">{group.records.length}</span></a>
+    <ul>{group.records.map(r => <li><a href={`#${r.id}`} data-qtl-nav={r.id}>{r.navLabel ?? r.name}</a></li>)}</ul>
+  </div>)}
+  <a class="directory-category archive-link" href="#resource-papers">资源简报与论文</a>
+</nav>
+<style>
+  .directory-group + .directory-group { margin-top: 18px; }
+  .directory-category { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: var(--ink); text-decoration: none; font-size: .875rem; font-weight: 700; line-height: 1.6; }
+  .directory-count { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 400; }
+  ul { padding: 4px 0 0; margin: 0; list-style: none; }
+  li a { display: block; padding: 5px 10px; border-left: 2px solid var(--line); font-size: .875rem; line-height: 1.6; color: var(--muted); text-decoration: none; overflow-wrap: anywhere; }
+  li a:hover, li a[aria-current="location"] { border-left-color: var(--accent); background: var(--pale); color: var(--accent); }
+  .archive-link { margin-top: 22px; padding-top: 15px; border-top: 1px solid var(--line); }
+</style>

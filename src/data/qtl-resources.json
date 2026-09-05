@@ -1,5 +1,167 @@
 [
   {
+    "id": "tenk10k-phase1-eqtl",
+    "name": "TenK10K Phase 1 — 单细胞 eQTL / WGS",
+    "version": "Cuomo et al., medRxiv；summary statistics v2（2026-01-30）；2026-09-05 核验",
+    "category": "single-cell",
+    "tissue": "外周血 PBMC；Tasmanian Ophthalmic Biobank（TOB）与 BioHEART-CT；eQTL 分析为欧洲祖源",
+    "qtlTypes": [
+      "cis-eQTL",
+      "rare-variant eQTL",
+      "cell-state eQTL",
+      "cell-state abundance QTL"
+    ],
+    "summary": "基于单细胞计数与 WGS，在 28 类免疫细胞中研究常见和罕见变异的表达调控；提供全量 cis-eQTL、罕见变异基因层面检验，以及 SuSiE fine-mapping 和共定位结果。适合细胞类型特异调控、低频变异及单细胞关联方法开发。",
+    "sampleSize": "Phase 1 总体为 2,103 人 / 5,920,025 cells；原 eQTL 分析纳入 1,925 名欧洲祖源 donor / 5,438,679 个质控后 PBMC。现有 EGA AnnData 与基因型归档均对应 1,925 人；各细胞类型有效 n 不同。",
+    "cellsPerDonor": "原论文实测质控后均值 2,825 cells/donor，范围 124–11,348。Phase 1 实验目标约 5,000 cells/donor；项目名称中的 10K 不代表已达到的每人细胞数或本次发布人数。",
+    "assay": "10x Genomics Chromium X；3′ Chromium Next GEM Single Cell HT v3.1 scRNA-seq；Illumina NovaSeq 6000；配套 WGS（2 × 150 bp）和 GRCh38 基因型。",
+    "depth": "WGS 平均覆盖度 30×。已核验的 scRNA 实验方法和 EGA 元数据未给出统一的目标或实测 reads/cell；该字段保留未核实，不以 UMI 数代替测序深度。",
+    "access": "Zenodo 18221260（v2）公开完整常见变异 ±100 kb / ±1 Mb cis 统计量、罕见变异结果、SuSiE 和 coloc。个体层面的 AnnData（EGAD50000002379）、FASTQ（EGAD50000002517）及 WGS / VCF（EGAS50000001654）均须经 EGA DAC 申请；AnnData 与 FASTQ 分别于 2026-02-27、2026-04-24 发布。",
+    "limitations": "与 OneK1K 的 TOB donor 存在重叠，合并或 meta-analysis 前需检查重复个体。这里明确列出原论文 v1 的样本计数与实验方法，下载结果使用已核验的 Zenodo v2；勿把项目长期计划当作已发布规模。全量统计量同时有不同 cis 窗口及模型不收敛后的重跑文件，应固定分析版本。",
+    "sources": [
+      {
+        "label": "论文（medRxiv v2）",
+        "url": "https://www.medrxiv.org/content/10.1101/2025.03.20.25324352v2"
+      },
+      {
+        "label": "样本量与实验方法（原论文 v1）",
+        "url": "https://www.medrxiv.org/content/10.1101/2025.03.20.25324352v1.full-text"
+      },
+      {
+        "label": "完整 eQTL / fine-mapping 下载（Zenodo v2）",
+        "url": "https://zenodo.org/records/18221260"
+      },
+      {
+        "label": "AnnData 与访问申请（EGA）",
+        "url": "https://ega-archive.org/datasets/EGAD50000002379"
+      },
+      {
+        "label": "原始 scRNA FASTQ（EGA）",
+        "url": "https://ega-archive.org/datasets/EGAD50000002517"
+      },
+      {
+        "label": "WGS / SNP / indel / tandem-repeat 基因型（EGA）",
+        "url": "https://ega-archive.org/studies/EGAS50000001654"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        1,
+        3,
+        5
+      ],
+      "cellsPerDonor": [
+        1
+      ],
+      "assay": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "depth": [
+        1,
+        5
+      ],
+      "access": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-05",
+      "primaryAccess": "medRxiv full-text direct fetch returned 403. The v1 primary manuscript was read in full via its ResearchGate copy: https://www.researchgate.net/publication/390182341_Impact_of_Rare_and_Common_Genetic_Variation_on_Cell_Type-Specific_Gene_Expression . The v2 manuscript link is independently identified by Zenodo v2 References; no claim that the full v2 methods were inspected.",
+      "sampleCounts": "v1 Results first subsection reports 5,438,679 PBMCs / 1,925 donors, Fig. 1 caption reports mean 2,825 and range 124–11,348. Introduction gives phase-one total 2,103 / 5,920,025. EGA AnnData and genotype study independently confirm released 1,925-donor set.",
+      "assayDepth": "v1 Methods, Single-cell RNA sequencing data / Sample pooling: Phase 1 target 5,000 cells per donor; TOB reuses OneK1K collection pools. Capture uses Chromium X HT v3.1 / NovaSeq 6000. No numerical RNA reads/cell identified. EGA WGS CRAM dataset description confirms mean 30× / paired-end 150 bp.",
+      "release": "Zenodo 18221260 is open Version v2 dated 2026-01-30, 170.6 GB, contains complete 100 kb and 1 Mb results and explicit convergence-failure reruns. EGA AnnData and raw FASTQ require DAC application (EGAC50000000931); not open individual data.",
+      "targetCaution": "Do not call this a released 10,000-donor dataset. EGA current access agreement describes eventual ~10,000 samples from ~8,000 donors, whereas older program announcements used 10,000 individuals / ~50 million cells; neither is the current phase-one analysis size."
+    },
+    "group": "sc-immune",
+    "navLabel": "TenK10K · sc-eQTL",
+    "dataUrl": "https://zenodo.org/records/18221260"
+  },
+  {
+    "id": "tenk10k-phase1-caqtl",
+    "name": "TenK10K Phase 1 — scATAC / multiome caQTL",
+    "version": "Xue et al., medRxiv；公开结果已含 2026-06-27 修订；2026-09-05 核验",
+    "category": "single-cell",
+    "tissue": "外周血 PBMC；TOB / OneK1K 发现队列，BioHEART 与 LBIO multiome 验证队列",
+    "qtlTypes": [
+      "cis-caQTL",
+      "rare-variant caQTL",
+      "cell-state caQTL"
+    ],
+    "summary": "TenK10K 的染色质可及性资源，提供 28 类免疫细胞的 caQTL、SuSiE / mvSuSiE、caQTL–eQTL / GWAS 共定位及 ChromBPNet 变异效应。可联合对应的 RNA eQTL 检查非编码变异、调控元件与靶基因关系。",
+    "sampleSize": "发现队列生成 952 名 TOB donor 的 scATAC，质控与 WGS 匹配后用于 caQTL 的为 922 人 / 3,472,552 nuclei。另生成 90 人的 multiome（BioHEART 64、LBIO 26）；官方代码库列出 60 人用于复制分析，不能合并写成 1,042 人发现队列。",
+    "cellsPerDonor": "发现队列质控后平均 3,766 nuclei/donor（原论文报告，3,472,552 ÷ 922）。multiome 复制队列细胞数另计，不能套用这一均值。",
+    "assay": "发现队列：10x Genomics Chromium Next GEM Epi ATAC v2，NovaSeq 6000；验证队列：10x Single Cell Multiome ATAC + Gene Expression / Chromium X，RNA 与 ATAC 文库分开测序。配套 WGS。",
+    "depth": "WGS 30×。本次核验的原论文方法、EGA 与作者发布页未提供统一 scATAC / multiome reads per nucleus 深度；不以峰内片段数、质控阈值或细胞捕获目标替代。",
+    "access": "作者在 Hugging Face 公开全量常见 / 罕见变异 caQTL、fine-mapping、coloc、SMR、细胞状态结果与模型输出。原始 scATAC FASTQ（EGAD50000002682）、multiome BAM 与相应基因型（EGAD50000002900）经 EGA 受控申请。",
+    "limitations": "大部分发现队列是 scATAC 与 scRNA 在 donor 层面匹配，并非同一细胞的 RNA–ATAC 双测；同细胞配对来自独立 multiome 子集。作者于 2026-06-27 修正 caQTL–eQTL coloc 的等位基因翻转问题，需使用此日期后的结果。当前资源来源于预印本。",
+    "sources": [
+      {
+        "label": "论文（medRxiv v2）",
+        "url": "https://www.medrxiv.org/content/10.1101/2025.08.27.25334533v2"
+      },
+      {
+        "label": "样本与实验方法（原论文 v1）",
+        "url": "https://www.medrxiv.org/content/10.1101/2025.08.27.25334533v1"
+      },
+      {
+        "label": "完整 caQTL / 模型结果与更新日志",
+        "url": "https://huggingface.co/datasets/anglixue/TenK10K_multiome"
+      },
+      {
+        "label": "作者分析代码与队列构成",
+        "url": "https://github.com/powellgenomicslab/tenk10k_phase1_multiome"
+      },
+      {
+        "label": "scATAC 与 multiome 数据集目录（EGA）",
+        "url": "https://ega-archive.org/studies/EGAS50000001653"
+      },
+      {
+        "label": "multiome BAM / 基因型受控申请",
+        "url": "https://ega-archive.org/datasets/EGAD50000002900"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        1,
+        2,
+        3
+      ],
+      "cellsPerDonor": [
+        1
+      ],
+      "assay": [
+        1,
+        2,
+        4
+      ],
+      "depth": [
+        1,
+        2
+      ],
+      "access": [
+        2,
+        4,
+        5
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-05",
+      "primaryAccess": "Primary v1 manuscript read via https://www.researchgate.net/publication/395044527_Genetic_regulation_of_cell_type-specific_chromatin_accessibility_shapes_immune_function_and_disease_risk after medRxiv direct fetch failed. Current official author dataset card points to v2.",
+      "counts": "v1 Methods QC gives exact 3,472,552 nuclei / 922 donors and mean 3,766; author HF card independently confirms 3.47 million / 922. Official repo gives generated 952 + 64 + 26 = 1,042 donors and 60 replication donors. v1 mentions 63 multiome donors in one processed-data subsection, therefore distinguish processing stages and use explicitly labelled 60 for replication.",
+      "assay": "v1 Sample collection and library processing describes two scATAC captures per eight-person pool (238 libraries), ATAC v2 / NovaSeq 6000 and separate 90-donor 10x Multiome subset; no uniform reads-per-nucleus value found. EGA independently identifies Epi ATAC v2 and NovaSeq 6000.",
+      "versionWarning": "HF update log: 27-Jun-2026 08:41 Sydney, caQTL/eQTL coloc updated to correct allele-flipping issues; use corrected results. Dataset card and code are primary author releases, not independent replications."
+    },
+    "group": "sc-immune",
+    "navLabel": "TenK10K · caQTL / multiome",
+    "dataUrl": "https://huggingface.co/datasets/anglixue/TenK10K_multiome"
+  },
+  {
     "id": "onek1k",
     "name": "OneK1K",
     "version": "Yazar et al., Science 2022",
@@ -58,7 +220,9 @@
       "depth": [
         1
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "OneK1K"
   },
   {
     "id": "cima-2026",
@@ -128,7 +292,9 @@
       "depth": [
         0
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "CIMA"
   },
   {
     "id": "aida",
@@ -204,7 +370,9 @@
       "depth": [
         2
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "AIDA"
   },
   {
     "id": "lifelines-scqtl-2018",
@@ -255,7 +423,9 @@
       "depth": [
         0
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "Lifelines DEEP sc-eQTL"
   },
   {
     "id": "1m-scbloodnl",
@@ -314,7 +484,9 @@
       "depth": [
         1
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "1M-scBloodNL"
   },
   {
     "id": "cd4-activation-soskic",
@@ -369,7 +541,9 @@
       "depth": [
         0
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "CD4 activation"
   },
   {
     "id": "perez-sle-scqtl",
@@ -433,7 +607,9 @@
       "depth": [
         2
       ]
-    }
+    },
+    "group": "sc-immune",
+    "navLabel": "CLUES / ImmVar SLE"
   },
   {
     "id": "bryois-brain-2022",
@@ -508,7 +684,9 @@
       "access": [
         1
       ]
-    }
+    },
+    "group": "sc-brain",
+    "navLabel": "Bryois brain eQTL"
   },
   {
     "id": "singlebrain-2026",
@@ -610,7 +788,9 @@
       "depth": [
         0
       ]
-    }
+    },
+    "group": "sc-brain",
+    "navLabel": "SingleBrain"
   },
   {
     "id": "brainscope-psychencode-2024",
@@ -695,7 +875,9 @@
       "assay": [
         5
       ]
-    }
+    },
+    "group": "sc-brain",
+    "navLabel": "brainSCOPE"
   },
   {
     "id": "jerber-neuroseq-2021",
@@ -798,7 +980,9 @@
       "cellsPerDonor": [
         0
       ]
-    }
+    },
+    "group": "cell-models",
+    "navLabel": "HipSci 神经分化"
   },
   {
     "id": "cuomo-endoderm-2020",
@@ -867,7 +1051,10 @@
       "depth": [
         0
       ]
-    }
+    },
+    "group": "cell-models",
+    "navLabel": "HipSci 内胚层分化",
+    "dataUrl": "https://zenodo.org/records/3625024"
   },
   {
     "id": "elorbany-cardiac-2022",
@@ -939,7 +1126,9 @@
       "tissue": [
         0
       ]
-    }
+    },
+    "group": "cell-models",
+    "navLabel": "Yoruba 心肌分化"
   },
   {
     "id": "gtex-bulk",
@@ -1009,7 +1198,9 @@
       "官方搜索摘录 query site:gtexportal.org \"2026-01-16\" \"V11\": news?id=530 → 2026-01-16. Adult GTEx V11 Released。",
       "官方 V11 下载页说明 contains no new samples or donors compared to V10；GENCODE 47。",
       "50M/82M 是官方方法中的 total reads 口径；v8 固定参考集，不声称最新版样本量。"
-    ]
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "GTEx"
   },
   {
     "id": "eqtlgen-phase1",
@@ -1081,7 +1272,9 @@
       "Nature Genetics abstract: 31,684 individuals; trans tested 10,317 trait-associated variants。",
       "官方 Phase I overview: consortium incorporates 37 datasets。",
       "论文 Data availability 区分公开 meta-analysis 汇总结果、需批准的 per-cohort summary 与个体数据。"
-    ]
+    ],
+    "group": "bulk-blood",
+    "navLabel": "eQTLGen Phase I"
   },
   {
     "id": "eqtlgen-phase2",
@@ -1136,11 +1329,13 @@
       "预印本原始摘要检索：43,301 blood samples from 52 datasets。",
       "官方 Resources 页面当前仅列 Phase I summary statistics。",
       "补充核查（非网页展示引用）：ResearchGate 上的预印本全文镜像 data availability 写 full discovery statistics upon acceptance；原始 medRxiv full-text 抓取 403，因此页面展示只声明未核实下载，避免过度断言。"
-    ]
+    ],
+    "group": "bulk-blood",
+    "navLabel": "eQTLGen Phase II"
   },
   {
     "id": "eqtl-catalogue",
-    "name": "eQTL Catalogue",
+    "name": "eQTL Catalogue — EMBL-EBI 统一 QTL 数据库",
     "version": "r7（2024-06）＋r8 pre-release（2026-01）；按研究/数据集 ID 取数",
     "category": "catalogue",
     "tissue": "多组织、纯化免疫细胞及若干单细胞 pseudobulk 研究；祖源依原始研究。",
@@ -1150,13 +1345,13 @@
       "转录本/启动子使用 QTL",
       "SuSiE fine-mapping"
     ],
-    "summary": "EMBL-EBI 将公开 RNA 表型和基因型以统一流程重分析，直接提供共定位常用的汇总统计、可信集与 SuSiE log Bayes factors。",
-    "sampleSize": "无单一独立 donor N。r6（2023 论文）为 31 项研究、127 个数据集，累计 7,526 donors / 30,602 samples；这是历史版本累计口径，不是当前独立样本总量。当前应读取每个 QTS/QTD 的 metadata。",
+    "summary": "优先入口：跨 bulk 和单细胞研究统一重算表达、剪接及转录本 QTL，提供全量 cis 汇总统计、SuSiE fine-mapping 与 API；可按 QTS 研究、QTD 表型/组织定位下载。",
+    "sampleSize": "无单一独立 donor N。官方研究清单逐项给出 donor 与 sample N；例如 GEUVADIS 445、HipSci 322、INTERVAL RNA 4,729。同一 donor 可贡献多组织、细胞类型和再分析版本，不累加为总人数。",
     "cellsPerDonor": "bulk 部分不适用；单细胞部分按原研究与 QC 后 metadata 查询，pseudobulk 数据集数不等于细胞数。",
     "assay": "bulk RNA-seq、部分表达芯片、scRNA-seq 转换的 donor × cell-type pseudobulk；统一计算处理不意味着统一实验平台。",
     "depth": "各研究实验测序深度不同；无有意义的统一 reads/样本或 reads/cell 数值，需沿 study accession 返回原论文。",
     "access": "公开 summary statistics、元数据、fine-mapping、REST API；r8 pre-release 开始向 parquet 迁移。原始表达和基因型访问权限跟随来源队列。",
-    "limitations": "数据库包含 GTEx、DICE、BLUEPRINT 等资源的重新处理结果，同一原始样本可出现在多个版本与多个条目中；不能累加 donor 数。r8 当前核实到 pre-release，不能称正式完整 r8。",
+    "limitations": "r8 仍标作 pre-release；五个新标注单细胞条目与 r7 对应研究共享原始数据。除统一重分析外，另有 GTEx_v8、MetaLCL 的原作者结果导入区；导入区不能描述成使用同一计算流程。",
     "sources": [
       {
         "label": "官方 release notes",
@@ -1181,7 +1376,8 @@
     ],
     "fieldSources": {
       "sampleSize": [
-        1,
+        0,
+        3,
         4
       ],
       "version": [
@@ -1206,7 +1402,10 @@
       "r8 pre-release January 2026，正式 next major release scheduled for Q3 2026。",
       "r8 重新标注的五个 sc datasets 与 r7 QTS000036-41 是相同 underlying raw data。",
       "r8 增加 INTERVAL_RNA n=4,729 和 INTERVAL_RNA_WGS n=2,892，不能据此断言二者是独立个体。"
-    ]
+    ],
+    "group": "directories",
+    "navLabel": "eQTL Catalogue",
+    "dataUrl": "https://www.ebi.ac.uk/eqtl/Data_access/"
   },
   {
     "id": "dice-bulk",
@@ -1266,7 +1465,9 @@
       "PMC 原文全文已下载为 dice_source_intermediate.txt。",
       "Results: 13 immune cell types isolated from 106 leukapheresis samples provided by 91 healthy subjects, including 15 longitudinal donors。",
       "Methods: 50-bp single-end；median of 20.1 million uniquely mapped reads per sample；Table S1B。"
-    ]
+    ],
+    "group": "bulk-immune",
+    "navLabel": "DICE bulk"
   },
   {
     "id": "blueprint-epivar",
@@ -1339,7 +1540,9 @@
       "PMC 原文全文已下载为 blueprint_source_intermediate.txt。",
       "Methods Data Generation: monocytes and neutrophils 100bp SE, mean 9.18Gb raw；T cells 100bp PE, mean 11.74Gb raw。",
       "RNA 概述 ~80 million reads/sample；WGS mean approximately 7×，已严格区分。"
-    ]
+    ],
+    "group": "bulk-immune",
+    "navLabel": "BLUEPRINT Epivar"
   },
   {
     "id": "metabrain-bulk",
@@ -1396,7 +1599,9 @@
       "论文 Results 指定 Cortex-EUR n=2,683，摘要 n≤2,759 不可替换特定 cis 集。",
       "8,613 RNA-seq samples 为QC后测量数量；genotype 数据 6,518 也是原始 genotype sample 口径，不当独立 QTL donor 总量。",
       "MetaBrain 官网：full cis 表单申请、trans/ieQTL supplements 17/8；禁止重新分发数据。"
-    ]
+    ],
+    "group": "bulk-brain",
+    "navLabel": "MetaBrain"
   },
   {
     "id": "psychencode-bulk",
@@ -1458,6 +1663,1384 @@
       "PMC 原文全文已下载为 psych_source_intermediate.txt。",
       "Fig 1: genotypes 1362 PsychENCODE and 25 GTEx individuals for total 1387 matched to RNA-seq for QTL after QC。",
       "resource.psychencode.org 本次 web open 502，未声称成功下载 summary statistics。"
+    ],
+    "group": "bulk-brain",
+    "navLabel": "PsychENCODE bulk",
+    "dataUrl": "https://www.synapse.org/Synapse:syn4921369"
+  },
+  {
+    "id": "sc-eqtlgen-directory",
+    "name": "sc-eQTLGen 联盟数据目录",
+    "version": "联盟导航；2026-09-05 核验",
+    "category": "catalogue",
+    "tissue": "外周血免疫细胞；静息、感染刺激及疾病队列；祖源依各研究。",
+    "qtlTypes": [
+      "cell-type eQTL",
+      "response eQTL",
+      "co-expression QTL"
+    ],
+    "summary": "单细胞群体遗传学联盟的官方导航入口，可继续追踪各研究的表达矩阵、基因型、QTL 结果及分析流程。",
+    "sampleSize": "导航资源，没有一个可直接下载的统一 donor N；首页的 28 指参与研究组数量，不是队列数或 donor 数。",
+    "cellsPerDonor": "按具体研究查询；联盟成员或目录条目不能换算为单细胞数。",
+    "assay": "不同单细胞 RNA / 多组学实验及 donor × cell-type pseudobulk 分析；平台按原始队列。",
+    "depth": "无统一测序深度。van der Wijst、1M-scBloodNL、Candida 等各有独立实验设计。",
+    "access": "官网 Datasets 菜单包含 van der Wijst 2018、Candida、1M-scBloodNL、STEMI scRNA-seq 和 scMO。逐项返回研究页面下载或申请；目录本身不授予原始数据访问权。",
+    "limitations": "联盟主页也收录表达图谱等研究入口；不能把所有链接都当作已提供全量 QTL summary statistics 的队列，更不能将与本站单列队列的样本重复相加。",
+    "sources": [
+      {
+        "label": "官方联盟与 Datasets 目录",
+        "url": "https://eqtlgen.org/sc/"
+      },
+      {
+        "label": "联盟介绍与研究设计",
+        "url": "https://elifesciences.org/articles/52155"
+      },
+      {
+        "label": "参与研究组",
+        "url": "https://eqtlgen.org/sc/participating.html"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        2
+      ],
+      "assay": [
+        0,
+        1
+      ],
+      "depth": [
+        0,
+        1
+      ],
+      "access": [
+        0
+      ],
+      "limitations": [
+        0
+      ]
+    },
+    "evidence": [
+      "2026-09-05 official homepage has five named dataset menu items; headline says 28 participating groups. Do not reuse bulk eQTLGen's 30,000+ donors as sc-eQTLGen N."
+    ],
+    "group": "directories",
+    "navLabel": "sc-eQTLGen",
+    "dataUrl": "https://www.eqtlgen.org/sc/"
+  },
+  {
+    "id": "geuvadis-bulk",
+    "name": "GEUVADIS / 1000 Genomes LCL",
+    "version": "Lappalainen et al., Nature 2013；Catalogue QTS000013",
+    "category": "bulk",
+    "tissue": "EBV 转化淋巴母细胞系（LCL）；CEU、FIN、GBR、TSI、YRI 五个人群，欧洲与 Yoruba 非洲祖源。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "sQTL",
+      "transcript QTL",
+      "allele-specific expression"
+    ],
+    "summary": "配套 1000 Genomes 基因型、原始 RNA 数据公开的经典参考，适合开发 QTL、剪接、等位基因表达与跨祖源分析方法。",
+    "sampleSize": "原论文 462 名 donor（373 欧洲祖源、89 Yoruba）；Catalogue QTS000013 重处理后为 445 donors / 445 samples。原始存档标题与最终论文计数不同，分析时固定样本清单。",
+    "cellsPerDonor": "不适用：细胞系 bulk RNA-seq；不是每名 donor 仅测一个细胞。",
+    "assay": "Illumina TruSeq RNA Sample Prep v2；75 bp paired-end mRNA-seq，配套独立的 1000 Genomes 基因型。另有 small-RNA 数据，应与 mRNA 数据区分。",
+    "depth": "E-GEUV-1 实验设计规定至少 20M mapped reads/样本（最低目标；保留存档 reads 单位，不改写为 read pairs）；具体样本实际深度应取 run / BAM 统计。",
+    "access": "IGSR GEUVADIS 集合和 BioStudies E-GEUV-1 公开 RNA-seq；1000 Genomes 提供公开基因型；Catalogue QTS000013 提供统一重分析 cis-QTL、剪接及 fine-mapping 结果。",
+    "limitations": "LCL 的 EBV 转化和体外培养会改变调控状态，不等同于原代 B 细胞。欧洲与 Yoruba 的 LD 不同；原论文和 Catalogue 的样本过滤及参考基因组须分别记录。",
+    "sources": [
+      {
+        "label": "原始论文",
+        "url": "https://www.nature.com/articles/nature12531"
+      },
+      {
+        "label": "原始测序与实验设计（E-GEUV-1）",
+        "url": "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-GEUV-1"
+      },
+      {
+        "label": "IGSR GEUVADIS 数据集合",
+        "url": "https://www.internationalgenome.org/data-portal/data-collection/geuvadis"
+      },
+      {
+        "label": "Catalogue 研究清单（QTS000013）",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "Catalogue 汇总统计下载",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        3
+      ],
+      "assay": [
+        1,
+        2
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "limitations": [
+        0,
+        3
+      ]
+    },
+    "evidence": [
+      "BioStudies indexed original design explicitly states TruSeq RNA Sample Prep v2, 75 bp paired end and minimum 20M mapped reads. The current JS page body lacks full metadata; indexed original metadata and IGSR are complementary primary records.",
+      "Catalogue current study directory gives 445/445, distinct from final paper 462. Do not treat assay accessions, technical replicates or the E-GEUV-1 legacy title (452) as the QTL analysis N."
+    ],
+    "group": "cell-models",
+    "navLabel": "GEUVADIS"
+  },
+  {
+    "id": "bios-bulk",
+    "name": "BIOS — Biobank-based Integrative Omics Study",
+    "version": "Zhernakova et al., Nature Genetics 2017 原始 eQTL 版",
+    "category": "bulk",
+    "tissue": "全血；四个荷兰队列 CODAM、LifeLines DEEP、Leiden Longevity Study 和 Rotterdam Study，欧洲祖源为主。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "exon-ratio QTL",
+      "context-dependent eQTL"
+    ],
+    "summary": "荷兰多队列全血 RNA-seq 资源，联合基因、外显子及外显子比例表型，并研究细胞组成和干扰素等背景依赖调控。",
+    "sampleSize": "本条锁定原始论文的 2,116 名无亲缘关系健康成人；BIOS 后续扩展版本和 eQTLGen 中的 BIOS 样本不能直接沿用此 N。",
+    "cellsPerDonor": "不适用：全血 bulk RNA-seq；细胞组成由测量或计算估计，不能提供每名 donor 的单细胞数。",
+    "assay": "全血 RNA 经 Ambion GLOBINclear 去除 globin，Illumina TruSeq v2 建库；HiSeq 2000、2 × 50 bp paired-end；配套芯片基因型与插补。",
+    "depth": "本次未核实原始 2,116 人 eQTL 版本的统一目标或实测 reads/样本。相关 NTR 双生子论文所写 >15M read pairs/样本属于其自身实验设计，未移用于此版本。",
+    "access": "RNA BAM 存档为受控 EGA EGAD00001001623；表达、基因型及扩展版本可向 BIOS / BBMRI-NL 申请。原论文的 BIOS QTL Browser 提供显著结果入口，本次未验证浏览器当前可达。",
+    "limitations": "浏览器的显著 QTL 表不等于全量 SNP–gene summary statistics。BIOS 参与 eQTLGen，不能作为其独立复制集直接计算或累加样本。",
+    "sources": [
+      {
+        "label": "原始 eQTL 论文",
+        "url": "https://www.nature.com/articles/ng.3737"
+      },
+      {
+        "label": "同一 2,116 人 BIOS RNA 实验方法",
+        "url": "https://cris.maastrichtuniversity.nl/ws/files/78377787/Van_der_Kallen_2016_Disease_variants_alter_transcription_factor.pdf"
+      },
+      {
+        "label": "原始 BAM（EGA，受控）",
+        "url": "https://ega-archive.org/datasets/EGAD00001001623"
+      },
+      {
+        "label": "BIOS QTL Browser（当前可达性未验证）",
+        "url": "https://www.genenetwork.nl/biosqtlbrowser/"
+      },
+      {
+        "label": "BIOS 官方资料与申请说明",
+        "url": "https://wiki.bbmri.nl/wiki/BIOS_start-"
+      },
+      {
+        "label": "BIOS 官方 QTL 查询与表格范围说明",
+        "url": "https://wiki.bbmri.nl/raw-attachment/wiki/BIOS_BBMRI-omics_course/20170331_QTL_Lookup_%26_Analysis.pdf"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        0,
+        1
+      ],
+      "access": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "limitations": [
+        5
+      ]
+    },
+    "evidence": [
+      "Original abstract confirms 2,116 unrelated individuals; original acknowledgments names the four contributing cohorts.",
+      "BIOS companion primary paper Disease variants alter transcription factor levels and methylation of their binding sites explicitly describes the RNA-seq method and says cis-eQTL mapping uses the same 2,116 BIOS samples.",
+      "Official BIOS teaching slides explicitly label QTL Browser as only significant QTLs. Browser open failed in this pass; do not claim successful download."
+    ],
+    "group": "bulk-blood",
+    "navLabel": "BIOS"
+  },
+  {
+    "id": "interval-rna",
+    "name": "INTERVAL RNA-seq",
+    "version": "Tokolyi et al., Nature Genetics 2025；Catalogue r8 pre-release",
+    "category": "bulk",
+    "tissue": "英国献血者全血；欧洲祖源，健康献血队列。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-sQTL",
+      "trans-eQTL",
+      "trans-sQTL"
+    ],
+    "summary": "数千人的统一全血 RNA-seq 队列，配套蛋白、代谢物与血脂，适合表达—剪接—蛋白的共定位和分子机制研究。",
+    "sampleSize": "2025 原论文 QC 后 4,732 名 donor；Catalogue QTS000053（芯片插补）为 4,729，QTS000054（WGS 版本）为 2,892。两者来自同一 INTERVAL 生物样本库，不能相加为独立人数。",
+    "cellsPerDonor": "不适用：全血 bulk RNA-seq。",
+    "assay": "NEBNext Poly(A) 富集、KAPA RiboErase Globin 去除 globin、NEBNext Ultra II 建库；NovaSeq 6000 S4，75 bp paired-end、reverse stranded。",
+    "depth": "论文实测均值 25.3M unique reads/样本，IQR 21.5–26.9M；QC 排除 <10M uniquely mapped reads 的样本。沿用论文 reads 口径，未换算 read pairs。",
+    "access": "INTERVAL RNA Portal 公开 QTL、共定位和中介分析结果；Catalogue r8 pre-release 另有重新计算的 cis-QTL。RNA-seq 为 EGA EGAD00001008015，个体数据需经 Blood Donors Studies BioResource DAC 申请。",
+    "limitations": "RNA 4,732 人是 INTERVAL 约 50,000 人献血者队列的子集；蛋白/代谢组各有不同 N。原论文 sQTL 使用 LeafCutter，Catalogue r8 新增 MAJIQ v3，不能将不同表型/版本直接拼接。",
+    "sources": [
+      {
+        "label": "原始论文",
+        "url": "https://www.nature.com/articles/s41588-025-02096-3"
+      },
+      {
+        "label": "出版全文（含建库与深度方法）",
+        "url": "https://d-nb.info/1366965094/34"
+      },
+      {
+        "label": "INTERVAL RNA 结果门户",
+        "url": "https://www.intervalrna.org.uk/"
+      },
+      {
+        "label": "RNA-seq（EGA，受控）",
+        "url": "https://ega-archive.org/datasets/EGAD00001008015"
+      },
+      {
+        "label": "Catalogue r8 版本与两套 N",
+        "url": "https://www.ebi.ac.uk/eqtl/Release_notes/"
+      },
+      {
+        "label": "数据申请政策",
+        "url": "https://www.donorhealth-btru.nihr.ac.uk/wp-content/uploads/2020/04/Data-Access-Policy-v1.0-14Apr2020.pdf"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        4
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "limitations": [
+        0,
+        1,
+        4
+      ]
+    },
+    "evidence": [
+      "Published Methods PDF page 10: library preparation and 75bp PE NovaSeq6000; mean25.3M unique reads IQR21.5–26.9, minimum10M. Pages12–13: EGA accession and public portal.",
+      "Published paper has a malformed Zenodo DOI (actually the preprint DOI) in Data availability, so use the verified portal as the summary-statistics entry and do not manufacture a Zenodo accession."
+    ],
+    "group": "bulk-blood",
+    "navLabel": "INTERVAL RNA-seq"
+  },
+  {
+    "id": "hipsci-bulk",
+    "name": "HipSci iPSC bulk eQTL",
+    "version": "Kilpinen et al., Nature 2017；Catalogue QTS000016",
+    "category": "bulk",
+    "tissue": "健康志愿者来源的诱导多能干细胞；原始主 eQTL 集以欧洲祖源 donor 为主。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "secondary eQTL",
+      "iPSC-specific eQTL"
+    ],
+    "summary": "体外干细胞的遗传调控参考，可与 HipSci 神经/内胚层分化单细胞数据比较，分析多能态与分化态的调控差异。",
+    "sampleSize": "2017 主 RNA-seq eQTL 图谱：166 名无亲缘 donor、239 条 iPSC lines；同论文 711 lines / 301 donors 是更大的芯片/表型资源。Catalogue 后续 QTS000016 版本为 322 donors / 322 samples。",
+    "cellsPerDonor": "不适用：本条为 bulk iPSC 培养物；cell line 数量不是单细胞测量数，多个克隆可能来自同一 donor。",
+    "assay": "原始 RNA-seq 采用 poly(A) RNA 建库，Illumina HiSeq 2000 v3、75 bp paired-end；另有表达芯片与多种细胞表型，不能混同于 RNA-seq。",
+    "depth": "原始 166 人 RNA-seq eQTL 集的中位数 38M reads/样本（论文直接报告）。该深度不自动适用于后续 Catalogue 的 322 人重分析版本。",
+    "access": "HipSci 公开同意范围的数据在 ENA PRJEB7388 / PRJEB11752；受控 RNA 和基因型在 EGA。Catalogue QTS000016 公开统一重分析的 QTL 与 fine-mapping。",
+    "limitations": "iPSC line 不是独立 donor；与 Jerber、Cuomo 等 HipSci 分化项目及 i2QTL 整合集可能共享 donor，不能作为独立复制或简单相加。",
+    "sources": [
+      {
+        "label": "原始论文",
+        "url": "https://www.nature.com/articles/nature22403"
+      },
+      {
+        "label": "原始作者稿（详细 Methods）",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5524171/"
+      },
+      {
+        "label": "Catalogue QTS000016 元数据与存档",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "HipSci RNA-seq（EGA）",
+        "url": "https://ega-archive.org/studies/EGAS00001000593"
+      },
+      {
+        "label": "公开 RNA-seq（ENA）",
+        "url": "https://www.ebi.ac.uk/ena/browser/view/PRJEB7388"
+      },
+      {
+        "label": "Catalogue 汇总统计下载",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1,
+        2
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "limitations": [
+        0,
+        1
+      ]
+    },
+    "evidence": [
+      "PMC indexed text confirms 75 base paired-end HiSeq2000v3. Main eQTL N166/239 and median38M reads independently recovered from the primary author manuscript uploaded by coauthor Davide Danovi: https://www.researchgate.net/publication/316876180_Common_genetic_variation_drives_molecular_heterogeneity_in_human_iPSCs . No secondary review values used.",
+      "Do not replace original166 with catalogue322 without preserving version distinction."
+    ],
+    "group": "cell-models",
+    "navLabel": "HipSci bulk"
+  },
+  {
+    "id": "i2qtl-ipsc",
+    "name": "i2QTL / HipSci–iPSCORE 等 iPSC 整合资源",
+    "version": "Bonder et al., Nature Genetics 2021",
+    "category": "bulk",
+    "tissue": "iPSC；整合 HipSci、iPSCORE、PhLiPS 等；完整资源有多祖源 donor，主常见变异 eQTL 分析为欧洲祖源。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "sQTL",
+      "transcript QTL",
+      "APA QTL",
+      "trans-eQTL"
+    ],
+    "summary": "将多个 iPSC 队列统一重处理，覆盖基因、外显子、剪接、转录本和多聚腺苷酸化表型；适合常见与罕见调控变异及 GWAS 共定位研究。",
+    "sampleSize": "整体资源 1,367 条 iPSC lines、948 名独立 donor；主常见变异 eQTL 图谱使用 682 名欧洲祖源 donor。1,367 不能用作独立 donor N。",
+    "cellsPerDonor": "不适用：bulk iPSC RNA-seq；克隆/细胞系不是单细胞数。",
+    "assay": "多个来源的 bulk RNA-seq 与基因型/WGS 联合重处理；原始建库和平台按 HipSci、iPSCORE 等来源，不能用单一 10x 或单一建库版本描述。",
+    "depth": "未核实覆盖所有来源的统一目标或实测 reads/样本；应按原始队列与样本 QC 文件获取。WGS 覆盖度不应写入 RNA-seq 深度。",
+    "access": "作者 Zenodo 4005576 公开 cis-QTL 汇总统计及筛选后的 trans 结果；包含多种 RNA 表型文件。个体级 RNA 和基因型按各原始队列在 ENA / EGA / dbGaP 下载或申请；iPSCORE 官网提供更新数据清单。",
+    "limitations": "与本站 HipSci、iPSCORE 衍生分化研究共享来源。Zenodo trans 文件仅保留 raw P < 0.05，不是全量 trans 检验表；使用前核对具体文件、表型及样本筛选版本。",
+    "sources": [
+      {
+        "label": "原始论文",
+        "url": "https://www.nature.com/articles/s41588-021-00800-7"
+      },
+      {
+        "label": "原始作者稿与方法",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7944648/"
+      },
+      {
+        "label": "作者 QTL 汇总统计（Zenodo 4005576）",
+        "url": "https://zenodo.org/records/4005576"
+      },
+      {
+        "label": "iPSCORE 最新样本与数据清单",
+        "url": "https://frazerlab.ucsd.edu/ipscore-samples-and-datasets"
+      },
+      {
+        "label": "联合 WGS 与结构变异配套数据",
+        "url": "https://www.nature.com/articles/s41467-020-16481-5"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "assay": [
+        1,
+        3
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "limitations": [
+        1,
+        2
+      ]
+    },
+    "evidence": [
+      "Original paper abstract1367 lines; original PMC indexed full text and author-institution hosted published PDF report948 distinct donors and main682 European donors. Source PDF: https://research.rug.nl/files/1519853238/Identification_of_rare.pdf .",
+      "Zenodo directly verified: all cis-eQTL mapping results and trans-eQTL rawP<0.05, multiple phenotype archives. Do not label trans as complete unscreened summary statistics."
+    ],
+    "group": "cell-models",
+    "navLabel": "i2QTL"
+  },
+  {
+    "id": "twinsuk-bulk",
+    "name": "TwinsUK / EuroBATS 多组织 RNA-seq QTL",
+    "version": "Buil et al., Nature Genetics 2015；Catalogue QTS000029",
+    "category": "bulk",
+    "tissue": "皮下脂肪、皮肤、LCL 及全血；英国欧洲祖源女性双生子。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "sQTL",
+      "allele-specific expression",
+      "G×E / G×G"
+    ],
+    "summary": "同一双生子群体的多组织转录组，适合分析组织共享、等位基因表达与遗传/环境来源的个体差异。",
+    "sampleSize": "2015 原研究涉及 856 名女性双生子；不同组织可用 N 不同。Catalogue QTS000029 重分析使用 433 名 donor、1,364 个组织样本；该计数与原研究全体不能混用。",
+    "cellsPerDonor": "不适用：bulk RNA-seq；同一 donor 的不同组织或双生子配对均不是单细胞数。",
+    "assay": "Illumina TruSeq RNA 建库；HiSeq 2000，49 bp paired-end。与早期 MuTHER 的 HumanHT-12 表达芯片数据应区分。",
+    "depth": "原始分析排除外显子 mapped reads <10M 的样本（QC 下限，不是测序目标或总体均值）；本次未核实整个多组织集的统一实测深度。",
+    "access": "RNA-seq 在受控 EGA EGAS00001000805，按脂肪/皮肤/LCL/全血分 dataset；基因型与表型向 TwinsUK DAC 申请。Catalogue QTS000029 公开重分析 QTL 结果。",
+    "limitations": "双生子相关性、多组织重复测量需要在模型和独立样本计数中处理；女性欧洲祖源结果外推到男性或其他祖源时需另行验证。",
+    "sources": [
+      {
+        "label": "原始论文与 Methods",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4643454/"
+      },
+      {
+        "label": "Catalogue 样本与四类组织存档",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "TwinsUK 数据申请",
+        "url": "https://twinsuk.ac.uk/resources-for-researchers/access-our-data/"
+      },
+      {
+        "label": "RNA-seq 原始存档",
+        "url": "https://ega-archive.org/studies/EGAS00001000805"
+      },
+      {
+        "label": "同一队列的测序与访问方法确认",
+        "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1010556"
+      },
+      {
+        "label": "Catalogue 汇总统计下载",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "assay": [
+        0,
+        4
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "limitations": [
+        0
+      ]
+    },
+    "evidence": [
+      "Primary Buil PMC indexed sample collection:856 Caucasian females; original QC excludes <10M reads sequenced and mapped to exons. Later primary reuse Zito2023 confirms same TruSeq/HiSeq2000/49bpPE protocol and EGA archive."
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "TwinsUK / EuroBATS"
+  },
+  {
+    "id": "fusion-bulk",
+    "name": "FUSION 肌肉 / 脂肪 QTL",
+    "version": "Taylor et al., PNAS 2019；Catalogue QTS000011",
+    "category": "bulk",
+    "tissue": "芬兰成人骨骼肌、皮下脂肪；欧洲祖源，覆盖糖代谢与体成分表型。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "sQTL",
+      "mQTL",
+      "eQTM"
+    ],
+    "summary": "代谢相关组织的 RNA、DNA 甲基化及基因型参考；官方肌肉资源同时提供 eQTL、mQTL 和 SMR 格式，适合糖尿病、胰岛素与体成分机制分析。",
+    "sampleSize": "2019 肌肉表达＋甲基化共同测量集为 265 名 donor；Catalogue QTS000011 脂肪＋肌肉重分析涉及 302 名 donor、559 个组织样本。每种组织和组学的 QTL N 应从对应 sample_size 文件读取。",
+    "cellsPerDonor": "不适用：组织 bulk RNA-seq；肌纤维/细胞组成异质性是分析协变量。",
+    "assay": "组织 bulk RNA-seq，配套基因型与 DNA 甲基化芯片；本次未核实能够同时代表 Catalogue 肌肉和脂肪两套 RNA 文件的统一建库、读长及仪器版本。",
+    "depth": "未核实这两个组织重分析集的统一 reads/样本深度；应分别返回原始测序样本及论文补充方法。",
+    "access": "EMBL-EBI FUSION 官方页面公开 nominal eQTL、mQTL、eQTM 和 SMR BESD 文件，并为分析提供 sample_size.tsv；个体数据经 dbGaP phs001048 申请。Catalogue QTS000011 另有统一 RNA QTL 重分析。",
+    "limitations": "265 指肌肉多组学交集，不能当作所有组织的统一 N；eQTM 是表达—甲基化相关性，不等同于遗传 QTL 或已证明的因果关系。",
+    "sources": [
+      {
+        "label": "原始多组学论文",
+        "url": "https://www.pnas.org/doi/10.1073/pnas.1814263116"
+      },
+      {
+        "label": "官方汇总统计、SMR 文件与样本量",
+        "url": "https://www.ebi.ac.uk/birney-srv/FUSION/"
+      },
+      {
+        "label": "Catalogue QTS000011 脂肪/肌肉元数据",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "个体数据（dbGaP，受控）",
+        "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001048.v2.p1"
+      },
+      {
+        "label": "Catalogue 汇总统计下载",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1,
+        2
+      ],
+      "assay": [
+        0,
+        2
+      ],
+      "depth": [
+        0,
+        2
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "limitations": [
+        0,
+        1
+      ]
+    },
+    "evidence": [
+      "Official FUSION page directly states265 co-measured skeletal muscle biopsies and lists QTLtools nominal summary tables, per-analysis sample_size.tsv, and SMR input files. Catalogue directory separately states302 donors/559 samples in muscle+adipose. No inferred depth or donor sum inserted."
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "FUSION"
+  },
+  {
+    "id": "lung-pf-natri",
+    "name": "Lung PF / ILD sc-eQTL",
+    "version": "Natri et al., Nature Genetics 2024（正式版）",
+    "category": "single-cell",
+    "tissue": "肺外周组织；66 名肺纤维化 / ILD 患者、48 名未患病 donor；67% 自报欧洲祖源。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "disease-interaction eQTL"
+    ],
+    "summary": "覆盖肺上皮、内皮、间质及免疫细胞，适合研究组织细胞类型与疾病背景对遗传效应的影响。",
+    "sampleSize": "114 名 genotype-matched donor；atlas 质控后 475,047 cells；eQTL 进一步过滤后 466,989 cells，38 类细胞的实际 QTL N=40–113。",
+    "cellsPerDonor": "约 4,167 cells/donor（475,047 ÷ 114，atlas 总量计算均值；包含同一肺不同区域取样）。各 donor 实际分布需读取 metadata。",
+    "assay": "10x Chromium 5′ scRNA-seq；Illumina NovaSeq 6000 / HiSeq 4000；配套 low-pass WGS 后 imputation。",
+    "depth": "RNA reads/cell 目标及实测深度未核实；方法中的 5,000–10,000 是每份样本的目标捕获细胞数。WGS 通常 0.4–1×，不能作为 RNA 深度。",
+    "access": "GSE227136 提供原始 / 处理后 RNA、Seurat、pseudobulk 表达矩阵和 LIMIX / mashr 汇总统计；基因型经 dbGaP phs003521 申请。",
+    "limitations": "正式版 114 人与早期预印本 / HCA 描述的 116 人不同；每类 donor 至少 5 cells、每类至少 40 donors。疾病交互分析另有组内门槛。",
+    "sources": [
+      {
+        "label": "正式原论文与 Methods",
+        "url": "https://www.nature.com/articles/s41588-024-01702-0"
+      },
+      {
+        "label": "GEO 表达矩阵与全量 QTL 结果",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227136"
+      },
+      {
+        "label": "dbGaP 基因型",
+        "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs003521"
+      },
+      {
+        "label": "原始分析代码",
+        "url": "https://doi.org/10.5281/zenodo.10459632"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2
+      ],
+      "limitations": [
+        0
+      ]
+    },
+    "evidence": [
+      "Publisher Results distinguish 475,047 atlas cells from Methods 466,989 eQTL cells; Methods state maximum 113 donors per cell type. Values in cellsPerDonor are computed and explicitly labeled.",
+      "Methods and Results differ in the number of donors with region-replicate libraries; therefore only presence of region repeats is stated, without a conflicting count. Raw and summary availability follows original Data availability; GEO fetch showed anti-bot page in this session."
+    ],
+    "group": "sc-tissue",
+    "navLabel": "Lung PF / ILD"
+  },
+  {
+    "id": "lung-sceqtl-fu",
+    "name": "LungSCeQTL（中国肺组织）",
+    "version": "Fu et al., Cell Genomics 2026；2025-12 在线发表",
+    "category": "single-cell",
+    "tissue": "中国 donor 手术取得的正常肺组织；研究目标为肺癌遗传易感性。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "细胞类型特异性 eQTL"
+    ],
+    "summary": "连接正常肺细胞的遗传调控与 NSCLC 风险，涵盖肺泡上皮、巨噬细胞等肺组织关键细胞群，并有配套 bulk 比较。",
+    "sampleSize": "QC 后 222 名无近亲关系 donor、562,255 cells；atlas 注释 21 类细胞，eQTL 分析覆盖 17 类。",
+    "cellsPerDonor": "论文报告实测均值 2,533 cells/donor，范围 330–10,184；为拆样、去除 doublets 和 QC 后计数。",
+    "assay": "Singleron GEXSCOPE Single Cell RNA Library Kit Tissue for HD V2（3′）；NovaSeq 6000，150 bp paired-end；基因型辅助 Demuxlet 拆样。",
+    "depth": "本次核验的全文未报告统一 reads/cell 目标或实测深度；150 bp 是读长，不能当作测序深度。",
+    "access": "LungSCeQTL 门户供浏览；QTL 汇总数据归档 GVP000052，表达数据 OMIX011241，原始测序 HRA012741。入口以论文声明为据，本次未能独立确认归档的当前下载权限。",
+    "limitations": "正常组织来自手术队列，不能直接视为普通健康人群的随机样本；17 类 QTL 细胞群不等于全部 21 类 atlas 注释。",
+    "sources": [
+      {
+        "label": "原论文与 STAR Methods",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12985386/"
+      },
+      {
+        "label": "LungSCeQTL 门户",
+        "url": "http://ccra.njmu.edu.cn/LungSCeQTL"
+      },
+      {
+        "label": "GVM：检索 GVP000052",
+        "url": "https://ngdc.cncb.ac.cn/gvm"
+      },
+      {
+        "label": "表达数据 OMIX011241",
+        "url": "https://ngdc.cncb.ac.cn/omix/release/OMIX011241"
+      },
+      {
+        "label": "原始测序 HRA012741",
+        "url": "https://ngdc.cncb.ac.cn/gsa-human/browse/HRA012741"
+      },
+      {
+        "label": "分析代码",
+        "url": "https://github.com/LungHealthFu/LungSCeQTL_Analysis"
+      },
+      {
+        "label": "期刊版次与发表日期",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41386230/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "version": [
+        6
+      ]
+    },
+    "evidence": [
+      "Published full text retrieved via Europe PMC fullTextXML for PMC12985386. Fig 1 gives mean and range; key resources identify kit HD V2; STAR Methods state NovaSeq6000 PE150. This is Singleron, not 10x.",
+      "Data/code availability names GVP000052, OMIX011241, HRA012741. HRA and OMIX returned 502 in direct check, so current open versus controlled access is not asserted."
+    ],
+    "group": "sc-tissue",
+    "navLabel": "LungSCeQTL"
+  },
+  {
+    "id": "adipose-kobs-rysa",
+    "name": "KOBS + RYSA 皮下脂肪 sn-eQTL",
+    "version": "Lee et al., Nature Communications 2026",
+    "category": "single-cell",
+    "tissue": "芬兰重度肥胖人群，减重手术时的皮下脂肪 SAT 活检。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "条件独立 cis 信号"
+    ],
+    "summary": "在脂肪细胞、ASPC、内皮、髓系和淋巴系 5 类细胞中定位遗传效应，可比较 pseudobulk tensorQTL 与单细胞 SAIGE-QTL 结果。",
+    "sampleSize": "127 位 donor（KOBS 59 + RYSA 68），全部有匹配基因型；QC 后 124,664 nuclei，atlas 含 13 类细胞。",
+    "cellsPerDonor": "约 982 nuclei/donor（124,664 ÷ 127，QC 后总量计算均值）；具体细胞类型与 donor 的核数不同。",
+    "assay": "10x Chromium 3′ v3.1 snRNA-seq；KOBS：NovaSeq X Plus 25B；RYSA：NovaSeq 6000 S4。Infinium Global Screening Array-24 v1 分型后 imputation。",
+    "depth": "同一 KOBS 59-donor 数据的来源论文报告目标 70,000 reads/nucleus；不是实测均值。RYSA 的目标 / 实测深度本次未核实。",
+    "access": "完整 tensorQTL / SAIGE-QTL cis 汇总结果：Zenodo 18880304；RNA 数据：KOBS GSE302701、RYSA GSE274778。基因型公开下载状态未核实，需向队列查询。",
+    "limitations": "以重度肥胖手术人群为背景；只分析 MAF≥10% 的变异。另整合的 snm3C-seq 是外部 5-donor 表观组，不是 127 人同核多组学。",
+    "sources": [
+      {
+        "label": "原论文 / donor 与 QTL 定义",
+        "url": "https://www.nature.com/articles/s41467-026-72248-4"
+      },
+      {
+        "label": "Supplementary Methods：建库与平台",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-72248-4/MediaObjects/41467_2026_72248_MOESM1_ESM.pdf"
+      },
+      {
+        "label": "完整 cis-eQTL 结果",
+        "url": "https://zenodo.org/records/18880304"
+      },
+      {
+        "label": "KOBS 表达数据",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE302701"
+      },
+      {
+        "label": "RYSA 表达数据",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE274778"
+      },
+      {
+        "label": "同一 KOBS 数据的目标测序深度",
+        "url": "https://www.nature.com/articles/s41467-026-73660-6"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        5
+      ],
+      "access": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "limitations": [
+        0,
+        1
+      ]
+    },
+    "evidence": [
+      "Publisher main text explicitly confirms genotypes for all127 participants; Supplementary Methods pp1–4 confirm kit v3.1, cohort-specific instruments and GSA24v1.",
+      "Gelev et al. NatCommun2026 source5 describes exactly the same KOBS59/GSE302701 data, target70,000 reads/nucleus. Its MAFALDA target50,000/70,000 values are NOT attributed to RYSA. Zenodo current fetch returned429; paper availability and accession confirmed, not downloaded."
+    ],
+    "group": "sc-tissue",
+    "navLabel": "KOBS + RYSA 脂肪",
+    "dataUrl": "https://zenodo.org/records/18880304"
+  },
+  {
+    "id": "tiger-islet",
+    "name": "TIGER（人胰岛 bulk eQTL / ASE）",
+    "version": "Alonso et al., Cell Reports 2021",
+    "category": "bulk",
+    "tissue": "欧洲背景人胰岛；以非糖尿病器官 donor 为主。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "combined allele-specific expression（cASE）"
+    ],
+    "summary": "专门覆盖胰岛的遗传调控资源，适合 T2D 与血糖性状的共定位；补充 GTEx 整块胰腺不能充分代表的胰岛信号。",
+    "sampleSize": "初始 5 队列 514 donors；RNA QC 后 460 份；匹配高质量基因型与 RNA 的 eQTL meta-analysis 为 404 人（含 21 名糖尿病 donor）。",
+    "cellsPerDonor": "不适用：完整胰岛 bulk RNA-seq，没有单细胞条码或逐 donor 的单细胞数。",
+    "assay": "多来源队列 bulk RNA-seq＋基因分型芯片；平台与建库按原队列。例：64-donor Akerman 来源含 Illumina Genome Analyzer IIx / HiSeq 2500、paired-end RNA-seq。",
+    "depth": "RNA 数据集报告唯一比对 reads 的样本中位数约 93M；对应 RNA 数据集总体，不是 404 名 QTL 子集的独立深度估计，也不是 raw read pairs。",
+    "access": "TIGER 门户提供 eQTL / cASE 浏览与 full summary 下载入口；PISA 原始 RNA / 分型：EGA EGAS00001005535；其余队列按论文 key resources 分别申请。",
+    "limitations": "514 是初始 donor 总数，不能当最终 eQTL N；与 InsPIRE 复用 207 个来源样本，不能作为独立复制或直接相加。门户需要 JavaScript，本次未验证大文件下载。",
+    "sources": [
+      {
+        "label": "原论文与数据可用性",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8864863/"
+      },
+      {
+        "label": "TIGER 门户",
+        "url": "https://tiger.bsc.es/"
+      },
+      {
+        "label": "TIGER 结果下载入口",
+        "url": "https://tiger.bsc.es/resources"
+      },
+      {
+        "label": "PISA 原始 RNA / 分型",
+        "url": "https://ega-archive.org/studies/EGAS00001005535"
+      },
+      {
+        "label": "Akerman 来源队列与测序平台",
+        "url": "https://ega-archive.org/studies/EGAS00001002865"
+      },
+      {
+        "label": "InsPIRE 原研究（有样本重叠）",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7528108/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "assay": [
+        0,
+        4
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "limitations": [
+        0,
+        5
+      ]
+    },
+    "evidence": [
+      "Published full text obtained from Europe PMC PMC8864863: initial514, RNAQC460, genotype+RNA404, diabetes21 in QTL subset. Results explicitly say uniquely aligned reads median93million per sample.",
+      "TIGER paper states207 source samples were analyzed by InsPIRE; eQTL meta-analysis has four cohorts despite initial five. All laboratory platforms are not collapsed into the illustrative EGA64-donor source."
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "TIGER 胰岛"
+  },
+  {
+    "id": "nephqtl2",
+    "name": "NephQTL2 / NEPTUNE",
+    "version": "Han et al., Nature Communications 2023",
+    "category": "bulk",
+    "tissue": "肾病患者活检，显微分离的肾小球 GLOM 与肾小管间质 TUBE。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "染色质注释辅助 fine-mapping"
+    ],
+    "summary": "肾脏分区 eQTL 与 DAP-G fine-mapping 资源，以外部单核开放染色质注释改善变异优先级，适合肾功能和蛋白尿 GWAS 共定位。",
+    "sampleSize": "332 位有配对 RNA-seq / WGS 的 NEPTUNE donor；GLOM N=240，TUBE N=311，二者重叠 219 人，不能相加为 551 donors。",
+    "cellsPerDonor": "不适用：显微分离组织的 bulk RNA-seq。外部 5-donor snRNA / snATAC 仅用于注释，不是 332 人的单细胞 QTL 数据。",
+    "assay": "SMART-Seq v4 RNA kit；Illumina HiSeq 2500，150 bp unstranded paired-end；配套 WGS。",
+    "depth": "RNA 每样本 reads 深度本次未核实；论文 WGS 为 30×，不能误写为 RNA-seq 深度。",
+    "access": "NephQTL2 官方入口已转向 Common Metabolic Diseases Knowledge Portal，提供处理后 fine-mapped eQTL 与注释；原始数据经 NEPTUNE ancillary study 申请。",
+    "limitations": "继承有肾病的临床活检队列背景；属于组织分区 bulk eQTL，不是 sc/sn-eQTL；需匹配 fine-mapping 的先验版本。",
+    "sources": [
+      {
+        "label": "原论文 / Methods",
+        "url": "https://www.nature.com/articles/s41467-023-37691-7"
+      },
+      {
+        "label": "NephQTL2 官方入口",
+        "url": "https://www.nephqtl2.org/"
+      },
+      {
+        "label": "当前门户目标页面",
+        "url": "https://hugeampkpn.org/research.html?pageid=nephqtl2_home_89"
+      },
+      {
+        "label": "NEPTUNE 原始数据申请",
+        "url": "https://www.neptune-study.org/ancillary-studies"
+      },
+      {
+        "label": "作者实验室数据说明",
+        "url": "https://www.sampsonlab.org/tools-and-data-sets"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        4
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "limitations": [
+        0
+      ]
+    },
+    "evidence": [
+      "Publisher Methods KidneyRNA-seq specifies SMARTSeqv4/HiSeq2500/150bp unstrandedPE; Results332/240/311 and figure matched219. WGS30x is distinct.",
+      "Official nephqtl2.org live page linked to hugeampkpn research page; downstream JS content was not independently downloaded."
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "NephQTL2"
+  },
+  {
+    "id": "starnet",
+    "name": "STARNET（心血管 / 代谢多组织）",
+    "version": "Franzén et al., Science 2016；Koplev et al., 2022 网络扩展",
+    "category": "bulk",
+    "tissue": "冠心病手术患者：血液、主动脉根部、乳内动脉、皮下脂肪、内脏脂肪、骨骼肌和肝。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "trans-eQTL",
+      "跨组织调控网络"
+    ],
+    "summary": "同一人多组织测量的遗传调控资源，适合心血管性状、肝–脂肪组织相互作用及跨组织效应共享分析。",
+    "sampleSize": "原始研究招募 600 名 CAD 患者；dbGaP v1 为 QC 后 566 份基因型、3,577 份 RNA-seq（7 组织），各组织 QTL N 不同。2022 扩展另含 250 名非 CAD 对照。",
+    "cellsPerDonor": "不适用：bulk 组织 RNA-seq；3,577 是重复组织测量数，不是 donor 数。",
+    "assay": "poly(A) / Ribo-Zero bulk RNA-seq，50–100 bp single-end、Illumina HiSeq；dbGaP v1 标注 HiSeq 2000；扩展匹配病例–对照批次为 HiSeq 4000、100 bp SE。",
+    "depth": "2022 论文 Methods 将原始队列测序规模描述为 20–30M reads/样本；这是方法报告范围，不是每人实测分布。扩展批次同为 20–30M reads/样本。",
+    "access": "dbGaP phs001203 申请个体表达与基因型；STARNET browser 浏览组织 eQTL 与调控网络。门户当前可用性未核实，完整汇总文件需从论文 / dbGaP 核查。",
+    "limitations": "锁定原始 600-CAD 参考版本；2022 扩展 RNA counts、后续 WGS / 巨噬细胞研究不等于原始 eQTL 样本集合。多组织测量不能当独立样本相加。",
+    "sources": [
+      {
+        "label": "dbGaP v1：QC 样本与平台",
+        "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001203.v1.p1"
+      },
+      {
+        "label": "2022 全文与原始 / 扩展测序方法",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9583458/"
+      },
+      {
+        "label": "2022 正式论文与数据可用性",
+        "url": "https://www.nature.com/articles/s44161-021-00009-1"
+      },
+      {
+        "label": "STARNET browser",
+        "url": "https://starnet.mssm.edu/"
+      },
+      {
+        "label": "2016 原始论文",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27540175/"
+      },
+      {
+        "label": "分析代码",
+        "url": "https://github.com/skoplev/starnet"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        2
+      ],
+      "assay": [
+        0,
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        0,
+        2,
+        3
+      ],
+      "limitations": [
+        0,
+        1
+      ]
+    },
+    "evidence": [
+      "PMC full HTML successfully fetched with urllib; Methods RNAseq20–30M, polyA/RiboZero,50–100bpSE; matched1496-sample extension100bpSE/HiSeq4000. Depth wording kept as methods range, no achieved mean inferred.",
+      "dbGaPv1 reports566 genotypes and3577 RNA profiles;2022 separately reprocesses cohort and extends controls, not substituted for original QTL N. Portal live fetch502."
+    ],
+    "group": "bulk-tissue",
+    "navLabel": "STARNET",
+    "dataUrl": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001203.v1.p1"
+  },
+  {
+    "id": "ibdverse-sceqtl",
+    "name": "IBDverse — 肠道与血液 sc-eQTL",
+    "version": "Alegbe, Harris et al., Nature 2026；2026-09-05 核验",
+    "category": "single-cell",
+    "group": "sc-tissue",
+    "navLabel": "IBDverse · 肠道",
+    "tissue": "末端回肠、直肠与外周血；英国队列，包含 Crohn’s disease 与健康 donor。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "interaction eQTL",
+      "细胞类型 / 组织 / 跨组织 eQTL"
+    ],
+    "summary": "覆盖肠上皮、基质和免疫细胞的 IBD 遗传调控资源，在 86 个细胞类型、9 个大类及整体样本层面映射 eQTL，适合比较组织与细胞类型特异效应及 IBD GWAS 共定位。",
+    "sampleSize": "总体 421 名 donor（其中 125 名 IBD）；正式论文的最终基因型匹配 sc-eQTL 队列为 396 名 donor、2,196,874 cells。Atlas 为 1,852,681 cells；门户仍标基因型 397 人，应按具体下载版本核对。",
+    "cellsPerDonor": "QTL 队列约 5,548 cells/donor（2,196,874 ÷ 396，跨组织汇总的计算均值）；部分 donor 多部位采样，不是每个细胞类型或单份活检的细胞数。",
+    "assay": "10x Genomics Chromium 3′ scRNA-seq，v3.0 / v3.1；Illumina HiSeq 4000 / NovaSeq 6000，配套基因型芯片。",
+    "depth": "目标 50,000 reads/cell；属于设计目标，不能解释为 QC 后实测均值。组织与 donor 的细胞捕获量不同。",
+    "access": "BioStudies S-BSST2922 提供 eQTL、ieQTL 与共定位结果；E-MTAB-16986 提供 atlas / analysis 表达及元数据。原始 scRNA 与基因型受控，须向 Sanger DAC 申请 EGA 数据。",
+    "limitations": "421 为总体招募人数，396 为正式论文 QTL 分析人数，门户的 397 为另一发布口径，不能互换。Atlas 与 QTL-ready 数据采用不同过滤/注释步骤。门户的基因型链接实际指向含 CRAM 的 EGA 页面，申请时须核对数据集文件类型。",
+    "sources": [
+      {
+        "label": "正式论文与 Methods",
+        "url": "https://www.nature.com/articles/s41586-026-10627-z"
+      },
+      {
+        "label": "IBDverse 官方数据入口",
+        "url": "https://www.ibdverse.info/"
+      },
+      {
+        "label": "QTL / ieQTL / 共定位结果",
+        "url": "https://www.ebi.ac.uk/biostudies/studies/S-BSST2922"
+      },
+      {
+        "label": "表达与元数据",
+        "url": "https://www.ebi.ac.uk/biostudies/studies/E-MTAB-16986"
+      },
+      {
+        "label": "EGA 受控数据与测序平台",
+        "url": "https://ega-archive.org/datasets/EGAD00001016069"
+      },
+      {
+        "label": "论文列出的另一 EGA 数据集",
+        "url": "https://ega-archive.org/datasets/EGAD00001015692"
+      }
+    ],
+    "dataUrl": "https://www.ibdverse.info/",
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0,
+        4
+      ],
+      "depth": [
+        0,
+        3
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "limitations": [
+        0,
+        1,
+        4
+      ]
+    },
+    "evidence": [
+      "Publisher main text explicitly says final sc-eQTL cohort is 396 genotyped individuals. Official project page says 397 genotype individuals and 421 analysis individuals. Preserve the discrepancy rather than replacing final-paper N with 397.",
+      "Publisher Methods obtained by urllib: atlasing 1,852,681 cells; after autoannotation and intersection with genotyped individuals 2,196,874 cells. Calculated donor average 2,196,874/396 = 5547.66.",
+      "Paper Methods directly confirms 10x3prime v3.0/v3.1 target50,000reads/cell. Public archive metadata EGAD00001016069 lists HiSeq4000/NovaSeq6000.",
+      "Paper data availability assigns rawRNA EGAD00001015692 and genotype EGAD00001016069, but current16069 page contains717samples and CRAM files. Avoid asserting that either EGA link is exclusively genotype without checking files. Portal links genotype397 to16069."
     ]
+  },
+  {
+    "id": "sabr-bulk",
+    "name": "SABR — South African Blood Regulatory",
+    "version": "Castel et al., Nature Genetics 2025",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "SABR · 南非全血",
+    "tissue": "南非全血；Pedi / Bapedi、Tsonga 和 Zulu 三个 South Eastern Bantu-speaking 人群。",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-sQTL",
+      "cell-type interaction QTL",
+      "细胞组成性状 GWAS"
+    ],
+    "summary": "配套 WGS 与全血 RNA-seq 的非洲祖源调控资源，补充欧洲祖源数据库；可用于跨祖源共定位、表达和剪接调控。40 项细胞性状由 bulk 表达反卷积估计。",
+    "sampleSize": "入组 750 人；RNA 建库质控通过 669 份；RNA 与基因型共同通过 QC、用于 QTL mapping 的为 614 人。细胞组成 GWAS 为另一个 620 人分析集合。",
+    "cellsPerDonor": "不适用：全血 bulk RNA-seq。40 项细胞性状是反卷积估计，没有单细胞条码，不能给出 cells/donor。",
+    "assay": "Illumina TruSeq Stranded Total RNA Ribo-Zero Globin，NovaSeq 6000、2 × 151 bp；配套 Illumina DNA Prep WGS 与联合基因分型 / 插补。",
+    "depth": "RNA 实测中位数 30M mapped read pairs/样本；设计目标 9 Gb/样本。WGS 实测中位覆盖 5.1×（范围 4.0–18.3×）；RNA 深度与 DNA 覆盖分开记录。",
+    "access": "全量 QTL / GWAS 汇总统计公开于 Zenodo 15334125 与作者 AWS S3；个体基因型、转录组通过 EGA EGAS50000001008 申请。论文声明数据仅供非商业用途。",
+    "limitations": "属于 bulk eQTL；cell-type interaction QTL 不等同于直接测得的 sc-eQTL。三个人群不能代表全部非洲祖源；分析时使用匹配的 LD 与等位基因频率。",
+    "sources": [
+      {
+        "label": "正式论文",
+        "url": "https://www.nature.com/articles/s41588-025-02223-0"
+      },
+      {
+        "label": "开放全文 / 样本与测序 metadata",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12283414/"
+      },
+      {
+        "label": "全量 QTL / GWAS 汇总结果",
+        "url": "https://zenodo.org/records/15334125"
+      },
+      {
+        "label": "个体基因型与转录组（EGA）",
+        "url": "https://ega-archive.org/studies/EGAS50000001008"
+      },
+      {
+        "label": "细胞性状 GWAS Catalog",
+        "url": "https://www.ebi.ac.uk/gwas/publications/40500424"
+      }
+    ],
+    "dataUrl": "https://zenodo.org/records/15334125",
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "cellsPerDonor": [
+        0,
+        1
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "limitations": [
+        0,
+        1
+      ]
+    },
+    "evidence": [
+      "Checked local cached EuropePMC XML sabr.xml (PMC12283414, DOI10.1038/s41588-025-02223-0). Results specify RNA mappedpairs median30M; finalQTL614; initial750. Methods specify669 libraryQC-pass, celltraitGWAS620.",
+      "RNA library label TruSeq strandedTotalRNA RiboZeroGlobin; NovaSeq6000 2x151bp; target9Gb/sample. WGS median5.1x range4.0–18.3x. No wetlab or culture protocols reproduced.",
+      "Data availability explicitly states academic researchers may apply for EGA EGAS50000001008; fullGWAS/QTL in Zenodo DOI10.5281/zenodo.15334125 and s3://public.us-prod.variantbio.com/SABR/; noncommercialuseonly. Zenodo live fetch unavailable during this check, so public status follows published availability.",
+      "40 celltraits are derived from xCell deconvolution of bulkRNA, not measured singlecells. Retain bulk classification."
+    ]
+  },
+  {
+    "id": "randolph-2021",
+    "name": "Randolph PBMC sc-eQTL",
+    "version": "Science 2021；Catalogue QTS000036 / QTS000046",
+    "category": "single-cell",
+    "tissue": "外周血 PBMC；欧洲与非洲裔美国人群",
+    "qtlTypes": [
+      "cis-eQTL",
+      "context-dependent eQTL"
+    ],
+    "summary": "免疫细胞遗传调控与祖源差异资源，适合细胞类型特异 eQTL、跨祖源效应及不同细胞状态间的遗传效应比较。eQTL Catalogue 提供统一重分析结果。",
+    "sampleSize": "原始单细胞队列 90 名 donor；HCA 项目估计约 235,000 cells。Catalogue 基因型关联重分析为 89 人。",
+    "cellsPerDonor": "HCA 门户估计总量折算约 2,611 cells/donor（235,000 ÷ 90，跨项目测量汇总的粗略均值）。89 人 QTL 子集的逐 donor 细胞分布未核实。",
+    "assay": "10x Genomics 3′ v2 scRNA-seq（HCA 建库元数据）；配套基因型数据。测序仪型号未在本次目录元数据核实。",
+    "depth": "每细胞目标或实测 reads 深度未核实；HCA Cell Count Estimate 是细胞数估计，不是测序深度。",
+    "access": "表达数据：GEO GSE162632 / HCA；Catalogue 列出的基因型入口：PRJNA736483。统一 QTL summary statistics 经 Catalogue FTP / REST API 获取。",
+    "limitations": "QTS000036 与重新注释版本 QTS000046 属于同一 cohort，不能视为独立复制。原始 90 人与 QTL 重分析 89 人分母不同；HCA 约 235k 为门户估计值。",
+    "sources": [
+      {
+        "label": "原论文",
+        "url": "https://doi.org/10.1126/science.abg0928"
+      },
+      {
+        "label": "HCA 队列与测序元数据",
+        "url": "https://explore.data.humancellatlas.org/projects/c211fd49-d980-4ba1-8c6a-c24254a3cb52"
+      },
+      {
+        "label": "Catalogue 样本量与数据登录号",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "Catalogue QTL 下载与 API",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      },
+      {
+        "label": "GEO 表达数据",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE162632"
+      },
+      {
+        "label": "基因型 BioProject",
+        "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA736483"
+      }
+    ],
+    "evidence": {
+      "sampleSize": "HCA Overview updated 2024-10-24: Donor Count 90, Cell Count Estimate 235.0k. Catalogue Studies lists 89 donors for QTS000036 and QTS000046, spelling original study label Randoplh_2021.",
+      "assay": "HCA Library Construction Method: 10x 3' v2. No protocol retrieval performed in this revision.",
+      "depth": "Unknown in consulted directory metadata; no instrument or reads/cell inferred from assay label.",
+      "scope": "Public resource-directory metadata only; no infection, stimulation, culture, or reagent procedures included."
+    },
+    "group": "sc-immune",
+    "navLabel": "Randolph · PBMC",
+    "dataUrl": "https://www.ebi.ac.uk/eqtl/Data_access/",
+    "fieldSources": {
+      "sampleSize": [
+        1,
+        2
+      ],
+      "cellsPerDonor": [
+        1,
+        2
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        1
+      ]
+    }
+  },
+  {
+    "id": "nathan-2022",
+    "name": "Peruvian memory T-cell eQTL（Nathan）",
+    "version": "Nature 2022；Catalogue QTS000040 / QTS000049",
+    "category": "single-cell",
+    "tissue": "秘鲁人群外周血 memory T cells；既往结核进展队列",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cell-state interaction eQTL"
+    ],
+    "summary": "结合转录组和表面蛋白定义连续 T 细胞状态，研究遗传效应随细胞状态变化。原论文报告 6,511 个 cis-eQTL 中约三分之一具有细胞状态依赖效应，适合连续状态模型与疾病共定位方法研究。",
+    "sampleSize": "原论文 / dbGaP：259 名 donor、超过 500,000 个 memory T cells；Catalogue 重分析保留 249 人。",
+    "cellsPerDonor": "原始队列超过 500,000 cells ÷ 259 donor，对应总体平均超过约 1,930 cells/donor；精确均值、逐 donor 分布及 Catalogue 249 人子集细胞总数未核实。",
+    "assay": "CITE-seq：单细胞 RNA 表达与 31 个细胞表面蛋白联合测量（dbGaP 元数据）。10x 建库版本、测序仪与读长未在本次目录元数据核实。",
+    "depth": "RNA 与蛋白标签文库的目标或实测测序深度未核实；不得把表面蛋白数或细胞总数当作 reads/cell。",
+    "access": "表达与多模态数据：dbGaP phs002467.v1.p1；Catalogue 列出的基因型入口：phs002025，个体数据需申请。Catalogue FTP / REST API 提供统一重分析 QTL 结果。",
+    "limitations": "259 是原始队列人数，249 是 Catalogue 重分析人数，不能混用细胞总量与分母。QTS000040 与重新注释版本 QTS000049 属于同一 cohort；原始细胞状态交互模型与 Catalogue 细胞类型聚合结果的估计目标不同。",
+    "sources": [
+      {
+        "label": "原论文摘要与结果范围",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35545678/"
+      },
+      {
+        "label": "原论文 DOI",
+        "url": "https://doi.org/10.1038/s41586-022-04713-1"
+      },
+      {
+        "label": "dbGaP 表达与 CITE-seq 元数据",
+        "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002467.v1.p1"
+      },
+      {
+        "label": "dbGaP 基因型",
+        "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002025"
+      },
+      {
+        "label": "Catalogue 样本量与数据登录号",
+        "url": "https://www.ebi.ac.uk/eqtl/Studies/"
+      },
+      {
+        "label": "Catalogue QTL 下载与 API",
+        "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      }
+    ],
+    "evidence": {
+      "sampleSize": "PubMed abstract: >500,000 memory T cells from 259 Peruvian individuals, 6,511 cis-eQTLs. dbGaP phs002467 description corroborates >500K/259 and states CITE-seq with 31 surface proteins. Catalogue QTS000040/49 lists 249.",
+      "cellsPerDonor": "Only approximate lower bound computed from abstract: 500000/259 = 1930.50. Not the 249-donor reanalysis mean.",
+      "depth": "Assay platform version and depth not verified in descriptive archive metadata; left unknown.",
+      "scope": "Public resource-directory metadata only; no infection, stimulation, culture, or reagent procedures included."
+    },
+    "group": "sc-immune",
+    "navLabel": "Nathan · memory T",
+    "dataUrl": "https://www.ebi.ac.uk/eqtl/Data_access/",
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        2,
+        4
+      ],
+      "cellsPerDonor": [
+        0,
+        2,
+        4
+      ],
+      "assay": [
+        2
+      ],
+      "depth": [
+        2
+      ]
+    }
+  },
+  {
+    "id": "fujita-rosmap-2024",
+    "name": "ROSMAP 脑细胞亚型 eQTL（Fujita）",
+    "version": "Nature Genetics 2024；Synapse 数据集标题标为 Fujita et al. 2023",
+    "category": "single-cell",
+    "tissue": "ROSMAP 高龄 donor 的背外侧前额叶皮层（DLPFC）",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cell-subtype eQTL"
+    ],
+    "summary": "脑组织细胞亚型遗传调控图谱，在 7 类主要细胞与 64 个亚型中开展 cis-eQTL 分析，分别识别 10,004 与 8,099 个 eGenes；适合阿尔茨海默病等脑相关 GWAS 的细胞背景定位。",
+    "sampleSize": "424 名 donor；约 150 万单核转录组。具体细胞类型 / 亚型的 eQTL 有效 donor 数不同。",
+    "cellsPerDonor": "约 3,538 nuclei/donor（1,500,000 ÷ 424；基于摘要约数计算的总体均值，不是每位 donor 的实际数量）。",
+    "assay": "snRNA-seq（单核 RNA 测序）与配套 WGS 基因型；建库版本、测序仪及读长未在本次目录元数据核实。",
+    "depth": "每核目标或实测 reads 深度未核实；约 150 万转录组是单核数量，不是 reads 总数。",
+    "access": "细胞类型 / 亚型注释与 eQTL summary statistics：Synapse syn52335732；单核表达数据：syn31512863；WGS VCF：syn11724057。个体数据需按 AD Knowledge Portal 的 Data Use Certificate 流程申请。",
+    "limitations": "与其他 ROSMAP 发布版本或脑 eQTL meta-analysis 可能存在 donor 重叠，合并前需核对。不要将另一 ROSMAP 图谱的 427 人 / 230 万细胞替代本研究 424 人 / 约 150 万核。Zenodo 10472216 是代码归档，不是 eQTL 数据下载。",
+    "sources": [
+      {
+        "label": "原论文摘要与样本量",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38514782/"
+      },
+      {
+        "label": "原论文 DOI",
+        "url": "https://doi.org/10.1038/s41588-024-01685-y"
+      },
+      {
+        "label": "eQTL 与细胞亚型注释",
+        "url": "https://doi.org/10.7303/syn52335732"
+      },
+      {
+        "label": "单核 RNA 数据",
+        "url": "https://www.synapse.org/Synapse:syn31512863"
+      },
+      {
+        "label": "WGS 基因型",
+        "url": "https://www.synapse.org/Synapse:syn11724057"
+      },
+      {
+        "label": "数据申请说明",
+        "url": "https://adknowledgeportal.synapse.org/DataAccess/"
+      },
+      {
+        "label": "原论文数据可用性声明",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12288883/"
+      }
+    ],
+    "evidence": {
+      "sampleSize": "PubMed 38514782 and Broad Institute publication abstract: 424 older individuals, ~1.5 million transcriptomes, 7 cell types, 64 subtypes, 10,004/8,099 eGenes.",
+      "access": "Original publication's indexed Data availability text lists syn52335732 for annotation and QTL summaries, syn31512863 for raw/processed snRNA, syn11724057 for WGS VCF and DUC-restricted participant data. Synapse public record title is Fujita et al 2023 - ROSMAP DLPFC snRNAseq.",
+      "depth": "Deeper assay metadata and reads/nucleus not verified in this revision; no experimental-method retrieval undertaken.",
+      "zenodo": "Zenodo 10472216: Software Open, masashi-CU/snuc-eQTL-v1.zip, 8.8 kB. Do not label as QTL summary-statistics dataset."
+    },
+    "group": "sc-brain",
+    "navLabel": "Fujita · ROSMAP",
+    "dataUrl": "https://doi.org/10.7303/syn52335732",
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0,
+        6
+      ],
+      "depth": [
+        0
+      ]
+    }
   }
 ]

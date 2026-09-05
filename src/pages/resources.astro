@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import QtlResource from '../components/QtlResource.astro';
+import QtlDirectory from '../components/QtlDirectory.astro';
 import qtlResources from '../data/qtl-resources.json';
-
+import { qtlGroups } from '../data/qtl-groups';
 import ResourceBrief from '../components/ResourceBrief.astro';
 import PaperCard from '../components/PaperCard.astro';
 import { publishedIssues, publishedPapers } from '../lib/issues';
@@ -16,55 +17,147 @@ const briefs = issues.flatMap(i => i.data.briefs).filter(b => {
 }).sort((a,b) => +b.date - +a.date);
 const previous = issues.filter(i => i.data.topics.includes('resources') && !i.data.briefs.length);
 const papers = (await publishedPapers()).filter(p => p.data.topics.includes('resources')).sort((a,b) => +b.data.date - +a.data.date);
-const groups = [
-  {id:'single-cell', title:'Single-cell / single-nucleus QTL', note:'免疫细胞、脑组织与 iPSC 分化队列。细胞或细胞核是重复测量，遗传关联分析的独立样本单位通常是 donor。'},
-  {id:'bulk', title:'Bulk / 分选细胞 QTL', note:'组织、全血与分选细胞群体的表达测量。分选 bulk 仍是细胞群体测量，不计作 single-cell。'},
-  {id:'catalogue', title:'跨研究整合目录', note:'下载和比较多个队列时，先核对样本重叠、基因组版本、等位基因方向与分析版本。'}
-];
-
+const groups = qtlGroups.map(group => ({
+  ...group, records: qtlResources.filter(r => r.group === group.id)
+})).filter(group => group.records.length);
+const featuredIds = ['eqtl-catalogue', 'tenk10k-phase1-eqtl', 'tenk10k-phase1-caqtl'];
+const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filter(r => r !== undefined);
 ---
-<Base title="QTL 数据资源 · Genetic Daily Papers" description="Single-cell、single-nucleus 与 bulk QTL 数据资源：donor 数、每位 donor 细胞数、测序方式、测序深度及原始数据与汇总统计获取来源。">
-  <header class="page-heading qtl-head">
-    <span class="eyebrow">Data resources</span><h1>QTL 数据资源</h1>
-    <p>按研究队列查找数据，比较样本量、每位 donor 的细胞数、测序方式与深度。</p>
-    <div class="qtl-status">{qtlResources.length} 项资源 · 资料核查：<time datetime="2026-09-05">2026-09-05</time></div>
+<Base title="QTL 数据资源 · Genetic Daily Papers" description="按组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源，比较 donor 数、每 donor 细胞数、测序方法、深度及数据访问条件。">
+  <header class="page-heading qtl-head" id="resources-top">
+    <div class="eyebrow">QTL RESOURCE DIRECTORY</div>
+    <div class="qtl-heading-row"><h1>QTL 数据资源</h1><span class="qtl-updated">核查 <time datetime="2026-09-05">2026-09-05</time></span></div>
+    <p>{qtlResources.length} 项资源 · {groups.length} 个分类 · 论文、数据入口与方法参数</p>
+    <nav class="featured-resources" aria-label="重点资源">
+      {featured.map(r => <a href={`#${r.id}`}>{r.navLabel ?? r.name}<span aria-hidden="true"> ↗</span></a>)}
+    </nav>
   </header>
-  <nav class="qtl-nav" aria-label="资源分类">
-    {groups.map(group => <a href={`#${group.id}`}>{group.title} <span>{qtlResources.filter(r => r.category === group.id).length}</span></a>)}
-    <a href="#resource-papers">资源论文与版本发布</a>
-  </nav>
-  <aside class="qtl-note" aria-label="数据口径说明">
-    <strong>如何比较这些数字</strong>
-    <p>donor 数、组织样本数和进入各细胞类型 QTL 分析的有效 N 分开记录。“计算均值”仅指总细胞数 ÷ 对应 donor 数，不能替代 donor 分布或各细胞类型的细胞数。reads、read pairs 与 UMI 不互换；目标深度与实测深度分开标注。未找到可核实数值的字段保留“未报告 / 未核实”，不以平台推荐值填充。</p>
-  </aside>
-  {groups.map(group => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
-    <div class="section-bar"><h2 id={`${group.id}-heading`}>{group.title}</h2></div>
-    <p class="qtl-group-note">{group.note}</p>
-    <div class="qtl-list">{qtlResources.filter(r => r.category === group.id).map(resource => <QtlResource resource={resource}/>)}</div>
-  </section>)}
-  <section id="resource-papers" aria-labelledby="resource-papers-heading">
-    <div class="section-bar"><h2 id="resource-papers-heading">资源简报与版本发布</h2></div>
-
-  {briefs.map(b => <ResourceBrief brief={b}/>)}
-  <div class="section-bar"><h2>数据库论文</h2></div>
-  <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
-  {previous.length > 0 && <section class="recent"><div class="section-bar"><h2>往期数据记录</h2></div>{previous.map(e => <a class="archive-row" href={`/daily/${e.id}/`}><time>{e.id}</time><strong>{e.data.title}</strong><span>查看 →</span></a>)}</section>}
-  <p class="resource-directory">常用入口：<a href="https://gtexportal.org/">GTEx</a> · <a href="https://www.ebi.ac.uk/eqtl/">eQTL Catalogue</a> · <a href="https://yanglab.westlake.edu.cn/smr-portal/">SMR Portal</a></p>
-  </section>
+  <details class="mobile-directory">
+    <summary>资源目录 <span>{groups.length} 类 / {qtlResources.length} 项</span></summary>
+    <div class="mobile-directory-body"><QtlDirectory groups={groups}/></div>
+  </details>
+  <div class="qtl-layout">
+    <aside class="desktop-directory">
+      <div class="directory-heading"><strong>资源目录</strong><a href="#resources-top">顶部 ↑</a></div>
+      <QtlDirectory groups={groups}/>
+    </aside>
+    <div class="qtl-content">
+      <div class="qtl-tools">
+        <details class="qtl-conventions">
+          <summary>收录范围与样本口径</summary>
+          <p>收录已提供遗传关联分析的研究、明确的数据发布与跨研究目录；普通表达图谱不自动视为 QTL 队列。资源按实验类型和组织分类，尚不能视为所有公开 QTL 数据的穷尽清单。</p>
+          <p>donor、组织样本及每个细胞类型的有效 N 分开记录。总细胞数 ÷ donor 数仅标为计算均值。reads、read pairs、UMI 及 ATAC fragments 不互换；目标深度与实测深度分开标注，未核实字段保留状态。跨资源分析需先核对样本重叠。</p>
+        </details>
+        <button type="button" class="qtl-expand-all" hidden aria-expanded="false">展开全部测序与来源</button>
+      </div>
+      {groups.map((group, index) => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
+        <header class="qtl-group-heading"><div><span class="group-number">{String(index + 1).padStart(2, '0')}</span><h2 id={`${group.id}-heading`}>{group.title}</h2></div><span class="group-count">{group.records.length} 项</span></header>
+        <p class="qtl-group-note">{group.note}</p>
+        <div class="qtl-list">{group.records.map(resource => <QtlResource resource={resource}/>)}</div>
+      </section>)}
+      <section id="resource-papers" aria-labelledby="resource-papers-heading">
+        <header class="qtl-group-heading"><h2 id="resource-papers-heading">资源简报与论文</h2><a href="#resources-top">返回顶部 ↑</a></header>
+        {briefs.map(b => <ResourceBrief brief={b}/>)}
+        <div class="section-bar"><h2>数据库论文</h2></div>
+        <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
+        {previous.length > 0 && <section class="recent"><div class="section-bar"><h2>往期数据记录</h2></div>{previous.map(e => <a class="archive-row" href={`/daily/${e.id}/`}><time>{e.id}</time><strong>{e.data.title}</strong><span>查看 →</span></a>)}</section>}
+        <p class="resource-directory">常用入口：<a href="https://gtexportal.org/">GTEx</a> · <a href="https://www.ebi.ac.uk/eqtl/">eQTL Catalogue</a> · <a href="https://yanglab.westlake.edu.cn/smr-portal/">SMR Portal</a></p>
+      </section>
+    </div>
+  </div>
 </Base>
+<script>
+  const expansionButton = document.querySelector<HTMLButtonElement>('.qtl-expand-all');
+  const records = [...document.querySelectorAll<HTMLDetailsElement>('.qtl-record-details')];
+  const refreshExpansion = () => {
+    const expanded = records.length > 0 && records.every(record => record.open);
+    if (!expansionButton) return;
+    expansionButton.textContent = expanded ? '收起全部测序与来源' : '展开全部测序与来源';
+    expansionButton.setAttribute('aria-expanded', String(expanded));
+  };
+  if (expansionButton) {
+    expansionButton.hidden = false;
+    expansionButton.addEventListener('click', () => {
+      const expand = !records.every(record => record.open);
+      records.forEach(record => record.open = expand);
+      refreshExpansion();
+    });
+  }
+  records.forEach(record => record.addEventListener('toggle', refreshExpansion));
+  const revealResource = (hash: string) => {
+    let id: string;
+    try { id = decodeURIComponent(hash.replace(/^#/, '')); } catch { return; }
+    const target = document.getElementById(id);
+    document.querySelectorAll<HTMLAnchorElement>('a[data-qtl-nav]').forEach(link => {
+      if (link.dataset.qtlNav === id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    if (!target?.matches('.qtl-resource')) return;
+    const details = target.querySelector<HTMLDetailsElement>('.qtl-record-details');
+    if (details) details.open = true;
+  };
+  document.addEventListener('click', event => {
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href^="#"]') : null;
+    if (!link) return;
+    revealResource(link.hash);
+    const mobileDirectory = link.closest<HTMLDetailsElement>('.mobile-directory');
+    if (mobileDirectory) mobileDirectory.open = false;
+  });
+  window.addEventListener('hashchange', () => revealResource(window.location.hash));
+  revealResource(window.location.hash);
+  refreshExpansion();
+</script>
 <style>
+  .qtl-head { padding-top: 8px; padding-bottom: 25px; }
+  .qtl-heading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .qtl-heading-row h1 { margin: 9px 0 7px; }
   .qtl-head p { font-size: 1rem; }
-  .qtl-status { display: flex; flex-wrap: wrap; gap: 4px; color: var(--muted); font-size: .875rem; margin-top: 12px; }
-  .qtl-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 22px; }
-  .qtl-nav a { padding: 7px 11px; border: 1px solid var(--line); border-radius: 5px; font-size: .875rem; background: white; text-decoration: none; }
-  .qtl-nav a:hover { border-color: var(--accent); }
-  .qtl-nav span { color: var(--muted); padding-left: 5px; }
-  .qtl-note { padding: 17px 20px; border-left: 3px solid var(--accent); background: var(--pale); font-size: .875rem; }
-  .qtl-note p { margin: 7px 0 0; color: #3b505b; line-height: 1.85; }
-  .qtl-group { scroll-margin-top: 110px; margin-top: 36px; }
-  .qtl-group .section-bar { margin-bottom: 8px; }
-  .qtl-group .section-bar h2 { font-size: 1.3rem; }
-  .qtl-group-note { font-size: 1rem; color: var(--muted); margin: 0 0 18px; }
-  .qtl-list { display: grid; gap: 18px; }
-  #resource-papers { margin-top: 44px; scroll-margin-top: 110px; }
+  .qtl-updated { color: var(--muted); font-size: .875rem; }
+  .featured-resources { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .featured-resources a { font-size: .875rem; padding: 7px 12px; border: 1px solid #b8d0c9; background: var(--pale); color: var(--accent); border-radius: 4px; text-decoration: none; font-weight: 650; }
+  .featured-resources a:hover { background: #dceee7; }
+  .qtl-layout { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 34px; align-items: start; }
+  .desktop-directory { position: sticky; top: 22px; max-height: calc(100vh - 44px); overflow-y: auto; padding-right: 14px; scrollbar-width: thin; overscroll-behavior: contain; }
+  .directory-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0 0 12px; margin-bottom: 17px; border-bottom: 2px solid var(--ink); }
+  .directory-heading strong { font-size: 1rem; }
+  .directory-heading a { font-size: .875rem; color: var(--muted); text-decoration: none; }
+  .qtl-content { min-width: 0; }
+  .qtl-tools { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .qtl-conventions { font-size: .875rem; color: var(--muted); min-width: 0; }
+  .qtl-conventions summary { color: var(--accent); cursor: pointer; padding-block: 5px; }
+  .qtl-conventions p { font-size: 1rem; line-height: 1.85; margin: 10px 0; }
+  .qtl-expand-all { flex-shrink: 0; font: inherit; font-size: .875rem; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--accent); padding: 6px 10px; cursor: pointer; }
+  .qtl-expand-all:hover { border-color: var(--accent); }
+  .qtl-expand-all:focus-visible { outline: 3px solid #d7a751; outline-offset: 4px; }
+  .qtl-group { scroll-margin-top: 24px; margin-bottom: 38px; }
+  .qtl-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 2px solid var(--ink); padding-bottom: 11px; }
+  .qtl-group-heading > div { display: flex; align-items: baseline; gap: 11px; }
+  .qtl-group-heading h2 { font-size: 1.25rem; line-height: 1.5; margin: 0; }
+  .group-number { font-size: .875rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .group-count, .qtl-group-heading > a { flex-shrink: 0; color: var(--muted); font-size: .875rem; }
+  .qtl-group-note { font-size: .875rem; color: var(--muted); margin: 11px 0 17px; line-height: 1.8; }
+  .qtl-list { display: grid; gap: 16px; }
+  #resource-papers { margin-top: 42px; scroll-margin-top: 24px; }
+  .mobile-directory { display: none; }
+  @media (max-width: 1000px) {
+    .qtl-layout { grid-template-columns: 1fr; }
+    .desktop-directory { display: none; }
+    .mobile-directory { display: block; position: sticky; top: 0; z-index: 15; background: var(--paper); border: 1px solid var(--line); border-radius: 5px; margin-bottom: 18px; box-shadow: 0 4px 12px #182d3608; }
+    .mobile-directory > summary { cursor: pointer; padding: 12px 15px; color: var(--accent); font-weight: 700; font-size: 1rem; }
+    .mobile-directory > summary > span { float: right; font-size: .875rem; font-weight: 400; color: var(--muted); }
+    .mobile-directory-body { max-height: 65vh; overflow-y: auto; padding: 8px 18px 20px; border-top: 1px solid var(--line); overscroll-behavior: contain; }
+    .qtl-group, #resource-papers { scroll-margin-top: 76px; }
+  }
+  @media (max-width: 540px) {
+    .qtl-heading-row { gap: 0 15px; }
+    .qtl-head { padding-bottom: 20px; }
+    .qtl-head p { margin-top: 8px; }
+    .qtl-tools { align-items: flex-start; flex-direction: column; gap: 8px; }
+    .qtl-group-heading h2 { font-size: 1.125rem; }
+    .qtl-group-heading > div { gap: 7px; }
+  }
+  @media print {
+    .desktop-directory, .mobile-directory, .qtl-tools, .featured-resources { display: none; }
+    .qtl-layout { display: block; }
+  }
 </style>

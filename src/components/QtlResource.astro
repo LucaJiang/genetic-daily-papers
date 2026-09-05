@@ -6,6 +6,8 @@ interface Props {
     depth: string; access: string; limitations: string;
     sources: { label: string; url: string }[];
     fieldSources?: Partial<Record<string, number[]>>;
+    group?: string;
+    dataUrl?: string;
   };
 }
 const { resource: r } = Astro.props;
@@ -15,38 +17,51 @@ const fields = [
   ['assay', '测序 / 测量方式', r.assay],
   ['depth', '测序深度', r.depth],
 ];
+const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方数据|汇总统计|门户|EGA|GEO/.test(s.label))?.url;
 ---
 <article class="qtl-resource" id={r.id} aria-labelledby={`${r.id}-title`}>
   <header>
-    <div class="qtl-meta"><span>{r.version}</span><span>{r.tissue}</span></div>
-    <h3 id={`${r.id}-title`}><a href={`#${r.id}`}>{r.name}</a></h3>
+    <div class="qtl-meta"><span>{r.version}</span></div>
+    <div class="qtl-title-row"><h3 id={`${r.id}-title`}><a href={`#${r.id}`}>{r.name}</a></h3>{dataSource && <a class="qtl-data-link" href={dataSource} target="_blank" rel="noreferrer">数据入口 ↗</a>}</div>
+    <p class="qtl-tissue">{r.tissue}</p>
     <div class="qtl-types">{r.qtlTypes.map(type => <span>{type}</span>)}</div>
     <p class="qtl-summary">{r.summary}</p>
   </header>
-  <dl class="qtl-fields">{fields.map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
-  <p class="qtl-access"><strong>数据获取</strong>{r.access}</p>
-  <details class="qtl-provenance">
-    <summary>来源链接与使用注意</summary>
-    <p>{r.limitations}</p>
-    <ol>{r.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer">{source.label}<span class="sr-only">（新窗口）</span></a></li>)}</ol>
+  <dl class="qtl-fields">{fields.slice(0, 2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
+  <details class="qtl-record-details" open={r.group === 'directories'}>
+    <summary><span>测序、下载与来源</span><span class="qtl-detail-hint">展开查看</span></summary>
+    <div class="qtl-detail-body">
+      <dl class="qtl-fields method-fields">{fields.slice(2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
+      <p class="qtl-access"><strong>数据获取</strong>{r.access}</p>
+      <div class="qtl-provenance"><p><strong>使用注意</strong> {r.limitations}</p><ol>{r.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer">{source.label}<span class="sr-only">（新窗口）</span></a></li>)}</ol></div>
+    </div>
   </details>
 </article>
 <style>
-  .qtl-resource { min-width: 0; padding: 26px 28px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); scroll-margin-top: 110px; overflow-wrap: anywhere; }
+  .qtl-resource { min-width: 0; padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); scroll-margin-top: 24px; overflow-wrap: anywhere; }
+  .qtl-resource:target { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
   .qtl-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; color: var(--muted); font-size: .875rem; }
-  h3 { margin: 8px 0 10px; font-size: 1.3rem; line-height: 1.4; }
+  h3 { margin: 7px 0; font-size: 1.25rem; line-height: 1.5; }
+  .qtl-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+  .qtl-data-link { flex-shrink: 0; font-size: .875rem; color: var(--accent); text-decoration: none; }
+  .qtl-tissue { margin: 0 0 12px; color: var(--muted); font-size: .875rem; line-height: 1.8; }
   h3 a { color: var(--ink); text-decoration: none; }
   h3 a:hover { color: var(--accent); text-decoration: underline; }
   .qtl-types { display: flex; flex-wrap: wrap; gap: 6px; }
   .qtl-types span { font-size: .875rem; background: var(--pale); color: var(--accent); padding: 2px 8px; border-radius: 4px; }
-  .qtl-summary { margin: 14px 0 20px; font-size: 1rem; color: #304651; }
-  .qtl-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; margin: 0; padding-block: 19px; border-block: 1px solid var(--line); }
+  .qtl-summary { margin: 12px 0 18px; font-size: 1rem; color: var(--text); }
+  .qtl-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; margin: 0; padding-block: 17px; border-top: 1px solid var(--line); }
   dt { color: var(--muted); font-size: .875rem; margin-bottom: 5px; }
   dd { margin: 0; font-size: 1rem; line-height: 1.8; }
   .qtl-access { margin: 16px 0; font-size: 1rem; }
   .qtl-access strong { display: block; font-size: .875rem; margin-bottom: 5px; }
   .qtl-provenance { font-size: .875rem; color: var(--muted); }
-  summary { cursor: pointer; color: var(--accent); width: fit-content; padding: 5px 0; font-weight: 600; }
+  .qtl-record-details { border-top: 1px solid var(--line); }
+  summary { cursor: pointer; color: var(--accent); padding: 12px 0 0; font-weight: 600; font-size: .875rem; }
+  .qtl-detail-hint { float: right; color: var(--muted); font-weight: 400; }
+  details[open] .qtl-detail-hint { display: none; }
+  .qtl-detail-body { padding-top: 12px; }
+  .method-fields { border-top: 0; padding-top: 5px; }
   .qtl-provenance p { line-height: 1.85; margin: 12px 0; }
   .qtl-provenance ol { padding-left: 1.3em; margin-bottom: 0; }
   .qtl-provenance a { color: var(--accent); }
@@ -55,6 +70,7 @@ const fields = [
   .qtl-cites a:hover { text-decoration: underline; }
   .qtl-provenance li { padding-block: 3px; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-  @media (max-width: 700px) { .qtl-resource { padding: 21px 20px; } .qtl-fields { grid-template-columns: 1fr; gap: 16px; } }
+  @media (max-width: 1000px) { .qtl-resource { scroll-margin-top: 76px; } }
+  @media (max-width: 700px) { .qtl-resource { padding: 19px 18px; } .qtl-fields { grid-template-columns: 1fr; gap: 16px; } .qtl-title-row { flex-wrap: wrap; gap: 0 12px; margin-bottom: 8px; } }
   @media print { .qtl-resource { break-inside: avoid; } }
 </style>
