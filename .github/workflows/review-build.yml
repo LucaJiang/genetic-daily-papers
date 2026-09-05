@@ -1,10 +1,12 @@
 name: Reviewed site build and browser checks
 on:
   push:
-    branches: [publish-reviewed-2026-09-05]
-    paths-ignore: ['.github/workflows/publish-evidence.yml', '.github/workflows/publish-review.yml']
+    branches: [publish-verified-final-2026-09-05]
 permissions:
   contents: write
+concurrency:
+  group: publish-verified-final-2026-09-05
+  cancel-in-progress: false
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -12,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: publish-reviewed-2026-09-05
+          ref: publish-verified-final-2026-09-05
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -33,7 +35,7 @@ jobs:
           git add package-lock.json public/figures src/content
           if ! git diff --cached --quiet; then
             git commit -m 'build: retain verified original figures and lock dependencies'
-            git push origin HEAD:publish-reviewed-2026-09-05
+            git push origin HEAD:publish-verified-final-2026-09-05
           fi
           git rev-parse HEAD > .radar/validated-commit.txt
           cp .radar/figure-check.json .radar/qa/figure-check.json
@@ -44,6 +46,7 @@ jobs:
           path: |
             dist/
             .radar/qa/
+            .radar/figure-check.json
             .radar/validated-commit.txt
           include-hidden-files: true
           retention-days: 3
