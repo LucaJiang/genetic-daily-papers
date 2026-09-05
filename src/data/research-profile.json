@@ -1,0 +1,11 @@
+{
+  "updatedAt": "2026-09-05",
+  "anchors": ["User-discussed papers in 多读论文", "Jian Yang, Westlake: SMR/HEIDI, SMR-Portal, gsMap, genetic architecture"],
+  "priorityQuestions": ["How do GWAS signals connect to molecular QTL and target genes?", "How do genetic effects depend on cell type, state and tissue?", "Can functional evidence improve fine-mapping and colocalization?", "Which methods improve genetic architecture inference or polygenic prediction?", "Which algorithms improve real single-cell or genetic analysis throughput without compromising inference?"],
+  "coreTopics": ["GWAS", "eQTL", "sQTL", "pQTL", "fine-mapping", "SuSiE", "colocalization", "SMR", "gsMap", "regulatory variants", "genetic architecture", "PRS"],
+  "additionalTopics": ["AlphaGenome", "single-cell methods", "spatial genetics", "GPU", "sparse computation", "parallel inference"],
+  "preferredJournals": ["Nature", "Nature Genetics", "Nature Methods", "Nature Biotechnology", "Nature Communications"],
+  "excludeFromDaily": ["API-only updates", "UI-only updates", "generic single-cell AI keyword matches", "unverified titles", "old papers relabeled as newly published"],
+  "resourceDefinition": "New data releases, database papers, cohorts, tissues, ancestries, molecular traits, reference panels and fine-mapping resources",
+  "scheduling": "Do not enable automatic daily runs without explicit user instruction"
+}

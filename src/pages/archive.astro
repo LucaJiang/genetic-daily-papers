@@ -1,27 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
-const entries = (await getCollection('daily'))
-  .filter((entry) => entry.data.papers.length > 0)
-  .sort((a, b) => +b.data.date - +a.data.date);
-const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
-}).format(date);
+import {publishedIssues,iso} from '../lib/issues';
+const issues=await publishedIssues();
 ---
-<Base title="Archive · Genetic Daily Papers">
-  <section class="hero hero--v4">
-    <div class="eyebrow">Archive</div>
-    <h1>历史日报</h1>
-    <p>按日期回看论文摘要、详细解读、数据发布与算法加速内容。</p>
-  </section>
-  <div class="archive-grid">
-    {entries.map((entry) => (
-      <a class="archive-card" href={`/daily/${entry.id}/`}>
-        <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
-        <h2>{entry.data.title}</h2>
-        <p>{entry.data.summary}</p>
-        <div class="topic-card__footer"><span>{entry.data.papers.length} 篇</span><span>打开 →</span></div>
-      </a>
-    ))}
-  </div>
-</Base>
+<Base title="归档 · Genetic Daily Papers"><header class="page-heading"><div class="eyebrow">Archive</div><h1>日报归档</h1></header><section class="archive-list">{issues.map(e=><a class="archive-row" href={`/daily/${e.id}/`}><time datetime={iso(e.data.date)}>{iso(e.data.date)}</time><div><h2>{e.data.title}</h2><p>{e.data.summary}</p></div><span>{e.data.papers.length} 篇 →</span></a>)}</section></Base>

@@ -1,0 +1,49 @@
+name: Reviewed site build and browser checks
+on:
+  push:
+    branches: [publish-reviewed-2026-09-05]
+    paths-ignore: ['.github/workflows/publish-evidence.yml', '.github/workflows/publish-review.yml']
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish-reviewed-2026-09-05
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve reviewed historical content
+        run: python scripts/migrate-reviewed-content.py
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build and validate all pages and figures
+        run: npm run build
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: Test actual Astro output
+        run: npm run test:browser
+      - name: Commit verified assets and dependency lock on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json public/figures src/content
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: retain verified original figures and lock dependencies'
+            git push origin HEAD:publish-reviewed-2026-09-05
+          fi
+          git rev-parse HEAD > .radar/validated-commit.txt
+          cp .radar/figure-check.json .radar/qa/figure-check.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reviewed-site
+          path: |
+            dist/
+            .radar/qa/
+            .radar/validated-commit.txt
+          include-hidden-files: true
+          retention-days: 3
