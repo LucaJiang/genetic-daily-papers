@@ -1,0 +1,76 @@
+name: Browser review
+on:
+  push:
+    branches: [publish-reviewed-2026-09-05]
+    paths: ['.github/workflows/browser-review.yml', 'src/**']
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Install browser test harness
+        run: python -m pip install playwright==1.55.0
+      - name: Validate rendered pages
+        run: |
+          mkdir -p browser-qa
+          python - <<'PY'
+          import asyncio,json,functools,http.server,threading,shutil,subprocess
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+          root=Path('dist').resolve()
+          class Handler(http.server.SimpleHTTPRequestHandler):
+              def log_message(self,*args):pass
+          server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(Handler,directory=str(root)))
+          threading.Thread(target=server.serve_forever,daemon=True).start()
+          exe=shutil.which('google-chrome') or shutil.which('chromium')
+          if not exe:subprocess.run(['python','-m','playwright','install','--with-deps','chromium'],check=True)
+          routes=['/','/daily/2026-09-03/','/daily/2026-09-04/','/daily/2026-09-05/','/papers/ibd-blood-gut-eqtl/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/','/papers/cigma-cell-type-specific-eqtl/','/topics/','/topics/QTL/','/topics/polygenic-prediction/','/topics/foundation-models/','/archive/','/resources/']
+          async def test():
+              results=[]
+              async with async_playwright() as pw:
+                  browser=await pw.chromium.launch(executable_path=exe,args=['--no-sandbox'])
+                  for width in [1440,1024,768,390,320]:
+                      page=await browser.new_page(viewport={'width':width,'height':1000},device_scale_factor=1)
+                      for route in routes:
+                          response=await page.goto('http://127.0.0.1:8765'+route,wait_until='networkidle')
+                          await page.evaluate('''async()=>{for(const img of document.images)img.loading='eager';await document.fonts.ready;await Promise.all(Array.from(document.images).map(img=>img.complete?Promise.resolve():new Promise(r=>{img.onload=r;img.onerror=r;setTimeout(r,6000)})));}''')
+                          data=await page.evaluate('''()=>({title:document.title,width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,cards:document.querySelectorAll('[data-paper-id]').length,briefs:document.querySelectorAll('[data-brief-id]').length,math:document.querySelectorAll('.katex').length,mathErrors:document.querySelectorAll('.katex-error').length,rawFigures:document.body.innerText.includes('[[figure:'),images:Array.from(document.images).map(i=>({src:i.getAttribute('src'),w:i.naturalWidth,h:i.naturalHeight})),brokenAnchors:Array.from(document.querySelectorAll('a[href^="#"]')).filter(a=>a.hash&&!document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a=>a.hash)})''')
+                          errors=[]
+                          if response.status!=200:errors.append(f'HTTP {response.status}')
+                          if data['scrollWidth']>width+1 or data['bodyWidth']>width+1:errors.append('horizontal overflow')
+                          if data['mathErrors'] or data['rawFigures']:errors.append('render error')
+                          if any(i['w']==0 for i in data['images']):errors.append('image not loaded')
+                          if data['brokenAnchors']:errors.append('broken anchors')
+                          expected={'/':3,'/daily/2026-09-03/':3,'/daily/2026-09-04/':4,'/daily/2026-09-05/':3}.get(route)
+                          if expected is not None and data['cards']!=expected:errors.append('card count mismatch')
+                          if route in ['/','/daily/2026-09-05/'] and data['briefs']!=1:errors.append('brief count mismatch')
+                          if route in routes[4:7] and len(data['images'])!=2:errors.append('new review must contain 2 actual figures')
+                          if route in ['/papers/cigma-cell-type-specific-eqtl/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/'] and data['math']==0:errors.append('math not rendered')
+                          if width in [1440,390] and route in ['/','/daily/2026-09-03/','/daily/2026-09-05/','/papers/glial-3d-epigenome/','/papers/ab-prs-adaptive-finetuning/','/papers/cigma-cell-type-specific-eqtl/','/topics/']:
+                              name=(route.strip('/').replace('/','-') or 'home')+f'-{width}.png'
+                              await page.screenshot(path='browser-qa/'+name,full_page=True)
+                          results.append({'route':route,'viewport':width,'errors':errors,**data})
+                          print(width,route,'PASS' if not errors else errors,flush=True)
+                      await page.close()
+                  await browser.close()
+              Path('browser-qa/report.json').write_text(json.dumps(results,ensure_ascii=False,indent=2))
+              failed=[r for r in results if r['errors']]
+              Path('browser-qa/summary.json').write_text(json.dumps({'checks':len(results),'failed':len(failed),'failures':failed},ensure_ascii=False,indent=2))
+              print(json.dumps({'checks':len(results),'failed':len(failed)}))
+              return bool(failed)
+          raise SystemExit(asyncio.run(test()))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-review
+          path: browser-qa
+          retention-days: 2
