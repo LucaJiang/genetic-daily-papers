@@ -8,6 +8,8 @@ interface Props {
     fieldSources?: Partial<Record<string, number[]>>;
     group?: string;
     dataUrl?: string;
+    ancestry: string;
+    ancestryTags: string[];
   };
 }
 const { resource: r } = Astro.props;
@@ -19,11 +21,12 @@ const fields = [
 ];
 const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方数据|汇总统计|门户|EGA|GEO/.test(s.label))?.url;
 ---
-<article class="qtl-resource" id={r.id} aria-labelledby={`${r.id}-title`}>
+<article class="qtl-resource" id={r.id} aria-labelledby={`${r.id}-title`} data-ancestries={r.ancestryTags.join(' ')}>
   <header>
     <div class="qtl-meta"><span>{r.version}</span></div>
     <div class="qtl-title-row"><h3 id={`${r.id}-title`}><a href={`#${r.id}`}>{r.name}</a></h3>{dataSource && <a class="qtl-data-link" href={dataSource} target="_blank" rel="noreferrer">数据入口 ↗</a>}</div>
     <p class="qtl-tissue">{r.tissue}</p>
+    <p class="qtl-ancestry"><strong>祖源</strong> {r.ancestry}<span class="qtl-cites">{(r.fieldSources?.ancestry ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`祖源来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></p>
     <div class="qtl-types">{r.qtlTypes.map(type => <span>{type}</span>)}</div>
     <p class="qtl-summary">{r.summary}</p>
   </header>
@@ -45,6 +48,8 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
   .qtl-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
   .qtl-data-link { flex-shrink: 0; font-size: .875rem; color: var(--accent); text-decoration: none; }
   .qtl-tissue { margin: 0 0 12px; color: var(--muted); font-size: .875rem; line-height: 1.8; }
+  .qtl-ancestry { margin: 0 0 14px; font-size: 1rem; line-height: 1.8; }
+  .qtl-ancestry strong { color: var(--accent); font-size: .875rem; margin-right: 6px; }
   h3 a { color: var(--ink); text-decoration: none; }
   h3 a:hover { color: var(--accent); text-decoration: underline; }
   .qtl-types { display: flex; flex-wrap: wrap; gap: 6px; }

@@ -68,6 +68,9 @@
         3,
         4,
         5
+      ],
+      "ancestry": [
+        1
       ]
     },
     "evidence": {
@@ -80,7 +83,11 @@
     },
     "group": "sc-immune",
     "navLabel": "TenK10K · sc-eQTL",
-    "dataUrl": "https://zenodo.org/records/18221260"
+    "dataUrl": "https://zenodo.org/records/18221260",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "实际 eQTL 分析限 1,925 名欧洲祖源 donor；Phase 1 总体 2,103 人不作为该分析的祖源分母。"
   },
   {
     "id": "tenk10k-phase1-caqtl",
@@ -148,6 +155,9 @@
         2,
         4,
         5
+      ],
+      "ancestry": [
+        2
       ]
     },
     "evidence": {
@@ -159,7 +169,11 @@
     },
     "group": "sc-immune",
     "navLabel": "TenK10K · caQTL / multiome",
-    "dataUrl": "https://huggingface.co/datasets/anglixue/TenK10K_multiome"
+    "dataUrl": "https://huggingface.co/datasets/anglixue/TenK10K_multiome",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "作者数据卡将 caQTL 队列描述为以欧洲祖源为主（predominantly European），未提供可统一套用的各祖源比例。922 人发现队列与另行分析的 multiome 复制队列需分别核对。"
   },
   {
     "id": "onek1k",
@@ -219,10 +233,17 @@
       ],
       "depth": [
         1
+      ],
+      "ancestry": [
+        1
       ]
     },
     "group": "sc-immune",
-    "navLabel": "OneK1K"
+    "navLabel": "OneK1K",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "原论文将 982 名分析 donor 描述为北欧祖源（Northern European ancestry）。"
   },
   {
     "id": "cima-2026",
@@ -263,6 +284,10 @@
       {
         "label": "分析代码",
         "url": "https://github.com/CIMA-Project/CIMA"
+      },
+      {
+        "label": "CIMA 原论文：群体遗传结构",
+        "url": "https://www.science.org/doi/10.1126/science.adt3130"
       }
     ],
     "evidence": {
@@ -291,10 +316,17 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        5
       ]
     },
     "group": "sc-immune",
-    "navLabel": "CIMA"
+    "navLabel": "CIMA",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "ancestry": "东亚祖源：中国成人队列的遗传结构与 1000 Genomes 汉族参考人群接近；用于 QTL 的匹配数据子集为 413 人。这里依据论文的遗传结构分析，而非仅依据招募地点。"
   },
   {
     "id": "aida",
@@ -369,10 +401,21 @@
       ],
       "depth": [
         2
+      ],
+      "ancestry": [
+        2,
+        1
       ]
     },
     "group": "sc-immune",
-    "navLabel": "AIDA"
+    "navLabel": "AIDA",
+    "ancestryTags": [
+      "MULTI",
+      "EAS",
+      "SEA",
+      "SAS"
+    ],
+    "ancestry": "474 人 sQTL 分析明确涵盖东亚、东南亚及南亚祖源。v2 atlas 另有 6 名欧洲对照，但不能计入该 v1 sQTL 子集。"
   },
   {
     "id": "lifelines-scqtl-2018",
@@ -403,6 +446,10 @@
       {
         "label": "EGA 数据申请",
         "url": "https://ega-archive.org/studies/EGAS00001002560"
+      },
+      {
+        "label": "同研究团队后续分析：原 45 人队列祖源",
+        "url": "https://link.springer.com/article/10.1186/s13059-023-02897-x"
       }
     ],
     "evidence": {
@@ -422,10 +469,17 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        3
       ]
     },
     "group": "sc-immune",
-    "navLabel": "Lifelines DEEP sc-eQTL"
+    "navLabel": "Lifelines DEEP sc-eQTL",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "45 名有匹配基因型的 Lifelines DEEP donor；该队列的后续 co-expression QTL 研究明确将 van der Wijst 数据集描述为欧洲祖源人群。"
   },
   {
     "id": "1m-scbloodnl",
@@ -483,10 +537,17 @@
       ],
       "depth": [
         1
+      ],
+      "ancestry": [
+        1
       ]
     },
     "group": "sc-immune",
-    "navLabel": "1M-scBloodNL"
+    "navLabel": "1M-scBloodNL",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "原论文将 120 名 donor 描述为欧洲祖源、白人背景。该标签对应本研究队列，不包括用于外部验证的欧洲／东亚 SLE 数据。"
   },
   {
     "id": "cd4-activation-soskic",
@@ -540,10 +601,17 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "group": "sc-immune",
-    "navLabel": "CD4 activation"
+    "navLabel": "CD4 activation",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "原论文将招募 donor 描述为英国祖源（British ancestry），归入欧洲祖源；质控后分析为其中 106 人。"
   },
   {
     "id": "perez-sle-scqtl",
@@ -586,6 +654,10 @@
       {
         "label": "dbGaP 基因型",
         "url": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs002812.v1.p1"
+      },
+      {
+        "label": "同队列 GSE174188 的 EUR / EAS 祖源说明",
+        "url": "https://escholarship.org/content/qt4fk0c0bn/qt4fk0c0bn.pdf?v=lg"
       }
     ],
     "evidence": {
@@ -606,10 +678,20 @@
       ],
       "depth": [
         2
+      ],
+      "ancestry": [
+        1,
+        6
       ]
     },
     "group": "sc-immune",
-    "navLabel": "CLUES / ImmVar SLE"
+    "navLabel": "CLUES / ImmVar SLE",
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "EAS"
+    ],
+    "ancestry": "欧洲及亚洲祖源队列；原论文用 European / Asian 分组，公开队列再分析将其亚洲分组标为东亚（EAS）。各细胞类型 QTL 的有效人数及祖源比例应以具体分析子集为准。"
   },
   {
     "id": "bryois-brain-2022",
@@ -683,10 +765,17 @@
       ],
       "access": [
         1
+      ],
+      "ancestry": [
+        1
       ]
     },
     "group": "sc-brain",
-    "navLabel": "Bryois brain eQTL"
+    "navLabel": "Bryois brain eQTL",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "eQTL 分析保留 192 名欧洲祖源 donor；原始脑队列总体的人口构成不能替代该分析筛选口径。"
   },
   {
     "id": "singlebrain-2026",
@@ -787,17 +876,24 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        5
       ]
     },
     "group": "sc-brain",
-    "navLabel": "SingleBrain"
+    "navLabel": "SingleBrain",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "官方数据发布明确为欧洲祖源：跨队列 983 个 donor 记录对应 757 名 unique donors。"
   },
   {
     "id": "brainscope-psychencode-2024",
     "name": "brainSCOPE / PsychENCODE 单核整合资源",
     "version": "Science 2024",
     "category": "single-cell",
-    "tissue": "成人前额叶皮层；含神经精神疾病与对照；祖源构成本次未核实",
+    "tissue": "成人前额叶皮层；含神经精神疾病与对照",
     "qtlTypes": [
       "细胞类型 eQTL",
       "dynamic eQTL",
@@ -874,17 +970,24 @@
       ],
       "assay": [
         5
+      ],
+      "ancestry": [
+        5
       ]
     },
     "group": "sc-brain",
-    "navLabel": "brainSCOPE"
+    "navLabel": "brainSCOPE",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "整合资源总体为多祖源，正文明确 388 名成人在祖源方面具有多样性。不同下游分析另有样本筛选；各 QTL 子集的祖源构成及比例本次未核实。"
   },
   {
     "id": "jerber-neuroseq-2021",
     "name": "HipSci 中脑神经分化 / Jerber 2021",
     "version": "Nature Genetics 2021",
     "category": "single-cell",
-    "tissue": "健康 donor 来源 iPSC，体外向中脑神经元（含多巴胺能神经元）分化；祖源构成本次未核实",
+    "tissue": "健康 donor 来源 iPSC，体外向中脑神经元（含多巴胺能神经元）分化",
     "qtlTypes": [
       "cis-eQTL",
       "分化阶段/细胞状态 eQTL",
@@ -979,17 +1082,24 @@
       ],
       "cellsPerDonor": [
         0
+      ],
+      "ancestry": [
+        1
       ]
     },
     "group": "cell-models",
-    "navLabel": "HipSci 神经分化"
+    "navLabel": "HipSci 神经分化",
+    "ancestryTags": [
+      "NR"
+    ],
+    "ancestry": "本研究 215 名 donor 及各 eQTL 分析子集的祖源构成本次未核实；不将整个 HipSci 细胞库的祖源比例套用于此分化队列。"
   },
   {
     "id": "cuomo-endoderm-2020",
     "name": "HipSci 内胚层分化 / Cuomo 2020",
     "version": "Nature Communications 2020",
     "category": "single-cell",
-    "tissue": "人 iPSC 向 definitive endoderm 分化，第 0、1、2、3 天；祖源构成本次未核实",
+    "tissue": "人 iPSC 向 definitive endoderm 分化，第 0、1、2、3 天",
     "qtlTypes": [
       "cis-eQTL",
       "动态 eQTL",
@@ -1050,11 +1160,18 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "group": "cell-models",
     "navLabel": "HipSci 内胚层分化",
-    "dataUrl": "https://zenodo.org/records/3625024"
+    "dataUrl": "https://zenodo.org/records/3625024",
+    "ancestryTags": [
+      "NR"
+    ],
+    "ancestry": "本研究 125 名 donor 及各时点 QTL 子集的祖源构成本次未核实；不根据 HipSci 项目所在地或整个细胞库的人口背景推断。"
   },
   {
     "id": "elorbany-cardiac-2022",
@@ -1125,10 +1242,17 @@
       ],
       "tissue": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "group": "cell-models",
-    "navLabel": "Yoruba 心肌分化"
+    "navLabel": "Yoruba 心肌分化",
+    "ancestryTags": [
+      "AFR"
+    ],
+    "ancestry": "19 名互不相关的 Yoruba 女性 donor，属于西非 Yoruba 人群；该标签对应实际用于动态 eQTL 分析的 donor。"
   },
   {
     "id": "gtex-bulk",
@@ -1191,6 +1315,9 @@
       "access": [
         3,
         4
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1200,7 +1327,13 @@
       "50M/82M 是官方方法中的 total reads 口径；v8 固定参考集，不声称最新版样本量。"
     ],
     "group": "bulk-tissue",
-    "navLabel": "GTEx"
+    "navLabel": "GTEx",
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "AFR"
+    ],
+    "ancestry": "v8 QTL 论文采用 European American、African American 和 Asian American 等人口标签，以欧洲裔美国人为主；Asian American 未细分为东亚祖源。各组织的实际分析子集构成不同，v8 的构成不自动适用于 V11。"
   },
   {
     "id": "eqtlgen-phase1",
@@ -1244,6 +1377,14 @@
       {
         "label": "官方 Affymetrix 分析规范",
         "url": "https://github.com/molgenis/systemsgenetics/wiki/QTL-mapping-analysis-cookbook-for-Affymetrix-expression-arrays"
+      },
+      {
+        "label": "原论文作者稿：人群构成说明",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8432599/"
+      },
+      {
+        "label": "Morocco 来源队列：原始人群说明",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE17065"
       }
     ],
     "fieldSources": {
@@ -1266,6 +1407,12 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        0,
+        1,
+        6,
+        7
       ]
     },
     "evidence": [
@@ -1274,7 +1421,12 @@
       "论文 Data availability 区分公开 meta-analysis 汇总结果、需批准的 per-cohort summary 与个体数据。"
     ],
     "group": "bulk-blood",
-    "navLabel": "eQTLGen Phase I"
+    "navLabel": "eQTLGen Phase I",
+    "ancestryTags": [
+      "MULTI",
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源为主的跨人群 meta-analysis；官方发现集包含 Morocco 等来源队列，Morocco 原研究明确纳入 Arab 和 Amazigh 人群。具体祖源比例及每个队列的最终纳入 N 需按联盟补充表核对。"
   },
   {
     "id": "eqtlgen-phase2",
@@ -1305,6 +1457,10 @@
       {
         "label": "官方 Phase II cookbook",
         "url": "https://eqtlgen.github.io/eqtlgen-web-site/eQTLGen-p2-cookbook.html"
+      },
+      {
+        "label": "原始预印本全文镜像：Results / Figure 1c",
+        "url": "https://www.researchgate.net/publication/400530929_Trans_-eQTLs_reveal_the_architecture_of_human_gene_regulatory_networks"
       }
     ],
     "fieldSources": {
@@ -1323,6 +1479,10 @@
       "version": [
         0,
         1
+      ],
+      "ancestry": [
+        0,
+        3
       ]
     },
     "evidence": [
@@ -1331,7 +1491,12 @@
       "补充核查（非网页展示引用）：ResearchGate 上的预印本全文镜像 data availability 写 full discovery statistics upon acceptance；原始 medRxiv full-text 抓取 403，因此页面展示只声明未核实下载，避免过度断言。"
     ],
     "group": "bulk-blood",
-    "navLabel": "eQTLGen Phase II"
+    "navLabel": "eQTLGen Phase II",
+    "ancestryTags": [
+      "MULTI",
+      "EUR"
+    ],
+    "ancestry": "跨人群、欧洲祖源为主；预印本报告 38,997 人（90.1%）来自标注为 European 的数据集。该比例按来源数据集的人群标签统计，不是逐 donor 遗传祖源比例。"
   },
   {
     "id": "eqtl-catalogue",
@@ -1396,6 +1561,9 @@
       "limitations": [
         0,
         3
+      ],
+      "ancestry": [
+        3
       ]
     },
     "evidence": [
@@ -1405,7 +1573,11 @@
     ],
     "group": "directories",
     "navLabel": "eQTL Catalogue",
-    "dataUrl": "https://www.ebi.ac.uk/eqtl/Data_access/"
+    "dataUrl": "https://www.ebi.ac.uk/eqtl/Data_access/",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "跨研究目录，没有单一祖源构成；按所选 QTS/QTD 研究与实际 QTL 分析子集确认，不能以统一重分析流程推定祖源一致。"
   },
   {
     "id": "dice-bulk",
@@ -1459,6 +1631,9 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1467,7 +1642,11 @@
       "Methods: 50-bp single-end；median of 20.1 million uniquely mapped reads per sample；Table S1B。"
     ],
     "group": "bulk-immune",
-    "navLabel": "DICE bulk"
+    "navLabel": "DICE bulk",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "包含不同祖源的 donor；原研究收集自报 race/ethnicity，并在分析中使用基因型主成分控制群体结构。91 名 donor 的细分构成未在本次核查中确认，需查 Table S1A；不将自报标签等同于推断遗传祖源。"
   },
   {
     "id": "blueprint-epivar",
@@ -1534,6 +1713,9 @@
       "limitations": [
         0,
         5
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1542,7 +1724,11 @@
       "RNA 概述 ~80 million reads/sample；WGS mean approximately 7×，已严格区分。"
     ],
     "group": "bulk-immune",
-    "navLabel": "BLUEPRINT Epivar"
+    "navLabel": "BLUEPRINT Epivar",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "实际 QTL 主分析限定欧洲祖源：研究将基因型与 1000 Genomes 参考人群合并做 PCA，排除 3 名混合来源离群者后保留 197 名 donor。"
   },
   {
     "id": "metabrain-bulk",
@@ -1593,6 +1779,9 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1601,7 +1790,14 @@
       "MetaBrain 官网：full cis 表单申请、trans/ieQTL supplements 17/8；禁止重新分发数据。"
     ],
     "group": "bulk-brain",
-    "navLabel": "MetaBrain"
+    "navLabel": "MetaBrain",
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "AFR",
+      "EAS"
+    ],
+    "ancestry": "按祖源分层分析：主 Cortex-EUR cis-eQTL 集为 2,683 人，Cortex-AFR 为 319 人；另有 208 人东亚祖源复制集。不同脑区、分析类型和复制阶段的 N 需分别读取。"
   },
   {
     "id": "psychencode-bulk",
@@ -1638,6 +1834,10 @@
       {
         "label": "联盟 Phase II 说明",
         "url": "https://www.psychencode.org/phase-ii"
+      },
+      {
+        "label": "原作者补充材料：人口标签与群体结构",
+        "url": "https://files.gersteinlab.org/public-docs/2018/11.20/Wang_S18_aat8464_Combined_nofig.pdf"
       }
     ],
     "fieldSources": {
@@ -1657,6 +1857,10 @@
       "limitations": [
         0,
         3
+      ],
+      "ancestry": [
+        0,
+        4
       ]
     },
     "evidence": [
@@ -1666,7 +1870,11 @@
     ],
     "group": "bulk-brain",
     "navLabel": "PsychENCODE bulk",
-    "dataUrl": "https://www.synapse.org/Synapse:syn4921369"
+    "dataUrl": "https://www.synapse.org/Synapse:syn4921369",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "跨队列整合；2018 补充材料的人口标签主要为 Caucasian 和 African American，并利用基因型 PCA 检查群体结构。1,387 人最终 QTL 子集的祖源分项 N 未核实，不把整合图谱的人口构成直接换算为 QTL 比例。"
   },
   {
     "id": "sc-eqtlgen-directory",
@@ -1718,6 +1926,10 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        0,
+        1
       ]
     },
     "evidence": [
@@ -1725,7 +1937,11 @@
     ],
     "group": "directories",
     "navLabel": "sc-eQTLGen",
-    "dataUrl": "https://www.eqtlgen.org/sc/"
+    "dataUrl": "https://www.eqtlgen.org/sc/",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "跨研究联盟目录；各成员数据集祖源不同，需回到原研究及实际 QTL 子集确认，不存在可用于全部目录条目的统一祖源比例。"
   },
   {
     "id": "geuvadis-bulk",
@@ -1789,6 +2005,11 @@
       "limitations": [
         0,
         3
+      ],
+      "ancestry": [
+        0,
+        2,
+        3
       ]
     },
     "evidence": [
@@ -1796,7 +2017,13 @@
       "Catalogue current study directory gives 445/445, distinct from final paper 462. Do not treat assay accessions, technical replicates or the E-GEUV-1 legacy title (452) as the QTL analysis N."
     ],
     "group": "cell-models",
-    "navLabel": "GEUVADIS"
+    "navLabel": "GEUVADIS",
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "AFR"
+    ],
+    "ancestry": "原论文 462 名 donor 包括 373 名欧洲祖源（CEU、FIN、GBR、TSI）和 89 名 Yoruba（YRI）。Catalogue 重分析保留 445 人，不能直接沿用原论文的分组人数。"
   },
   {
     "id": "bios-bulk",
@@ -1862,6 +2089,9 @@
       ],
       "limitations": [
         5
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1870,7 +2100,11 @@
       "Official BIOS teaching slides explicitly label QTL Browser as only significant QTLs. Browser open failed in this pass; do not claim successful download."
     ],
     "group": "bulk-blood",
-    "navLabel": "BIOS"
+    "navLabel": "BIOS",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "原始 2,116 人 BIOS eQTL 版以欧洲祖源为主；后续扩展集和参与 eQTLGen 的子集应分别核对，未给出未经核实的祖源比例。"
   },
   {
     "id": "interval-rna",
@@ -1939,6 +2173,9 @@
         0,
         1,
         4
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -1946,7 +2183,11 @@
       "Published paper has a malformed Zenodo DOI (actually the preprint DOI) in Data availability, so use the verified portal as the summary-statistics entry and do not manufacture a Zenodo accession."
     ],
     "group": "bulk-blood",
-    "navLabel": "INTERVAL RNA-seq"
+    "navLabel": "INTERVAL RNA-seq",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "本条 INTERVAL RNA-seq 分析集以欧洲祖源 donor 为主；Catalogue 的插补版和 WGS 子集来自同一队列，祖源构成与实际样本清单应按版本核对。"
   },
   {
     "id": "hipsci-bulk",
@@ -2013,6 +2254,11 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        0,
+        1,
+        2
       ]
     },
     "evidence": [
@@ -2020,7 +2266,11 @@
       "Do not replace original166 with catalogue322 without preserving version distinction."
     ],
     "group": "cell-models",
-    "navLabel": "HipSci bulk"
+    "navLabel": "HipSci bulk",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "原始 HipSci iPSC eQTL 集以欧洲祖源 donor 为主；本条 166 人原始分析与 Catalogue 322 人重分析的祖源分项人数未统一报告，不能互相套用。"
   },
   {
     "id": "i2qtl-ipsc",
@@ -2085,6 +2335,9 @@
       "limitations": [
         1,
         2
+      ],
+      "ancestry": [
+        1
       ]
     },
     "evidence": [
@@ -2092,7 +2345,11 @@
       "Zenodo directly verified: all cis-eQTL mapping results and trans-eQTL rawP<0.05, multiple phenotype archives. Do not label trans as complete unscreened summary statistics."
     ],
     "group": "cell-models",
-    "navLabel": "i2QTL"
+    "navLabel": "i2QTL",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "主常见变异 eQTL 分析限定为 682 名欧洲祖源 donor；整体 948-donor 资源的范围更广，不能把其全部样本直接当作该分析的祖源分母。"
   },
   {
     "id": "twinsuk-bulk",
@@ -2137,6 +2394,10 @@
       {
         "label": "Catalogue 汇总统计下载",
         "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      },
+      {
+        "label": "同一 TwinsUK / EuroBATS 队列的祖源说明",
+        "url": "https://doi.org/10.1016/j.ajhg.2016.07.001"
       }
     ],
     "fieldSources": {
@@ -2160,13 +2421,20 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        6
       ]
     },
     "evidence": [
       "Primary Buil PMC indexed sample collection:856 Caucasian females; original QC excludes <10M reads sequenced and mapped to exons. Later primary reuse Zito2023 confirms same TruSeq/HiSeq2000/49bpPE protocol and EGA archive."
     ],
     "group": "bulk-tissue",
-    "navLabel": "TwinsUK / EuroBATS"
+    "navLabel": "TwinsUK / EuroBATS",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源女性双生子；同一 EuroBATS 多组织 RNA-seq 队列的论文明确报告 856 名受试者均为欧洲祖源，Catalogue 重分析使用其中的子集。"
   },
   {
     "id": "fusion-bulk",
@@ -2207,6 +2475,14 @@
       {
         "label": "Catalogue 汇总统计下载",
         "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      },
+      {
+        "label": "原始 FUSION 多组学研究",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6561151/"
+      },
+      {
+        "label": "同一 FUSION 肌肉队列的祖源说明",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37993634/"
       }
     ],
     "fieldSources": {
@@ -2232,13 +2508,21 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        5,
+        6
       ]
     },
     "evidence": [
       "Official FUSION page directly states265 co-measured skeletal muscle biopsies and lists QTLtools nominal summary tables, per-analysis sample_size.tsv, and SMR input files. Catalogue directory separately states302 donors/559 samples in muscle+adipose. No inferred depth or donor sum inserted."
     ],
     "group": "bulk-tissue",
-    "navLabel": "FUSION"
+    "navLabel": "FUSION",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源的芬兰 FUSION 人群；该来源队列的转录组分析明确将其描述为欧洲祖源。具体组织与组学交集的 donor 数仍须按对应版本核对。"
   },
   {
     "id": "lung-pf-natri",
@@ -2295,6 +2579,9 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2302,7 +2589,13 @@
       "Methods and Results differ in the number of donors with region-replicate libraries; therefore only presence of region repeats is stated, without a conflicting count. Raw and summary availability follows original Data availability; GEO fetch showed anti-bot page in this session."
     ],
     "group": "sc-tissue",
-    "navLabel": "Lung PF / ILD"
+    "navLabel": "Lung PF / ILD",
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "AFR"
+    ],
+    "ancestry": "原论文按自报族裔记录：66.7% 欧洲来源、9.6% 非洲裔美国人、6.1% 其他、17.5% 未提供；这不是逐个 donor 的遗传祖源推断结果。"
   },
   {
     "id": "lung-sceqtl-fu",
@@ -2373,6 +2666,9 @@
       ],
       "version": [
         6
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2380,7 +2676,11 @@
       "Data/code availability names GVP000052, OMIX011241, HRA012741. HRA and OMIX returned 502 in direct check, so current open versus controlled access is not asserted."
     ],
     "group": "sc-tissue",
-    "navLabel": "LungSCeQTL"
+    "navLabel": "LungSCeQTL",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "ancestry": "东亚祖源；原论文明确说明队列全部为 East Asian participants，最终 sc-eQTL 使用其中 222 名中国受试者。"
   },
   {
     "id": "adipose-kobs-rysa",
@@ -2423,6 +2723,10 @@
       {
         "label": "同一 KOBS 数据的目标测序深度",
         "url": "https://www.nature.com/articles/s41467-026-73660-6"
+      },
+      {
+        "label": "Reporting Summary 第 2 页：祖源说明",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-72248-4/MediaObjects/41467_2026_72248_MOESM4_ESM.pdf"
       }
     ],
     "fieldSources": {
@@ -2447,6 +2751,9 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        6
       ]
     },
     "evidence": [
@@ -2455,7 +2762,11 @@
     ],
     "group": "sc-tissue",
     "navLabel": "KOBS + RYSA 脂肪",
-    "dataUrl": "https://zenodo.org/records/18880304"
+    "dataUrl": "https://zenodo.org/records/18880304",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源；论文 Reporting Summary 明确报告全部研究参与者为欧洲祖源，涵盖 KOBS 59 名与 RYSA 68 名 donor。"
   },
   {
     "id": "tiger-islet",
@@ -2520,6 +2831,9 @@
       "limitations": [
         0,
         5
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2527,7 +2841,11 @@
       "TIGER paper states207 source samples were analyzed by InsPIRE; eQTL meta-analysis has four cohorts despite initial five. All laboratory platforms are not collapsed into the illustrative EGA64-donor source."
     ],
     "group": "bulk-tissue",
-    "navLabel": "TIGER 胰岛"
+    "navLabel": "TIGER 胰岛",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲来源人群；原论文将五个来源队列的 514 名 donor 描述为 European background，最终 404 人 eQTL 分析是其质控子集。"
   },
   {
     "id": "nephqtl2",
@@ -2587,6 +2905,9 @@
       ],
       "limitations": [
         0
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2594,7 +2915,11 @@
       "Official nephqtl2.org live page linked to hugeampkpn research page; downstream JS content was not independently downloaded."
     ],
     "group": "bulk-tissue",
-    "navLabel": "NephQTL2"
+    "navLabel": "NephQTL2",
+    "ancestryTags": [
+      "MULTI"
+    ],
+    "ancestry": "多祖源；原论文明确说明 eQTL 数据来自包含多个祖源的 NEPTUNE 肾病队列。各祖源人数及肾组织分区内比例需从对应 donor 元数据核对。"
   },
   {
     "id": "starnet",
@@ -2660,6 +2985,9 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2668,7 +2996,11 @@
     ],
     "group": "bulk-tissue",
     "navLabel": "STARNET",
-    "dataUrl": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001203.v1.p1"
+    "dataUrl": "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001203.v1.p1",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源，以北欧来源为主；dbGaP 的群体结构说明指出受试者主要与北欧（芬兰）参考人群重叠。"
   },
   {
     "id": "ibdverse-sceqtl",
@@ -2745,6 +3077,9 @@
         0,
         1,
         4
+      ],
+      "ancestry": [
+        0
       ]
     },
     "evidence": [
@@ -2752,7 +3087,11 @@
       "Publisher Methods obtained by urllib: atlasing 1,852,681 cells; after autoannotation and intersection with genotyped individuals 2,196,874 cells. Calculated donor average 2,196,874/396 = 5547.66.",
       "Paper Methods directly confirms 10x3prime v3.0/v3.1 target50,000reads/cell. Public archive metadata EGAD00001016069 lists HiSeq4000/NovaSeq6000.",
       "Paper data availability assigns rawRNA EGAD00001015692 and genotype EGAD00001016069, but current16069 page contains717samples and CRAM files. Avoid asserting that either EGA link is exclusively genotype without checking files. Portal links genotype397 to16069."
-    ]
+    ],
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "最终 sc-eQTL 分析为欧洲祖源子集；基因型质控明确排除 KING 判定的非欧洲祖源 donor，因此不能用总体 421 人描述最终 QTL 祖源分母。"
   },
   {
     "id": "sabr-bulk",
@@ -2822,6 +3161,10 @@
       "limitations": [
         0,
         1
+      ],
+      "ancestry": [
+        0,
+        3
       ]
     },
     "evidence": [
@@ -2829,7 +3172,11 @@
       "RNA library label TruSeq strandedTotalRNA RiboZeroGlobin; NovaSeq6000 2x151bp; target9Gb/sample. WGS median5.1x range4.0–18.3x. No wetlab or culture protocols reproduced.",
       "Data availability explicitly states academic researchers may apply for EGA EGAS50000001008; fullGWAS/QTL in Zenodo DOI10.5281/zenodo.15334125 and s3://public.us-prod.variantbio.com/SABR/; noncommercialuseonly. Zenodo live fetch unavailable during this check, so public status follows published availability.",
       "40 celltraits are derived from xCell deconvolution of bulkRNA, not measured singlecells. Retain bulk classification."
-    ]
+    ],
+    "ancestryTags": [
+      "AFR"
+    ],
+    "ancestry": "非洲祖源，覆盖南非三个 South Eastern Bantu-speaking 人群；614 人为最终 QTL 分析集合。三个群体不能代表全部非洲遗传多样性。"
   },
   {
     "id": "randolph-2021",
@@ -2872,6 +3219,10 @@
       {
         "label": "基因型 BioProject",
         "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA736483"
+      },
+      {
+        "label": "原论文：研究人群与遗传祖源",
+        "url": "https://www.science.org/doi/10.1126/science.abg0928"
       }
     ],
     "evidence": {
@@ -2897,8 +3248,17 @@
       ],
       "depth": [
         1
+      ],
+      "ancestry": [
+        6
       ]
-    }
+    },
+    "ancestryTags": [
+      "MULTI",
+      "EUR",
+      "AFR"
+    ],
+    "ancestry": "包含欧洲与非洲祖源 donor；原研究同时考察连续的遗传祖源成分，不能将所有 donor 理解为两个无混合的离散群体。Catalogue 的 89 人重分析子集需按其样本元数据核对群体人数。"
   },
   {
     "id": "nathan-2022",
@@ -2941,6 +3301,10 @@
       {
         "label": "Catalogue QTL 下载与 API",
         "url": "https://www.ebi.ac.uk/eqtl/Data_access/"
+      },
+      {
+        "label": "原论文：秘鲁队列遗传祖源",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9842455/"
       }
     ],
     "evidence": {
@@ -2968,8 +3332,15 @@
       ],
       "depth": [
         2
+      ],
+      "ancestry": [
+        6
       ]
-    }
+    },
+    "ancestryTags": [
+      "AMR"
+    ],
+    "ancestry": "美洲混合祖源；原论文明确描述为具有美洲原住民与欧洲遗传祖源成分的秘鲁人群。此标签表示个体的混合祖源，不等同于分别招募多个单一祖源队列。"
   },
   {
     "id": "fujita-rosmap-2024",
@@ -3040,7 +3411,14 @@
       ],
       "depth": [
         0
+      ],
+      "ancestry": [
+        6
       ]
-    }
+    },
+    "ancestryTags": [
+      "EUR"
+    ],
+    "ancestry": "欧洲祖源；原论文的 cis-eQTL 方法明确将分析 donor 描述为欧洲祖源，并加入基因型主成分校正残余群体结构。"
   }
 ]

@@ -4,6 +4,7 @@ import QtlResource from '../components/QtlResource.astro';
 import QtlDirectory from '../components/QtlDirectory.astro';
 import qtlResources from '../data/qtl-resources.json';
 import { qtlGroups } from '../data/qtl-groups';
+import { qtlAncestries } from '../data/qtl-ancestries';
 import ResourceBrief from '../components/ResourceBrief.astro';
 import PaperCard from '../components/PaperCard.astro';
 import { publishedIssues, publishedPapers } from '../lib/issues';
@@ -22,18 +23,29 @@ const groups = qtlGroups.map(group => ({
 })).filter(group => group.records.length);
 const featuredIds = ['eqtl-catalogue', 'tenk10k-phase1-eqtl', 'tenk10k-phase1-caqtl'];
 const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filter(r => r !== undefined);
+const ancestries = qtlAncestries.map(ancestry => ({
+  ...ancestry, count: qtlResources.filter(r => r.ancestryTags.includes(ancestry.id)).length,
+})).filter(ancestry => ancestry.count > 0);
 ---
-<Base title="QTL 数据资源 · Genetic Daily Papers" description="按组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源，比较 donor 数、每 donor 细胞数、测序方法、深度及数据访问条件。">
+<Base title="QTL 数据资源 · Genetic Daily Papers" description="按祖源、组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源，比较 donor 数、每 donor 细胞数、测序方法、深度及数据访问条件。">
   <header class="page-heading qtl-head" id="resources-top">
     <div class="eyebrow">QTL RESOURCE DIRECTORY</div>
     <div class="qtl-heading-row"><h1>QTL 数据资源</h1><span class="qtl-updated">核查 <time datetime="2026-09-05">2026-09-05</time></span></div>
     <p>{qtlResources.length} 项资源 · {groups.length} 个分类 · 论文、数据入口与方法参数</p>
     <nav class="featured-resources" aria-label="重点资源">
-      {featured.map(r => <a href={`#${r.id}`}>{r.navLabel ?? r.name}<span aria-hidden="true"> ↗</span></a>)}
+      {featured.map(r => <a href={`#${r.id}`} data-qtl-featured={r.id}>{r.navLabel ?? r.name}<span aria-hidden="true"> ↗</span></a>)}
     </nav>
   </header>
+  <section class="ancestry-filter" hidden aria-labelledby="ancestry-heading">
+    <div class="ancestry-heading"><h2 id="ancestry-heading">按祖源筛选</h2><p class="ancestry-status" role="status" aria-live="polite" aria-atomic="true">全部 · {qtlResources.length} 项资源</p></div>
+    <div class="ancestry-options" role="group" aria-labelledby="ancestry-heading">
+      <button type="button" data-ancestry="all" data-label="全部" aria-pressed="true" aria-controls="qtl-results">全部 <span>{qtlResources.length}</span></button>
+      {ancestries.map(a => <button type="button" data-ancestry={a.id} data-label={a.label} aria-pressed="false" aria-controls="qtl-results">{a.label} <span>{a.count}</span></button>)}
+    </div>
+    <p class="ancestry-note">优先按 QTL 分析人群标注；招募地区不直接等同于遗传祖源。多祖源资源可归入多个分类，数量不可相加；具体组成、自报信息及研究阶段见各条目。</p>
+  </section>
   <details class="mobile-directory">
-    <summary>资源目录 <span>{groups.length} 类 / {qtlResources.length} 项</span></summary>
+    <summary>资源目录 <span data-qtl-directory-summary>{groups.length} 类 / {qtlResources.length} 项</span></summary>
     <div class="mobile-directory-body"><QtlDirectory groups={groups}/></div>
   </details>
   <div class="qtl-layout">
@@ -50,11 +62,11 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
         </details>
         <button type="button" class="qtl-expand-all" hidden aria-expanded="false">展开全部测序与来源</button>
       </div>
-      {groups.map((group, index) => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
+      <div id="qtl-results">{groups.map((group, index) => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
         <header class="qtl-group-heading"><div><span class="group-number">{String(index + 1).padStart(2, '0')}</span><h2 id={`${group.id}-heading`}>{group.title}</h2></div><span class="group-count">{group.records.length} 项</span></header>
         <p class="qtl-group-note">{group.note}</p>
         <div class="qtl-list">{group.records.map(resource => <QtlResource resource={resource}/>)}</div>
-      </section>)}
+      </section>)}</div>
       <section id="resource-papers" aria-labelledby="resource-papers-heading">
         <header class="qtl-group-heading"><h2 id="resource-papers-heading">资源简报与论文</h2><a href="#resources-top">返回顶部 ↑</a></header>
         {briefs.map(b => <ResourceBrief brief={b}/>)}
@@ -69,8 +81,11 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
 <script>
   const expansionButton = document.querySelector<HTMLButtonElement>('.qtl-expand-all');
   const records = [...document.querySelectorAll<HTMLDetailsElement>('.qtl-record-details')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.qtl-resource')];
+  const visibleDetails = () => records.filter(record => !record.closest<HTMLElement>('.qtl-resource')?.hidden);
   const refreshExpansion = () => {
-    const expanded = records.length > 0 && records.every(record => record.open);
+    const visible = visibleDetails();
+    const expanded = visible.length > 0 && visible.every(record => record.open);
     if (!expansionButton) return;
     expansionButton.textContent = expanded ? '收起全部测序与来源' : '展开全部测序与来源';
     expansionButton.setAttribute('aria-expanded', String(expanded));
@@ -78,16 +93,64 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
   if (expansionButton) {
     expansionButton.hidden = false;
     expansionButton.addEventListener('click', () => {
-      const expand = !records.every(record => record.open);
-      records.forEach(record => record.open = expand);
+      const visible = visibleDetails();
+      const expand = !visible.every(record => record.open);
+      visible.forEach(record => record.open = expand);
       refreshExpansion();
     });
   }
   records.forEach(record => record.addEventListener('toggle', refreshExpansion));
-  const revealResource = (hash: string) => {
+  const ancestryButtons = [...document.querySelectorAll<HTMLButtonElement>('button[data-ancestry]')];
+  const applyAncestry = (ancestry: string) => {
+    const visibleIds = new Set<string>();
+    cards.forEach(card => {
+      card.hidden = ancestry !== 'all' && !card.dataset.ancestries?.split(' ').includes(ancestry);
+      if (!card.hidden) visibleIds.add(card.id);
+    });
+    const groupCounts = new Map<string, number>();
+    document.querySelectorAll<HTMLElement>('.qtl-group').forEach(group => {
+      const count = [...group.querySelectorAll<HTMLElement>('.qtl-resource')].filter(card => !card.hidden).length;
+      group.hidden = count === 0;
+      groupCounts.set(group.id, count);
+      const countLabel = group.querySelector('.group-count');
+      if (countLabel) countLabel.textContent = `${count} 项`;
+    });
+    document.querySelectorAll<HTMLElement>('[data-qtl-directory-record]').forEach(item => {
+      item.hidden = !visibleIds.has(item.dataset.qtlDirectoryRecord ?? '');
+      if (item.hidden) item.querySelector('a')?.removeAttribute('aria-current');
+    });
+    document.querySelectorAll<HTMLElement>('[data-qtl-directory-group]').forEach(group => {
+      const count = groupCounts.get(group.dataset.qtlDirectoryGroup ?? '') ?? 0;
+      group.hidden = count === 0;
+      const label = group.querySelector('.directory-count');
+      if (label) label.textContent = String(count);
+    });
+    const visibleGroupCount = [...groupCounts.values()].filter(count => count > 0).length;
+    const directorySummary = document.querySelector('[data-qtl-directory-summary]');
+    if (directorySummary) directorySummary.textContent = `${visibleGroupCount} 类 / ${visibleIds.size} 项`;
+    const featuredLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-qtl-featured]')];
+    featuredLinks.forEach(link => link.hidden = !visibleIds.has(link.dataset.qtlFeatured ?? ''));
+    const featuredNav = document.querySelector<HTMLElement>('.featured-resources');
+    if (featuredNav) featuredNav.hidden = featuredLinks.every(link => link.hidden);
+    ancestryButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.ancestry === ancestry)));
+    const status = document.querySelector('.ancestry-status');
+    const label = ancestryButtons.find(button => button.dataset.ancestry === ancestry)?.dataset.label ?? '全部';
+    if (status) status.textContent = `${label} · ${visibleIds.size} 项资源`;
+    refreshExpansion();
+  };
+  ancestryButtons.forEach(button => button.addEventListener('click', () => applyAncestry(button.dataset.ancestry ?? 'all')));
+  const ancestryFilter = document.querySelector<HTMLElement>('.ancestry-filter');
+  if (ancestryFilter) ancestryFilter.hidden = false;
+  const revealResource = (hash: string, scrollRestored = false) => {
     let id: string;
     try { id = decodeURIComponent(hash.replace(/^#/, '')); } catch { return; }
     const target = document.getElementById(id);
+    if (target?.hidden && target.matches('.qtl-resource, .qtl-group')) {
+      applyAncestry('all');
+      if (scrollRestored) requestAnimationFrame(() => {
+        if (!target.hidden) target.scrollIntoView({ block: 'start' });
+      });
+    }
     document.querySelectorAll<HTMLAnchorElement>('a[data-qtl-nav]').forEach(link => {
       if (link.dataset.qtlNav === id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
@@ -103,7 +166,7 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
     const mobileDirectory = link.closest<HTMLDetailsElement>('.mobile-directory');
     if (mobileDirectory) mobileDirectory.open = false;
   });
-  window.addEventListener('hashchange', () => revealResource(window.location.hash));
+  window.addEventListener('hashchange', () => revealResource(window.location.hash, true));
   revealResource(window.location.hash);
   refreshExpansion();
 </script>
@@ -116,6 +179,18 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
   .featured-resources { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   .featured-resources a { font-size: .875rem; padding: 7px 12px; border: 1px solid #b8d0c9; background: var(--pale); color: var(--accent); border-radius: 4px; text-decoration: none; font-weight: 650; }
   .featured-resources a:hover { background: #dceee7; }
+  .featured-resources[hidden], .featured-resources a[hidden], .ancestry-filter[hidden] { display: none; }
+  .ancestry-filter { border: 1px solid var(--line); border-radius: 6px; padding: 17px 20px; margin-bottom: 24px; background: var(--paper); }
+  .ancestry-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; margin-bottom: 11px; }
+  .ancestry-heading h2 { font-size: 1rem; margin: 0; }
+  .ancestry-status { color: var(--muted); font-size: .875rem; margin: 0; }
+  .ancestry-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ancestry-options button { font: inherit; font-size: .875rem; line-height: 1.5; padding: 7px 11px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); color: var(--text); cursor: pointer; }
+  .ancestry-options button span { margin-left: 5px; font-variant-numeric: tabular-nums; opacity: .8; }
+  .ancestry-options button:hover { border-color: var(--accent); }
+  .ancestry-options button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: white; }
+  .ancestry-options button:focus-visible { outline: 3px solid #d7a751; outline-offset: 3px; }
+  .ancestry-note { font-size: .875rem; line-height: 1.8; color: var(--muted); margin: 12px 0 0; }
   .qtl-layout { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 34px; align-items: start; }
   .desktop-directory { position: sticky; top: 22px; max-height: calc(100vh - 44px); overflow-y: auto; padding-right: 14px; scrollbar-width: thin; overscroll-behavior: contain; }
   .directory-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0 0 12px; margin-bottom: 17px; border-bottom: 2px solid var(--ink); }
@@ -157,7 +232,7 @@ const featured = featuredIds.map(id => qtlResources.find(r => r.id === id)).filt
     .qtl-group-heading > div { gap: 7px; }
   }
   @media print {
-    .desktop-directory, .mobile-directory, .qtl-tools, .featured-resources { display: none; }
+    .desktop-directory, .mobile-directory, .qtl-tools, .featured-resources, .ancestry-options { display: none; }
     .qtl-layout { display: block; }
   }
 </style>

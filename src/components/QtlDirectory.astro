@@ -5,9 +5,9 @@ interface Props {
 const { groups } = Astro.props;
 ---
 <nav class="qtl-directory-nav" aria-label="QTL 资源目录">
-  {groups.map(group => <div class="directory-group">
+  {groups.map(group => <div class="directory-group" data-qtl-directory-group={group.id}>
     <a class="directory-category" href={`#${group.id}`}><span>{group.shortTitle}</span><span class="directory-count">{group.records.length}</span></a>
-    <ul>{group.records.map(r => <li><a href={`#${r.id}`} data-qtl-nav={r.id}>{r.navLabel ?? r.name}</a></li>)}</ul>
+    <ul>{group.records.map(r => <li data-qtl-directory-record={r.id}><a href={`#${r.id}`} data-qtl-nav={r.id}>{r.navLabel ?? r.name}</a></li>)}</ul>
   </div>)}
   <a class="directory-category archive-link" href="#resource-papers">资源简报与论文</a>
 </nav>
