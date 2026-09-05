@@ -1,0 +1,36 @@
+name: Research revision checks
+on:
+  push:
+    branches: [research-alignment-2026-09-05]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: research-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-snapshot
+          path: |
+            src/
+            scripts/
+            package.json
+            astro.config.mjs
+            public/favicon.svg
+          retention-days: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reviewed-site
+          path: dist/
+          retention-days: 2
