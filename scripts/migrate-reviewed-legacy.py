@@ -1,4 +1,4 @@
-"""One-time, idempotent migration of the nine previously reviewed entries."""
+"""One-time, idempotent migration of previously reviewed entries; no automatic selection."""
 from pathlib import Path
 import re
 labels={
@@ -21,4 +21,6 @@ for path in paths:
     text=re.sub(r'(?m)^## Figure\s*\d+(?:\s*/\s*\d+)?\s*应该怎样读\s*$',f'## {title}',text)
     text=text.replace('## 最值得带走的结论','## 小结')
     path.write_text(text)
+p=Path('src/content/papers/ab-prs-adaptive-finetuning.md')
+p.write_text(p.read_text().replace('昨日收录的罕见变异','此前收录的罕见变异'))
 print('Migrated 7 previously reviewed papers and 2 issues; no new entries auto-published.')
