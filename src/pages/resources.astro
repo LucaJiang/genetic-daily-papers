@@ -1,5 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import QtlResource from '../components/QtlResource.astro';
+import qtlResources from '../data/qtl-resources.json';
+
 import ResourceBrief from '../components/ResourceBrief.astro';
 import PaperCard from '../components/PaperCard.astro';
 import { publishedIssues, publishedPapers } from '../lib/issues';
@@ -13,12 +16,55 @@ const briefs = issues.flatMap(i => i.data.briefs).filter(b => {
 }).sort((a,b) => +b.date - +a.date);
 const previous = issues.filter(i => i.data.topics.includes('resources') && !i.data.briefs.length);
 const papers = (await publishedPapers()).filter(p => p.data.topics.includes('resources')).sort((a,b) => +b.data.date - +a.data.date);
+const groups = [
+  {id:'single-cell', title:'Single-cell / single-nucleus QTL', note:'免疫细胞、脑组织与 iPSC 分化队列。细胞或细胞核是重复测量，遗传关联分析的独立样本单位通常是 donor。'},
+  {id:'bulk', title:'Bulk / 分选细胞 QTL', note:'组织、全血与分选细胞群体的表达测量。分选 bulk 仍是细胞群体测量，不计作 single-cell。'},
+  {id:'catalogue', title:'跨研究整合目录', note:'下载和比较多个队列时，先核对样本重叠、基因组版本、等位基因方向与分析版本。'}
+];
+
 ---
-<Base title="数据资源 · Genetic Daily Papers">
-  <header class="page-heading"><div class="eyebrow">Data releases</div><h1>数据资源</h1><p>新数据、数据库论文与队列发布。</p></header>
+<Base title="QTL 数据资源 · Genetic Daily Papers" description="Single-cell、single-nucleus 与 bulk QTL 数据资源：donor 数、每位 donor 细胞数、测序方式、测序深度及原始数据与汇总统计获取来源。">
+  <header class="page-heading qtl-head">
+    <span class="eyebrow">Data resources</span><h1>QTL 数据资源</h1>
+    <p>按研究队列查找数据，比较样本量、每位 donor 的细胞数、测序方式与深度。</p>
+    <div class="qtl-status">{qtlResources.length} 项资源 · 资料核查：<time datetime="2026-09-05">2026-09-05</time></div>
+  </header>
+  <nav class="qtl-nav" aria-label="资源分类">
+    {groups.map(group => <a href={`#${group.id}`}>{group.title} <span>{qtlResources.filter(r => r.category === group.id).length}</span></a>)}
+    <a href="#resource-papers">资源论文与版本发布</a>
+  </nav>
+  <aside class="qtl-note" aria-label="数据口径说明">
+    <strong>如何比较这些数字</strong>
+    <p>donor 数、组织样本数和进入各细胞类型 QTL 分析的有效 N 分开记录。“计算均值”仅指总细胞数 ÷ 对应 donor 数，不能替代 donor 分布或各细胞类型的细胞数。reads、read pairs 与 UMI 不互换；目标深度与实测深度分开标注。未找到可核实数值的字段保留“未报告 / 未核实”，不以平台推荐值填充。</p>
+  </aside>
+  {groups.map(group => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
+    <div class="section-bar"><h2 id={`${group.id}-heading`}>{group.title}</h2></div>
+    <p class="qtl-group-note">{group.note}</p>
+    <div class="qtl-list">{qtlResources.filter(r => r.category === group.id).map(resource => <QtlResource resource={resource}/>)}</div>
+  </section>)}
+  <section id="resource-papers" aria-labelledby="resource-papers-heading">
+    <div class="section-bar"><h2 id="resource-papers-heading">资源简报与版本发布</h2></div>
+
   {briefs.map(b => <ResourceBrief brief={b}/>)}
   <div class="section-bar"><h2>数据库论文</h2></div>
   <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
   {previous.length > 0 && <section class="recent"><div class="section-bar"><h2>往期数据记录</h2></div>{previous.map(e => <a class="archive-row" href={`/daily/${e.id}/`}><time>{e.id}</time><strong>{e.data.title}</strong><span>查看 →</span></a>)}</section>}
   <p class="resource-directory">常用入口：<a href="https://gtexportal.org/">GTEx</a> · <a href="https://www.ebi.ac.uk/eqtl/">eQTL Catalogue</a> · <a href="https://yanglab.westlake.edu.cn/smr-portal/">SMR Portal</a></p>
+  </section>
 </Base>
+<style>
+  .qtl-head p { font-size: 1rem; }
+  .qtl-status { display: flex; flex-wrap: wrap; gap: 4px; color: var(--muted); font-size: .875rem; margin-top: 12px; }
+  .qtl-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 22px; }
+  .qtl-nav a { padding: 7px 11px; border: 1px solid var(--line); border-radius: 5px; font-size: .875rem; background: white; text-decoration: none; }
+  .qtl-nav a:hover { border-color: var(--accent); }
+  .qtl-nav span { color: var(--muted); padding-left: 5px; }
+  .qtl-note { padding: 17px 20px; border-left: 3px solid var(--accent); background: var(--pale); font-size: .875rem; }
+  .qtl-note p { margin: 7px 0 0; color: #3b505b; line-height: 1.85; }
+  .qtl-group { scroll-margin-top: 110px; margin-top: 36px; }
+  .qtl-group .section-bar { margin-bottom: 8px; }
+  .qtl-group .section-bar h2 { font-size: 1.3rem; }
+  .qtl-group-note { font-size: 1rem; color: var(--muted); margin: 0 0 18px; }
+  .qtl-list { display: grid; gap: 18px; }
+  #resource-papers { margin-top: 44px; scroll-margin-top: 110px; }
+</style>
