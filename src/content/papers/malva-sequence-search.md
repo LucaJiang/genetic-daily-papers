@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Ultrafast and reference-free sequence discovery in single-cell data"
 shortTitle: "Malva：在数千万单细胞原始 reads 中直接检索序列"
 authors: "Daniel León-Periñán, Nikos Karaiskos, Nikolaus Rajewsky"
@@ -90,8 +91,7 @@ $$
 
 在完整索引上，短序列通常毫秒级返回，完整 cDNA 为秒级，数千 transcript 的集合为分钟级。这里应同时关注服务器并发和缓存：单次 benchmark 并不等同于大量用户同时查询时的尾延迟。
 
-## Figure 1 应该怎样读
-
+## 序列索引与检索结果
 上半部分说明现有两类工具的缺口：single-cell portal 没有 sequence search，bulk sequence index 没有 cell resolution。下半部分展示 Malva 的输出不是一个简单“命中/未命中”，而是：
 
 - 含该序列的细胞和样本；
@@ -128,6 +128,6 @@ Malva 可以检索已知突变、splice junction、病毒或细菌序列，以�
 - donor-specific sequence query 可能暴露遗传信息，访问控制和审计很重要；
 - 数据库版本持续变化，同一 query 的样本集合可能随时间增长。
 
-## 最值得带走的结论
+## 小结
 
 Malva 把“重新处理 140 TB FASTQ”转化为“读取一个稀疏倒排表”。这是单细胞计算中很典型的高价值加速：不是在原有矩阵流程上寻找更快 kernel，而是保留新的信息层，并为最常见查询重新设计数据结构。

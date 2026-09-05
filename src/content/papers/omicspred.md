@@ -1,4 +1,5 @@
 ---
+published: true
 title: "OmicsPred as a centralized resource for genetic prediction of multi-omic traits"
 shortTitle: "OmicsPred：多组学遗传预测模型数据库"
 authors: "Carles Foguet, Laurent Gil, Yu Xu, Sofía Salazar-Magaña, Scott C. Ritchie, Elodie Persyn, Hae Kyung Im, Michael Inouye, Samuel A. Lambert"
@@ -119,6 +120,6 @@ OmicsPred 能标准化前两步并帮助检索，但不会自动解决 LD confou
 - 资源不能单独判断 predicted molecular trait 是否因果介导疾病；
 - 数据库持续更新，分析必须记录 dataset 和 score 版本。
 
-## 最值得带走的结论
+## 小结
 
 OmicsPred 最适合作为模型检索和可重复性基础设施。真正使用某组权重之前，仍需回到训练队列、祖源、组织、平台和预测性能；真正解释显著 TWAS/PWAS 结果之前，仍需回到 LD、多信号 fine-mapping 和共定位。

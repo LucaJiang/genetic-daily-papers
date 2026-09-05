@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Scalable, generalizable and uncertainty-aware integration of spatial multiomics across diverse modalities and platforms with SCIGMA"
 shortTitle: "SCIGMA：可扩展的空间多组学图表示学习"
 authors: "Seowon Chang, Alexander Fleischmann, Ying Ma"
@@ -82,8 +83,7 @@ SCIGMA 在位置层面学习 uncertainty parameter $\tau_i$，用它调节位置
 
 论文证明了可运行规模，但不同采样率下表示与空间域的稳定性仍值得进一步量化。
 
-## Figure 1 应该怎样读
-
+## 图注意力与跨模态整合
 Figure 1 的关键不是网络层数，而是三条信息流：
 
 1. **模态内信息**：每种模态有自己的特征图、GAT encoder 和 decoder；
@@ -121,6 +121,6 @@ decoder 的 RMSE 反映特征能否从表示恢复，但高丰度、空间平滑
 - 大数据 benchmark 中部分对照方法未完成，性能比较并不完整；
 - 深度模型的随机性要求报告多次运行，而不是只展示最佳空间图。
 
-## 最值得带走的结论
+## 小结
 
 SCIGMA 最有价值的部分是把模态特异图、联合表示和大图采样组合起来。若将其用于新的空间平台，优先检查的不是聚类图是否漂亮，而是不同预处理和随机种子下的稳定性、uncertainty 与真实误差的关系，以及稀有组织结构是否在采样中被保留。
