@@ -20,7 +20,7 @@ const toc = headings.filter(h => h.depth === 2);
     <article class="review-article">
       {issue && <a class="back" href={`/daily/${issue.id}/`}>← {iso(issue.data.date)} 日报</a>}
       <header class="article-header">
-        <div class="paper-meta"><span class="journal">{paper.data.source}</span><time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time><PriorityBadge priority={paper.data.priority}/></div>
+        <div class="paper-meta"><span class="journal">{paper.data.source}</span><time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time>{paper.data.versionDate && <span>{paper.data.version} 更新 <time datetime={iso(paper.data.versionDate)}>{iso(paper.data.versionDate)}</time></span>}<PriorityBadge priority={paper.data.priority}/></div>
         <h1>{paper.data.shortTitle ?? paper.data.title}</h1>
         {paper.data.shortTitle && <p class="original-title">{paper.data.title}</p>}
         <p class="authors">{paper.data.authors}</p>
@@ -29,7 +29,7 @@ const toc = headings.filter(h => h.depth === 2);
           {paper.data.pdfUrl && <a href={paper.data.pdfUrl} target="_blank" rel="noreferrer">PDF ↗</a>}
           {paper.data.codeUrl && <a href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
           {paper.data.resourceUrl && <a href={paper.data.resourceUrl} target="_blank" rel="noreferrer">数据资源 ↗</a>}
-          <span>{paper.data.peerReviewed ? (paper.data.version ?? '已同行评议') : '预印本'}</span>
+          <span>{paper.data.peerReviewed ? (paper.data.version ?? '已同行评议') : `预印本${paper.data.version ? ` · ${paper.data.version}` : ''}`}</span>
         </div>
         <p class="article-lead">{paper.data.summary}</p>
       </header>

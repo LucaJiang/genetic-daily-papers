@@ -19,6 +19,7 @@ const { paper, index = 1 } = Astro.props;
     <div class="paper-meta">
       <span class="journal">{paper.data.source}</span>
       <time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time>
+      {paper.data.versionDate && <span>{paper.data.version} 更新 <time datetime={iso(paper.data.versionDate)}>{iso(paper.data.versionDate)}</time></span>}
       <PriorityBadge priority={paper.data.priority}/>
     </div>
     <h2><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a></h2>
@@ -26,7 +27,7 @@ const { paper, index = 1 } = Astro.props;
     {paper.data.keyResults[1] && <p class="card-result"><span>结果</span>{paper.data.keyResults[1]}</p>}
     <div class="card-bottom">
       <div class="tags">{paper.data.topics.slice(0, 4).map(t => <a href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div>
-      <a class="read-link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">↗</span></a>
+      <a class="read-link" href={`/papers/${paper.id}/`}>{paper.data.readingDepth === 'abstract' ? '论文简报' : '详细解读'} <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </article>

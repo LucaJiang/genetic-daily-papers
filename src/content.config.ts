@@ -56,6 +56,7 @@ const papers = defineCollection({
     date: z.coerce.date(),
     source: z.string(),
     version: z.string().optional(),
+    versionDate: z.coerce.date().optional(),
     doi: z.string().optional(),
     paperUrl: z.string().url(),
     pdfUrl: z.string().url().optional(),

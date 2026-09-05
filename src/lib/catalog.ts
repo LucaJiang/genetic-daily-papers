@@ -27,6 +27,7 @@ export async function catalog() {
       if (!p) throw new Error(`Missing paper ${id} referenced by ${e.id}`);
       if (!p.data.published) throw new Error(`Unpublished paper ${id} referenced by ${e.id}`);
       if (+p.data.date > +e.data.date) throw new Error(`Future paper ${id} in ${e.id}`);
+      if (p.data.versionDate && +p.data.versionDate > +e.data.date) throw new Error(`Future paper version ${id} in ${e.id}`);
       for (const t of p.data.topics) if (!topicBySlug[t]) throw new Error(`Unknown topic ${t} in ${id}`);
     }
   }
