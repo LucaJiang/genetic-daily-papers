@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Mapping enhancer–gene regulatory interactions from single-cell data"
 shortTitle: "scE2G：将非编码变异连接到细胞类型特异的靶基因"
 authors: "Maya U. Sheth, Wei-Lin Qiu, X. Rosa Ma et al."

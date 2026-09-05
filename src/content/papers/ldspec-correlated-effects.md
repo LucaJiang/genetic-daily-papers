@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Correlations between causal effect sizes of proximal SNPs vary with functional annotations and implicate stabilizing selection"
 shortTitle: "LDSPEC：邻近 SNP 的因果效应可能并不独立"
 authors: "Martin Jinye Zhang, Arun Durvasula, Colby Chiang et al."

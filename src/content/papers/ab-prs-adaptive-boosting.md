@@ -1,4 +1,5 @@
 ---
+published: false
 title: "A pre-train and fine-tune framework for adaptive boosting of pre-trained polygenic risk scores"
 shortTitle: "AB-PRS：在已有多基因评分上学习遗漏的遗传信号"
 authors: "Jie Hu, Raelynn Chen, Maxwell Salvatore et al."

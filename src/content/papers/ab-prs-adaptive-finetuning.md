@@ -62,9 +62,11 @@ figures:
 对候选 SNP $j$，作者在包含原有 PRS 的回归中，以 AA 基因型作参照，分别估计 Aa 和 aa 基因型的附加关联。以一般的广义线性模型形式概括：
 
 $$
- g\{E(Y_i)\}=a+\beta_0\,\mathrm{PRS}_{i}^{\mathrm{pre}}
- +\theta_{j1}\mathbf{1}(G_{ij}=Aa)
- +\theta_{j2}\mathbf{1}(G_{ij}=aa).
+\begin{aligned}
+ g\{E(Y_i)\}={}&a+\beta_0\,\mathrm{PRS}_{i}^{\mathrm{pre}}\\
+ &+\theta_{j1}\mathbf{1}(G_{ij}=Aa)\\
+ &+\theta_{j2}\mathbf{1}(G_{ij}=aa).
+\end{aligned}
 $$
 
 随后用估计的 $\theta_{j1}$、$\theta_{j2}$ 将三种基因型编码为 $(0,\widehat\theta_{j1},\widehat\theta_{j2})$。上式为解释用写法，截距及连接函数按表型类型展开；论文 Methods 的式（1）给出条件于原 PRS 的核心模型。[1]
