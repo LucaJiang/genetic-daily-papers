@@ -1,0 +1,43 @@
+name: Publication evidence check
+on:
+  push:
+    branches: [publish-reviewed-2026-09-05]
+    paths: [.github/workflows/publish-evidence.yml]
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Retrieve public paper sources
+        run: |
+          mkdir -p evidence
+          python - <<'PY'
+          import urllib.request, concurrent.futures, json
+          from pathlib import Path
+          specs=[('ibd','s41467-026-76672-4','41467_2026_76672',[4,5]),('glial','s41586-026-10987-6','41586_2026_10987',[3,4]),('abprs','s41467-026-77128-5','41467_2026_77128',[3,7])]
+          urls={}
+          for name,doi,obj,figs in specs:
+            urls[name+'.html']='https://www.nature.com/articles/'+doi
+            urls[name+'.pdf']='https://www.nature.com/articles/'+doi+('_reference.pdf' if name!='glial' else '.pdf')
+            for f in figs:
+              urls[f'{name}-fig{f}.png']=f'https://media.springernature.com/full/springer-static/image/art%3A10.1038%2F{doi}/MediaObjects/{obj}_Fig{f}_HTML.png'
+          def get(item):
+            name,url=item
+            try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Accept':'*/*'})
+              with urllib.request.urlopen(req,timeout=40) as r:
+                data=r.read();mime=r.headers.get('Content-Type','');final=r.url
+              Path('evidence',name).write_bytes(data)
+              return dict(name=name,url=url,final=final,bytes=len(data),mime=mime)
+            except Exception as e:return dict(name=name,url=url,error=str(e))
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:report=list(pool.map(get,urls.items()))
+          Path('evidence/manifest.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publication-evidence
+          path: evidence
+          retention-days: 2
