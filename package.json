@@ -1,22 +1,6 @@
 {
-  "name": "genetic-daily-papers",
-  "version": "0.3.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "astro dev",
-    "prebuild": "node scripts/cache-figures.mjs",
-    "build": "astro check && astro build",
-    "preview": "astro preview"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/rss": "^4.0.12",
-    "@types/node": "^22.15.0",
-    "astro": "^5.13.5",
-    "katex": "^0.16.22",
-    "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0",
-    "typescript": "^5.9.2"
-  }
+ "name":"genetic-daily-papers","version":"0.4.0","private":true,"type":"module",
+ "scripts":{"dev":"astro dev","prebuild":"node scripts/check-content.mjs && node scripts/cache-review-figures.mjs","build":"astro check && astro build","postbuild":"node scripts/check-built.mjs","preview":"astro preview","check:content":"node scripts/check-content.mjs","check:built":"node scripts/check-built.mjs"},
+ "dependencies":{"@astrojs/check":"^0.9.4","@astrojs/rss":"^4.0.12","astro":"^5.13.5","katex":"^0.16.22","rehype-katex":"^7.0.1","remark-math":"^6.0.0","typescript":"^5.9.2","yaml":"^2.8.1"},
+ "devDependencies":{"@types/node":"^22.0.0"}
 }

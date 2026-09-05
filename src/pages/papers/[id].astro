@@ -1,73 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
-import FigureGallery from '../../components/FigureGallery.astro';
 import PriorityBadge from '../../components/PriorityBadge.astro';
-import { getCollection, render } from 'astro:content';
-import { topicLabel } from '../../data/topics';
-import { figuresForPaper } from '../../lib/figures';
-
-export async function getStaticPaths() {
-  const papers = await getCollection('papers');
-  return papers.map((paper) => ({ params: { id: paper.id }, props: { paper } }));
-}
-
-const { paper } = Astro.props;
-const { Content } = await render(paper);
-const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
-const issue = issues.find((entry) => entry.data.papers.includes(paper.id));
-const date = paper.data.date.toISOString().slice(0, 10);
-const figures = figuresForPaper(paper);
-const resultFigures = figures.filter((figure) => ['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
-const methodFigures = figures.filter((figure) => !['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
+import {render} from 'astro:content';
+import {publishedIssues,publishedPapers,iso} from '../../lib/issues';
+import {topicLabel} from '../../data/topics';
+export async function getStaticPaths(){return (await publishedPapers()).map(paper=>({params:{id:paper.id},props:{paper}}));}
+const {paper}=Astro.props;const {Content,headings}=await render(paper);const issues=await publishedIssues();const issue=issues.find(d=>d.data.papers.includes(paper.id));const toc=headings.filter(h=>h.depth===2);
 ---
-<Base title={`${paper.data.shortTitle ?? paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}>
-  <div class="article-shell">
-    {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
-
-    <header class="paper-header">
-      <div class="paper-header__meta">
-        <PriorityBadge priority={paper.data.priority} />
-        <span>{paper.data.source}</span>
-        <span>·</span>
-        <time datetime={date}>{date}</time>
-        {paper.data.version && <><span>·</span><span>{paper.data.version}</span></>}
-      </div>
-      <h1>{paper.data.title}</h1>
-      <p class="paper-header__authors">{paper.data.authors}</p>
-      <p class="paper-header__summary">{paper.data.summary}</p>
-      <div class="paper-actions">
-        <a class="button button--primary" href={paper.data.paperUrl} target="_blank" rel="noreferrer">原文 ↗</a>
-        {paper.data.codeUrl && <a class="button" href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
-        {paper.data.resourceUrl && <a class="button" href={paper.data.resourceUrl} target="_blank" rel="noreferrer">资源 ↗</a>}
-      </div>
-    </header>
-
-    {paper.data.keyResults.length > 0 && (
-      <section class="result-summary" aria-labelledby="result-summary-title">
-        <h2 id="result-summary-title">主要结果</h2>
-        <div class="result-summary__grid">
-          {paper.data.keyResults.map((result, index) => (
-            <div><span>{String(index + 1).padStart(2, '0')}</span><p>{result}</p></div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <FigureGallery id="result-figures" title="关键结果图" figures={resultFigures} />
-
-    <article class="paper-article"><Content /></article>
-
-    <FigureGallery id="method-figures" title="方法与验证图" figures={methodFigures} />
-
-    <footer class="paper-footer-meta">
-      <div>
-        <h2>文献信息</h2>
-        <p>{paper.data.authors}. <em>{paper.data.title}</em>. {paper.data.source}, {date}.</p>
-        {paper.data.doi && <p>DOI: <a href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">{paper.data.doi}</a></p>}
-      </div>
-      <div class="tag-list">
-        {paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}
-      </div>
-    </footer>
-  </div>
-</Base>
+<Base title={`${paper.data.shortTitle??paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}><div class="article-layout"><article class="review-article">{issue&&<a class="back" href={`/daily/${issue.id}/`}>← {iso(issue.data.date)} 日报</a>}<header class="article-header"><div class="paper-meta"><span class="journal">{paper.data.source}</span><time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time><PriorityBadge priority={paper.data.priority}/></div><h1>{paper.data.shortTitle??paper.data.title}</h1>{paper.data.shortTitle&&<p class="original-title">{paper.data.title}</p>}<p class="authors">{paper.data.authors}</p><div class="article-actions"><a href={paper.data.paperUrl} target="_blank" rel="noreferrer">论文原文 ↗</a>{paper.data.pdfUrl&&<a href={paper.data.pdfUrl} target="_blank" rel="noreferrer">PDF ↗</a>}{paper.data.codeUrl&&<a href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}{paper.data.resourceUrl&&<a href={paper.data.resourceUrl} target="_blank" rel="noreferrer">数据资源 ↗</a>}<span>{paper.data.peerReviewed?(paper.data.version??'已同行评议'):'预印本'}</span></div><p class="article-lead">{paper.data.summary}</p></header><details class="mobile-toc"><summary>本文目录</summary><nav aria-label="本文目录">{toc.map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</nav></details><div class="prose"><Content/></div><footer class="article-footer"><div class="tags">{paper.data.topics.map(t=><a href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div>{paper.data.doi&&<p>DOI <a href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">{paper.data.doi}</a></p>}</footer></article><aside class="toc"><span>本文目录</span><nav>{toc.map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</nav></aside></div></Base>

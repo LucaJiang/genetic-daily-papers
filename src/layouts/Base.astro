@@ -1,59 +1,9 @@
 ---
-import '../styles/global.css';
-import '../styles/v5.css';
-import '../styles/v6.css';
 import 'katex/dist/katex.min.css';
-
-const {
-  title = 'Genetic Daily Papers',
-  description = '统计遗传学、单细胞与空间组学、QTL、调控模型和算法加速的每日论文解读。',
-} = Astro.props;
-
-const path = Astro.url.pathname;
-const navItems = [
-  ['/', 'Today'],
-  ['/archive/', 'Archive'],
-  ['/topics/', 'Topics'],
-  ['/resources/', 'Data releases'],
-];
-const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+import '../styles/review.css';
+interface Props{title?:string;description?:string;}
+const {title='Genetic Daily Papers',description='统计遗传学、分子 QTL、精细定位、细胞类型调控与算法研究。'}=Astro.props;
+const nav=[['/','最新'],['/archive/','归档'],['/topics/','研究主题'],['/resources/','数据资源']];
+const path=Astro.url.pathname;
 ---
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#f4f3ef" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="wrap site-header__inner">
-          <a class="brand" href="/" aria-label="Genetic Daily Papers 首页">
-            <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-            <span>
-              <strong>Genetic Daily Papers</strong>
-              <small>STATISTICS · GENETICS · SINGLE-CELL</small>
-            </span>
-          </a>
-          <nav class="main-nav" aria-label="主导航">
-            {navItems.map(([href, label]) => (
-              <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
-            ))}
-          </nav>
-        </div>
-      </header>
-      <main class="wrap main-content"><slot /></main>
-      <footer class="site-footer">
-        <div class="wrap site-footer__inner">
-          <span>Genetic Daily Papers</span>
-          <span><a href="/rss.xml">RSS</a> · <a href="https://github.com/LucaJiang/genetic-daily-papers">GitHub</a></span>
-        </div>
-      </footer>
-    </div>
-  </body>
-</html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={new URL(path,Astro.site)}/><link rel="icon" href="/favicon.svg"/><link rel="alternate" type="application/rss+xml" title="Genetic Daily Papers" href="/rss.xml"/></head><body><a class="skip-link" href="#main">跳至正文</a><header class="site-header"><div class="site-wrap header-inner"><a class="brand" href="/"><strong>Genetic Daily Papers<span class="brand-dot">.</span></strong><span>STATISTICS · GENETICS · SINGLE-CELL</span></a><nav aria-label="主导航">{nav.map(([url,label])=><a href={url} aria-current={(url==='/'?path==='/':path.startsWith(url))?'page':undefined}>{label}</a>)}</nav></div></header><main id="main" class="site-wrap"><slot/></main><footer class="site-wrap site-footer"><span>Genetic Daily Papers</span><div><a href="/rss.xml">RSS</a><a href="https://github.com/LucaJiang/genetic-daily-papers" target="_blank" rel="noreferrer">GitHub</a></div></footer></body></html>

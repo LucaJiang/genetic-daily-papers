@@ -1,46 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PaperCard from '../../components/PaperCard.astro';
-import { getCollection, render } from 'astro:content';
-
-export async function getStaticPaths() {
-  const entries = await getCollection('daily');
-  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
-}
-
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-const allPapers = await getCollection('papers');
-const paperById = new Map(allPapers.map((paper) => [paper.id, paper]));
-const missing = entry.data.papers.filter((id: string) => !paperById.has(id));
-if (missing.length > 0) {
-  throw new Error(`Daily issue ${entry.id} references missing paper pages: ${missing.join(', ')}`);
-}
-const papers = entry.data.papers.map((id: string) => paperById.get(id)!);
-const date = entry.data.date.toISOString().slice(0, 10);
-const formatDate = (value: Date) => new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
-}).format(value);
+import ResourceBrief from '../../components/ResourceBrief.astro';
+import {render} from 'astro:content';
+import {publishedIssues,publishedPapers,resolvePapers,iso,dateLabel} from '../../lib/issues';
+export async function getStaticPaths(){return (await publishedIssues()).map(entry=>({params:{id:entry.id},props:{entry}}));}
+const {entry}=Astro.props;const papers=resolvePapers(entry,await publishedPapers());const {Content}=await render(entry);
 ---
-<Base title={`${entry.data.title} · Genetic Daily Papers`} description={entry.data.summary}>
-  <a class="back-link" href="/archive/">← 历史日报</a>
-
-  <header class="daily-header">
-    <div class="daily-header__date"><time datetime={date}>{formatDate(entry.data.date)}</time></div>
-    <h1>{entry.data.title}</h1>
-    <p>{entry.data.summary}</p>
-    <div class="daily-header__count"><strong>{papers.length}</strong><span>篇论文</span></div>
-  </header>
-
-  <section class="daily-paper-section" aria-labelledby="daily-paper-title">
-    <div class="daily-section-title">
-      <h2 id="daily-paper-title">本期论文</h2>
-      <span>{papers.length}</span>
-    </div>
-    <div class="paper-entry-list">
-      {papers.map((paper, index) => <PaperCard paper={paper} index={index + 1} total={papers.length} />)}
-    </div>
-  </section>
-
-  <section class="daily-note"><Content /></section>
-</Base>
+<Base title={`${iso(entry.data.date)} · Genetic Daily Papers`} description={entry.data.summary}><a class="back" href="/archive/">← 日报归档</a><header class="issue-header"><div class="eyebrow"><time datetime={iso(entry.data.date)}>{dateLabel(entry.data.date)}</time><span>{papers.length} 篇论文{entry.data.briefs.length?` · ${entry.data.briefs.length} 项资源`:''}</span></div><h1>{entry.data.title}</h1><p>{entry.data.summary}</p></header><div class="section-bar"><h2>本期论文</h2><span>论文日期见各条目</span></div><section class="paper-list" aria-label="本期论文">{papers.map((p,i)=><PaperCard paper={p} index={i+1}/>)}</section>{entry.data.briefs.length>0&&<section class="briefs"><div class="section-bar"><h2>数据资源</h2></div>{entry.data.briefs.map(b=><ResourceBrief brief={b}/>)}</section>}{entry.body?.trim()&&<section class="daily-notes prose"><Content/></section>}</Base>

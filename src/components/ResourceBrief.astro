@@ -1,0 +1,7 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import {iso} from '../lib/issues';
+interface Props{brief:CollectionEntry<'daily'>['data']['briefs'][number];}
+const {brief}=Astro.props;
+---
+<article class="resource-brief" data-brief-id={brief.id}><div class="paper-meta"><span class="journal">{brief.source}</span><time datetime={iso(brief.date)}>{iso(brief.date)}</time><span class="priority">资源简报</span></div><h3><a href={brief.url} target="_blank" rel="noreferrer">{brief.title} ↗</a></h3><p>{brief.summary}</p><p class="brief-detail">{brief.detail}</p>{brief.readingDepth==='abstract'&&<span class="reading-depth">已核对摘要；未作全文方法评述</span>}</article>

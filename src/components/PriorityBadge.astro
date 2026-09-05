@@ -1,9 +1,6 @@
 ---
-const { priority } = Astro.props;
-const labels: Record<string, string> = {
-  'must-read': 'MUST READ',
-  'worth-reading': 'WORTH READING',
-  skim: 'SKIM',
-};
+interface Props{priority:string;}
+const {priority}=Astro.props;
+const labels:Record<string,string>={'must-read':'重点阅读','worth-reading':'值得关注',skim:'简读'};
 ---
-<span class={`priority priority--${priority}`}>{labels[priority] ?? priority}</span>
+<span class:list={['priority',{'priority-main':priority==='must-read'}]}>{labels[priority]??'论文'}</span>

@@ -2,49 +2,51 @@ name: Publish review validation
 on:
   push:
     branches: [publish-reviewed-2026-09-05]
-    paths: ['.github/workflows/publish-review.yml']
 permissions:
   contents: read
+concurrency:
+  group: publish-reviewed-2026-09-05
+  cancel-in-progress: true
 jobs:
-  sources:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
-      - name: Retrieve publisher source figures
-        run: |
-          mkdir -p evidence
-          python - <<'PY'
-          import urllib.request, json, concurrent.futures, hashlib
-          from pathlib import Path
-          sources={
-            'ibd.html':'https://www.nature.com/articles/s41467-026-76672-4',
-            'ibd.pdf':'https://www.nature.com/articles/s41467-026-76672-4_reference.pdf',
-            'glial.html':'https://www.nature.com/articles/s41586-026-10987-6',
-            'glial.pdf':'https://www.nature.com/articles/s41586-026-10987-6.pdf',
-            'abprs.pdf':'https://www.nature.com/articles/s41467-026-77128-5_reference.pdf',
-          }
-          for name,doi,ident,figs in [
-            ('ibd-blood-gut-eqtl','s41467-026-76672-4','41467_2026_76672',[4,5]),
-            ('glial-3d-epigenome','s41586-026-10987-6','41586_2026_10987',[3,4]),
-            ('ab-prs-adaptive-finetuning','s41467-026-77128-5','41467_2026_77128',[3,7])]:
-              for n in figs:
-                  sources[f'{name}-fig{n}.png']=f'https://media.springernature.com/full/springer-static/image/art%3A10.1038%2F{doi}/MediaObjects/{ident}_Fig{n}_HTML.png'
-          def fetch(item):
-              name,url=item
-              try:
-                  request=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-                  with urllib.request.urlopen(request,timeout=50) as r:
-                      data=r.read();mime=r.headers.get('Content-Type','')
-                  Path('evidence',name).write_bytes(data)
-                  return {'file':name,'url':url,'mime':mime,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
-              except Exception as e:return {'file':name,'url':url,'error':str(e)}
-          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-              result=list(pool.map(fetch,sources.items()))
-          Path('evidence/manifest.json').write_text(json.dumps(result,indent=2))
-          print(json.dumps(result,indent=2))
-          PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
         with:
-          name: publication-evidence
-          path: evidence
+          ref: publish-reviewed-2026-09-05
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Preserve reviewed legacy entries
+        run: python scripts/migrate-reviewed-legacy.py
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build and validate
+        run: npm run build
+      - name: Save verified source assets on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json public/figures src/content
+          if ! git diff --cached --quiet; then
+            git commit -m 'build: pin dependencies and verified publisher figures'
+            git push origin HEAD:publish-reviewed-2026-09-05
+          fi
+          mkdir -p qa
+          git rev-parse HEAD > qa/commit.txt
+          cp .radar/figure-check.json qa/figure-check.json
+          tar --exclude=.git --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.radar --exclude=qa -czf /tmp/review-source.tgz .
+          cp /tmp/review-source.tgz qa/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reviewed-site-build
+          path: |
+            dist/
+            qa/
+            .radar/figure-check.json
+          include-hidden-files: true
           retention-days: 2

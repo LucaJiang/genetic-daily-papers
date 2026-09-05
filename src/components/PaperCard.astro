@@ -1,48 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type {CollectionEntry} from 'astro:content';
 import PriorityBadge from './PriorityBadge.astro';
-import { topicLabel } from '../data/topics';
-
-interface Props {
-  paper: CollectionEntry<'papers'>;
-  index: number;
-  total: number;
-}
-
-const { paper, index, total } = Astro.props;
-const date = paper.data.date.toISOString().slice(0, 10);
-const number = String(index).padStart(2, '0');
+import {topicLabel} from '../data/topics';
+import {iso} from '../lib/issues';
+interface Props{paper:CollectionEntry<'papers'>;index?:number;total?:number;featured?:boolean;}
+const {paper,index=1}=Astro.props;
 ---
-<article class="paper-entry">
-  <div class="paper-entry__number" aria-hidden="true">
-    <strong>{number}</strong>
-    <span>/ {String(total).padStart(2, '0')}</span>
-  </div>
-
-  <div class="paper-entry__content">
-    <div class="paper-entry__meta">
-      <PriorityBadge priority={paper.data.priority} />
-      <span>{paper.data.source}</span>
-      <span>·</span>
-      <time datetime={date}>{date}</time>
-    </div>
-
-    <h2><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a></h2>
-    <p class="paper-entry__summary">{paper.data.summary}</p>
-
-    {paper.data.keyResults.length > 0 && (
-      <ul class="paper-entry__results">
-        {paper.data.keyResults.slice(0, 2).map((result) => <li>{result}</li>)}
-      </ul>
-    )}
-
-    <div class="paper-entry__footer">
-      <div class="tag-list" aria-label="研究主题">
-        {paper.data.topics.slice(0, 4).map((topic) => (
-          <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>
-        ))}
-      </div>
-      <a class="paper-entry__link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">→</span></a>
-    </div>
-  </div>
-</article>
+<article class="paper-card" data-paper-id={paper.id}><div class="paper-number" aria-hidden="true">{String(index).padStart(2,'0')}</div><div class="paper-card-main"><div class="paper-meta"><span class="journal">{paper.data.source}</span><time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time><PriorityBadge priority={paper.data.priority}/></div><h2><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle??paper.data.title}</a></h2><p class="card-summary">{paper.data.summary}</p>{paper.data.keyResults[1]&&<p class="card-result"><span>结果</span>{paper.data.keyResults[1]}</p>}<div class="card-bottom"><div class="tags">{paper.data.topics.slice(0,4).map(t=><a href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div><a class="read-link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">↗</span></a></div></div></article>
