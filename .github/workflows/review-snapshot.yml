@@ -1,0 +1,19 @@
+name: Site review snapshot
+on:
+  push:
+    branches: [research-alignment-2026-09-05]
+    paths: ['.github/workflows/review-snapshot.yml']
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export source
+        run: tar --exclude=.git -czf /tmp/paper-radar-source.tgz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper-radar-source
+          path: /tmp/paper-radar-source.tgz
+          retention-days: 2
