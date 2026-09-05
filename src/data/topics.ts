@@ -11,6 +11,7 @@ export const topics = [
   {slug:'foundation-models',label:'基因组与细胞基础模型',shortLabel:'基础模型',description:'与变异效应、调控机制或遗传学问题直接相关的模型。'},
   {slug:'perturbation',label:'细胞扰动与功能验证',shortLabel:'扰动与验证',description:'基因扰动、CRISPR 实验与细胞状态变化。'},
 ] as const;
+
 export type TopicSlug = (typeof topics)[number]['slug'];
 export const topicBySlug = Object.fromEntries(topics.map(t => [t.slug,t])) as Record<string,(typeof topics)[number]>;
 export const topicLabel = (slug: string) => topicBySlug[slug]?.shortLabel ?? slug;

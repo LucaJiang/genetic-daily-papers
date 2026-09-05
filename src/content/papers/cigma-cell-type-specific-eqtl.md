@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Cell-type-specific eQTLs underlie the genetic architecture of complex traits"
 shortTitle: "CIGMA：量化跨细胞类型共享与特异的 eQTL 架构"
 authors: "Minhui Chen, Xinpei Wang, Lena Krockenberger, Rika Tyebally, Jeremy Berg, Sebastian Pott, Jonathan Flint, Joseph Powell, Brunilda Balliu, Xuanyao Liu, Andy Dahl et al."
@@ -93,8 +94,7 @@ $$
 
 主模型假定：给定共享效应后，各细胞类型的特异效应相互独立。论文也拟合了允许任意细胞类型遗传协方差的扩展模型；当前样本量下，完整协方差矩阵的单基因估计较不稳定，因此主要结论仍来自较简约的模型。
 
-## Figure 2 应该怎样读
-
+## 模拟与校准
 Figure 2a 的两类置换检验回答不同问题：
 
 - **genotype permutation**：打断基因型与表达的全部关系，共享和特异遗传方差都应接近 0；
@@ -131,6 +131,6 @@ CIGMA 回答的是**基因层面的遗传方差架构**。它不能告诉我们�
 - 方法不能直接进行 SNP-level colocalization；
 - 对低表达基因、较少见细胞类型或 donor 数较少的数据，特异方差可能出现较大标准误或边界估计。
 
-## 最值得带走的结论
+## 小结
 
 CIGMA 的主要贡献不是多检出一批 eQTL，而是说明：只统计已显著的 eQTL 会低估细胞类型特异调控。对复杂性状而言，尚未被常规 eQTL 研究稳定发现的弱、特异调控效应可能比共享的大效应更相关。

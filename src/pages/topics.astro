@@ -1,7 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import {catalog} from '../lib/catalog';
-import {topics} from '../data/topics';
-const {papers}=await catalog();
+import { topics } from '../data/topics';
+import { publishedPapers } from '../lib/issues';
+const papers = await publishedPapers();
 ---
-<Base title="研究主题 · Genetic Daily Papers"><header class="page-head"><span class="eyebrow">Research areas</span><h1>研究主题</h1></header><div class="topic-grid">{topics.map(t=><a class="topic-card" href={`/topics/${t.slug}/`}><span>{papers.filter(p=>p.data.topics.includes(t.slug)).length} 篇</span><h2>{t.label}</h2><p>{t.description}</p></a>)}</div></Base>
+<Base title="研究主题 · Genetic Daily Papers">
+  <header class="page-heading"><div class="eyebrow">Research areas</div><h1>研究主题</h1></header>
+  <section class="topic-grid">
+    {topics.map(t => <a class="topic-card" href={`/topics/${t.slug}/`}><span class="topic-count">{papers.filter(p => p.data.topics.includes(t.slug)).length} 篇</span><h2>{t.label}</h2><p>{t.description}</p><span aria-hidden="true">↗</span></a>)}
+  </section>
+</Base>

@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Spatial chromatin architecture and accessibility co-profiling of mammalian tissues"
 shortTitle: "Spatial-ATAC-Hi-C：同一组织位置联合测量开放染色质与三维基因组"
 authors: "Ping Wang, Juan Wang, Qixuan Wang, Mark W. Youngblood, Yang Cheng, Bo Tao, Josiah Hiu-Yuen Wong, Yu Luan, Feng Yue et al."
@@ -71,8 +72,7 @@ ATAC 模态可构造 gene activity score，概括启动子和基因体附近开�
 
 这些结果说明测量保留了两类预期信号，但 loop overlap 不应被理解为 38% 都是假阳性：不同测序深度、组织切片和 loop caller threshold 都会改变集合重叠。
 
-## Figure 2 应该怎样读
-
+## 小鼠脑空间结构
 Figure 2a 与 2b 分别展示基于 Hi-C 和 ATAC 的聚类。重点不是两个 UMAP 是否完全相同，而是：
 
 - 空间 cluster 是否与已知解剖区域相符；
@@ -107,6 +107,6 @@ Spatial-ATAC-Hi-C 本身没有人群基因型，不能直接做 QTL mapping。�
 - 组织切片间验证受到配准和局部组成差异影响；
 - 实验流程复杂，批次效应和文库质量控制需要在多中心数据中进一步评估。
 
-## 最值得带走的结论
+## 小结
 
 这项技术把“开放元件在哪里”和“它可能接触哪个基因”放进同一空间测量中。对遗传学研究最实际的用途，是提高候选变异到候选靶基因的组织背景分辨率，而不是替代 QTL 或 fine-mapping。

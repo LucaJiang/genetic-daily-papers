@@ -1,12 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
+import ResourceBrief from '../components/ResourceBrief.astro';
 import PaperCard from '../components/PaperCard.astro';
-import {catalog} from '../lib/catalog';
-const {papers}=await catalog();
-const resources=papers.filter(p=>p.data.kind==='resource'||p.id==='omicspred');
-const releases=[
- {date:'2026-05-28',title:'GTEx V11 bulk RNA-seq',body:'成人组织表达与 QTL 数据的新版本；各文件的基因注释、数据版本和分析说明以 GTEx 下载页为准。',href:'https://gtexportal.org/home/downloads/adult-gtex/overview'},
- {date:'2026-05-05',title:'Developmental GTEx V1 / NHP-dGTEx V1',body:'人类与非人灵长类发育组织数据的首次发布。',href:'https://gtexportal.org/'}
-];
+import { publishedIssues, publishedPapers } from '../lib/issues';
+
+const issues = await publishedIssues();
+const seen = new Set<string>();
+const briefs = issues.flatMap(i => i.data.briefs).filter(b => {
+  if (seen.has(b.id)) return false;
+  seen.add(b.id);
+  return true;
+}).sort((a,b) => +b.date - +a.date);
+const previous = issues.filter(i => i.data.topics.includes('resources') && !i.data.briefs.length);
+const papers = (await publishedPapers()).filter(p => p.data.topics.includes('resources')).sort((a,b) => +b.data.date - +a.data.date);
 ---
-<Base title="数据资源 · Genetic Daily Papers"><header class="page-head"><span class="eyebrow">Data resources</span><h1>数据资源</h1><p>遗传参考面板、分子 QTL 图谱与新发表的数据库论文。</p></header><div class="paper-list">{resources.map(p=><PaperCard paper={p}/>)}</div><div class="section-head"><h2>既往数据发布</h2></div>{releases.map(r=><article class="release-card"><time datetime={r.date}>{r.date}</time><div><h2>{r.title}</h2><p>{r.body}</p><a href={r.href} target="_blank" rel="noreferrer">官方数据与版本说明 ↗</a></div></article>)}</Base>
+<Base title="数据资源 · Genetic Daily Papers">
+  <header class="page-heading"><div class="eyebrow">Data releases</div><h1>数据资源</h1><p>新数据、数据库论文与队列发布。</p></header>
+  {briefs.map(b => <ResourceBrief brief={b}/>)}
+  <div class="section-bar"><h2>数据库论文</h2></div>
+  <section class="paper-list">{papers.map((p,i) => <PaperCard paper={p} index={i + 1}/>)}</section>
+  {previous.length > 0 && <section class="recent"><div class="section-bar"><h2>往期数据记录</h2></div>{previous.map(e => <a class="archive-row" href={`/daily/${e.id}/`}><time>{e.id}</time><strong>{e.data.title}</strong><span>查看 →</span></a>)}</section>}
+  <p class="resource-directory">常用入口：<a href="https://gtexportal.org/">GTEx</a> · <a href="https://www.ebi.ac.uk/eqtl/">eQTL Catalogue</a> · <a href="https://yanglab.westlake.edu.cn/smr-portal/">SMR Portal</a></p>
+</Base>

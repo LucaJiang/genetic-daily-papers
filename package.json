@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/cache-figures.mjs",
-    "build": "astro check && astro build && node scripts/validate-site.mjs",
-    "preview": "astro preview"
+    "prebuild": "node scripts/check-content.mjs && node scripts/cache-review-figures.mjs",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "postbuild": "node scripts/check-built.mjs && node scripts/validate-site.mjs",
+    "check:content": "node scripts/check-content.mjs",
+    "check:built": "node scripts/check-built.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -17,6 +20,7 @@
     "katex": "^0.16.22",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "yaml": "^2.8.1"
   }
 }

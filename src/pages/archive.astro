@@ -1,6 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import {catalog,formatDate} from '../lib/catalog';
-const {issues}=await catalog();
+import { publishedIssues, iso } from '../lib/issues';
+const issues = await publishedIssues();
 ---
-<Base title="历史归档 · Genetic Daily Papers"><header class="page-head"><span class="eyebrow">Archive</span><h1>历史归档</h1></header><div class="archive-grid">{issues.map(e=><a class="archive-card" href={`/daily/${e.id}/`}><time datetime={e.id}>{formatDate(e.data.date)}</time><h2>{e.data.title}</h2><p>{e.data.summary}</p><span class="archive-count">{e.data.papers.length} 篇论文与资源 →</span></a>)}</div></Base>
+<Base title="归档 · Genetic Daily Papers">
+  <header class="page-heading"><div class="eyebrow">Archive</div><h1>日报归档</h1></header>
+  <section class="archive-list">
+    {issues.map(e => <a class="archive-row" href={`/daily/${e.id}/`}><time datetime={iso(e.data.date)}>{iso(e.data.date)}</time><div><h2>{e.data.title}</h2><p>{e.data.summary}</p></div><span>{e.data.papers.length} 篇 →</span></a>)}
+  </section>
+</Base>

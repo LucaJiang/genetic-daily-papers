@@ -1,0 +1,59 @@
+{
+  "updatedAt": "2026-09-05",
+  "language": "zh-CN",
+  "primary": [
+    "GWAS 与分子 QTL 整合",
+    "统计精细定位、共定位与功能先验",
+    "细胞类型和细胞状态特异遗传效应",
+    "复杂性状遗传架构与预测"
+  ],
+  "secondary": [
+    "与遗传效应解释直接相关的单细胞和空间方法",
+    "可复用的统计计算、稀疏算法与 GPU 加速",
+    "实质新增的 GWAS/QTL/多组学数据"
+  ],
+  "seeds": [
+    {
+      "name": "SMR / HEIDI",
+      "url": "https://yanglab.westlake.edu.cn/software/smr",
+      "role": "GWAS 与分子表型整合"
+    },
+    {
+      "name": "SMR Portal",
+      "doi": "10.1038/s41592-024-02561-7",
+      "role": "可复用的 xQTL–GWAS 证据"
+    },
+    {
+      "name": "gsMap",
+      "doi": "10.1038/s41586-025-08757-x",
+      "role": "性状相关的空间细胞定位"
+    },
+    {
+      "name": "MeDuSA",
+      "doi": "10.1038/s43588-023-00487-2",
+      "role": "混合模型、细胞状态和表达反卷积"
+    },
+    {
+      "name": "SuSiE / DAP-G",
+      "role": "多信号精细定位与后验不确定性"
+    },
+    {
+      "name": "AlphaGenome",
+      "role": "调控序列预测及功能注释"
+    }
+  ],
+  "inclusionRule": "至少与一项核心研究问题有具体方法或数据联系；相关性优先于期刊和关键词。",
+  "journalPreference": [
+    "Nature",
+    "Nature Genetics",
+    "Nature Methods"
+  ],
+  "exclude": [
+    "只有关键词相关的通用单细胞 foundation model",
+    "仅 API、网页或文件格式改版",
+    "没有可复用计算贡献或可靠比较的 GPU 宣传",
+    "旧论文包装成今日发布",
+    "只列通用局限而不解释实际模型与结果"
+  ],
+  "scheduledGeneration": "do-not-enable-without-user-request"
+}

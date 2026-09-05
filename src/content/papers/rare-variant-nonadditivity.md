@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Deviations from genetic additivity driven by rare variants at biobank scale"
 shortTitle: "罕见变异非加性效应的 biobank-scale 检验"
 authors: "Frederik H. Lassen, Samvida S. Venkatesh, Nikolas A. Baya, Cecilia M. Lindgren, Duncan S. Palmer et al."
@@ -80,8 +81,7 @@ $$
 
 作者报告约三分之一的同源 gene–protein 关系具有可检测的非线性剂量响应，并观察到多种部分隐性模式。FUT10 罕见变异与肺功能降低的隐性关联在 All of Us 中获得复制，说明该框架并非只在 UK Biobank 内部产生统计信号。
 
-## Figure 1 应该怎样读
-
+## 非加性遗传编码
 先看横轴上的基因型或 burden 状态，再区分两条信息：
 
 - 加性轴描述每增加一个等位基因的平均线性变化；
@@ -117,6 +117,6 @@ $$
 - 正交统计分解不能单独识别分子机制；
 - 对二分类疾病、极端不平衡表型和非常稀有 burden，正态近似及 LMM 校准需要额外评估。
 
-## 最值得带走的结论
+## 小结
 
 这篇论文提供的是一个可扩展的“是否偏离加性”检验，而不是对罕见变异遗传模式的统一答案。对每个阳性结果，最重要的仍是报告三类基因型的实际人数、效应和置信区间，并在外部队列中复制同一编码下的剂量曲线。

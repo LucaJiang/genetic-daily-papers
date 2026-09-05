@@ -1,20 +1,32 @@
 ---
-import type { Paper } from '../lib/catalog';
-import { isoDate } from '../lib/catalog';
+import type { CollectionEntry } from 'astro:content';
+import PriorityBadge from './PriorityBadge.astro';
 import { topicLabel } from '../data/topics';
-import { figureAssetUrl, figuresForPaper } from '../lib/figures';
-interface Props { paper: Paper; index?: number; total?: number; }
-const { paper } = Astro.props;
-const p = paper.data;
-const figure = figuresForPaper(paper).find(f => f.kind === 'real-data') ?? figuresForPaper(paper)[0];
+import { iso } from '../lib/issues';
+
+interface Props {
+  paper: CollectionEntry<'papers'>;
+  index?: number;
+  total?: number;
+  featured?: boolean;
+}
+
+const { paper, index = 1 } = Astro.props;
 ---
-<article class:list={['paper-card',{'has-image':!!figure}]} data-paper-id={paper.id}>
-  <div class="card-content">
-    <div class="card-meta"><span class="journal">{p.source}</span><time datetime={isoDate(p.date)}>{isoDate(p.date)}</time>{p.readingType && <span class="reading-type">{p.readingType}</span>}{!p.peerReviewed && <span class="preprint">预印本</span>}</div>
-    <h2><a href={`/papers/${paper.id}/`}>{p.shortTitle ?? p.title}</a></h2>
-    <p class="card-summary">{p.summary}</p>
-    {p.keyResults[0] && <p class="card-result">{p.keyResults[0]}</p>}
-    <div class="card-bottom"><div class="tags">{p.topics.slice(0,3).map(t => <a class="tag" href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div><a class="read-link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">→</span></a></div>
+<article class="paper-card" data-paper-id={paper.id}>
+  <div class="paper-number" aria-hidden="true">{String(index).padStart(2, '0')}</div>
+  <div class="paper-card-main">
+    <div class="paper-meta">
+      <span class="journal">{paper.data.source}</span>
+      <time datetime={iso(paper.data.date)}>{iso(paper.data.date)}</time>
+      <PriorityBadge priority={paper.data.priority}/>
+    </div>
+    <h2><a href={`/papers/${paper.id}/`}>{paper.data.shortTitle ?? paper.data.title}</a></h2>
+    <p class="card-summary">{paper.data.summary}</p>
+    {paper.data.keyResults[1] && <p class="card-result"><span>结果</span>{paper.data.keyResults[1]}</p>}
+    <div class="card-bottom">
+      <div class="tags">{paper.data.topics.slice(0, 4).map(t => <a href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div>
+      <a class="read-link" href={`/papers/${paper.id}/`}>详细解读 <span aria-hidden="true">↗</span></a>
+    </div>
   </div>
-  {figure && <a class="card-image" href={`/papers/${paper.id}/`} tabindex="-1" aria-hidden="true"><img src={figureAssetUrl(figure.url)} alt="" loading="lazy" decoding="async"/><span>实证结果与方法分析</span></a>}
 </article>

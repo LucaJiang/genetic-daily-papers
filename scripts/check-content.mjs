@@ -1,0 +1,22 @@
+import {readFile,readdir} from 'node:fs/promises';
+import {join,basename} from 'node:path';
+import {parse} from 'yaml';
+const errors=[];
+async function entries(dir){const out=[];for(const name of await readdir(dir)){if(!name.endsWith('.md'))continue;const raw=await readFile(join(dir,name),'utf8');const match=raw.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);if(!match){errors.push(`${name}: no frontmatter`);continue;}let data;try{data=parse(match[1]);}catch(e){errors.push(`${name}: ${e.message}`);continue;}out.push({id:basename(name,'.md').toLowerCase(),name,data,body:raw.slice(match[0].length)});}return out;}
+const papers=await entries('src/content/papers'),issues=await entries('src/content/daily');
+const known=new Map();
+for(const p of papers){if(known.has(p.id))errors.push(`Case-insensitive ID collision: ${p.id}`);known.set(p.id,p);if(!p.data.published)continue;
+ if(!p.body.trim())errors.push(`${p.id}: empty published analysis`);
+ if(/||turn\d+(?:search|view|file)\d+/.test(p.body))errors.push(`${p.id}: internal citation token`);
+ if(/\bestimand\b|编辑结论|Figure\s*\d+(?:\/\d+)?\s*应该怎样读/i.test(p.body))errors.push(`${p.id}: disallowed prose heading/term`);
+ for(const key of ['paperUrl','codeUrl','resourceUrl'])if(p.data[key]&&!/^https:\/\//.test(p.data[key]))errors.push(`${p.id}: invalid ${key}`);
+ const figureIds=new Set((p.data.figures??[]).map(f=>f.id).filter(Boolean));
+ for(const match of p.body.matchAll(/\[\[figure:([^\]]+)\]\]/g))if(!figureIds.has(match[1]))errors.push(`${p.id}: missing figure ${match[1]}`);
+}
+let published=0;
+for(const d of issues){if(!d.data.published)continue;published++;const ids=d.data.papers??[];
+ if(new Set(ids).size!==ids.length)errors.push(`${d.id}: duplicate paper`);
+ if(!ids.length&&!(d.data.briefs??[]).length)errors.push(`${d.id}: empty published issue`);
+ for(const id of ids){if(id!==id.toLowerCase())errors.push(`${d.id}: non-canonical ID ${id}`);if(!known.get(id)?.data.published)errors.push(`${d.id}: missing/unpublished ${id}`);}
+}
+if(errors.length){console.error(errors.join('\n'));process.exit(1);}console.log(`[content] ${published} issues; ${papers.filter(p=>p.data.published).length} papers; references valid`);

@@ -20,16 +20,18 @@ for(const file of htmlFiles){
    if(tag==='img')imageCount++;
  }
 }
-const expected={'daily/2026-09-03/index.html':3,'daily/2026-09-04/index.html':4,'daily/2026-09-05/index.html':4};
+const expected={'daily/2026-09-03/index.html':3,'daily/2026-09-04/index.html':4,'daily/2026-09-05/index.html':3};
 for(const [path,count]of Object.entries(expected)){
  const html=await readFile(join(root,path),'utf8');const actual=(html.match(/data-paper-id=/g)??[]).length;
  if(actual!==count)failures.push(`${path}: expected ${count} entries, got ${actual}`);
 }
-for(const id of ['sce2g-enhancer-gene','aou-anvil-reference-panel','ldspec-correlated-effects','ab-prs-adaptive-boosting']){
+for(const id of ['ibd-blood-gut-eqtl','glial-3d-epigenome','ab-prs-adaptive-finetuning']){
  const html=await readFile(join(root,'papers',id,'index.html'),'utf8');
- if((html.match(/class="paper-figure"/g)??[]).length!==2)failures.push(`${id}: expected 2 inline figures`);
+ if((html.match(/class="inline-figure"/g)??[]).length!==2)failures.push(`${id}: expected 2 inline figures`);
  if(!html.includes('class="katex"'))failures.push(`${id}: missing rendered math`);
 }
+const latest=await readFile(join(root,'daily/2026-09-05/index.html'),'utf8');
+if(!latest.includes('data-brief-id="maeea-2026"'))failures.push('daily/2026-09-05: missing MAEEA resource brief');
 const report={pages:htmlFiles.length,renderedMath:mathCount,imageReferences:imageCount,errors:failures};
 await writeFile(join(root,'quality-report.json'),JSON.stringify(report,null,2));
 console.log(JSON.stringify(report,null,2));

@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Mapping genetic regulation of gene expression to cellular contexts identifies long non-coding RNAs associated with brain disorders"
 shortTitle: "脑组织细胞背景依赖的 lncRNA eQTL 与疾病共定位"
 authors: "Yuran Jia, Li Chen, Liyang Song, Tianyi Zheng, Jian Yang, Yadong Wang, Tianyi Zhao et al."
@@ -114,6 +115,6 @@ bulk 表达和细胞比例共同受到细胞组成、每细胞表达和技术噪
 - 新 lncRNA 的定量更容易受 mapping ambiguity 与低表达影响；
 - 共定位支持共享遗传信号，但不能单独建立分子中介链。
 
-## 最值得带走的结论
+## 小结
 
 这篇论文的价值在于用大样本 bulk cortex 扩展 lncRNA 调控图谱，并证明显式建模细胞组成可恢复一部分被 bulk 平均稀释的遗传效应。结果更适合作为单细胞验证、fine-mapping 和功能实验的候选生成层，而不是对细胞类型和疾病机制的最终归因。
