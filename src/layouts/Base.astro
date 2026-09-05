@@ -11,6 +11,7 @@ const path=Astro.url.pathname;
 <title>{title}</title><meta name="description" content={description}/>
 <link rel="canonical" href={new URL(path,Astro.site)}/><link rel="icon" href="/favicon.svg"/>
 <link rel="alternate" type="application/rss+xml" title="Genetic Daily Papers" href="/rss.xml"/>
+<style is:global>.prose .katex-display{text-align:left}.prose .katex-display>.katex{display:inline-block;min-width:100%;text-align:center}</style>
 </head><body>
 <a class="skip-link" href="#main">跳至正文</a>
 <header class="site-header"><div class="site-wrap header-inner">
