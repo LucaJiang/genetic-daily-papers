@@ -1,51 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import PaperCard from '../components/PaperCard.astro';
-import { getCollection } from 'astro:content';
-
-const issues = (await getCollection('daily'))
-  .filter((entry) => entry.data.papers.length > 0)
-  .sort((a, b) => +b.data.date - +a.data.date);
-const allPapers = await getCollection('papers');
-const paperById = new Map(allPapers.map((paper) => [paper.id, paper]));
-const latest = issues[0];
-const missing = latest ? latest.data.papers.filter((id) => !paperById.has(id)) : [];
-if (latest && missing.length > 0) {
-  throw new Error(`Latest issue ${latest.id} references missing paper pages: ${missing.join(', ')}`);
-}
-const papers = latest ? latest.data.papers.map((id) => paperById.get(id)!) : [];
-const formatDate = (date: Date) => new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
-}).format(date);
+import { catalog, formatDate } from '../lib/catalog';
+import { topicLabel } from '../data/topics';
+const {issues,resolve}=await catalog(); const latest=issues[0]; const papers=latest?resolve(latest):[];
+const core=['QTL','fine-mapping','single-cell','functional-annotation','statistical-genetics','algorithm-acceleration'];
 ---
 <Base>
-  <header class="home-header">
-    <div>
-      <span class="home-header__kicker">Daily Paper Radar</span>
-      <h1>今日论文</h1>
-      <p>统计遗传学、单细胞与空间组学、QTL、fine-mapping、调控模型和算法加速。</p>
-    </div>
-    {latest && (
-      <a class="home-issue-link" href={`/daily/${latest.id}/`}>
-        <time datetime={latest.data.date.toISOString().slice(0, 10)}>{formatDate(latest.data.date)}</time>
-        <strong>{papers.length} 篇论文</strong>
-        <span>查看日报 →</span>
-      </a>
-    )}
-  </header>
-
-  {latest ? (
-    <section class="daily-paper-section" aria-labelledby="latest-paper-title">
-      <div class="daily-section-title">
-        <h2 id="latest-paper-title">最新一期</h2>
-        <span>{papers.length}</span>
-      </div>
-      <p class="latest-summary">{latest.data.summary}</p>
-      <div class="paper-entry-list">
-        {papers.map((paper, index) => <PaperCard paper={paper} index={index + 1} total={papers.length} />)}
-      </div>
-    </section>
-  ) : (
-    <section class="empty-state"><h2>尚未发布日报</h2></section>
-  )}
+<header class="page-head"><div class="top-row"><span class="eyebrow">Daily Paper Radar</span><a href="/archive/">历史归档 →</a></div><h1>遗传统计与细胞组学</h1><p>GWAS · 分子 QTL · Fine-mapping · 性状相关细胞 · 调控机制</p></header>
+<div class="topic-strip">{core.map(t=><a class="tag" href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div>
+{latest ? <><div class="section-head"><h2>{formatDate(latest.data.date)}</h2><a href={`/daily/${latest.id}/`}>{papers.length} 篇 · 查看本期 →</a></div><p class="latest-summary">{latest.data.summary}</p><div class="paper-list">{papers.map(p=><PaperCard paper={p}/>)}</div></> : <p class="empty-state">暂无已发布日报。</p>}
 </Base>

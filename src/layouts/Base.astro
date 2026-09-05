@@ -1,59 +1,29 @@
 ---
-import '../styles/global.css';
-import '../styles/v5.css';
-import '../styles/v6.css';
 import 'katex/dist/katex.min.css';
-
-const {
-  title = 'Genetic Daily Papers',
-  description = '统计遗传学、单细胞与空间组学、QTL、调控模型和算法加速的每日论文解读。',
-} = Astro.props;
-
-const path = Astro.url.pathname;
-const navItems = [
-  ['/', 'Today'],
-  ['/archive/', 'Archive'],
-  ['/topics/', 'Topics'],
-  ['/resources/', 'Data releases'],
-];
-const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+import '../styles/site.css';
+interface Props { title?: string; description?: string; }
+const { title='Genetic Daily Papers', description='遗传统计、分子 QTL、细胞与空间遗传学的论文解读。' }=Astro.props;
+const nav=[['/','最新'],['/archive/','归档'],['/topics/','研究主题'],['/resources/','数据资源']];
+const active=(p:string)=>p==='/'?Astro.url.pathname==='/':Astro.url.pathname.startsWith(p);
 ---
 <!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#f4f3ef" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="wrap site-header__inner">
-          <a class="brand" href="/" aria-label="Genetic Daily Papers 首页">
-            <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-            <span>
-              <strong>Genetic Daily Papers</strong>
-              <small>STATISTICS · GENETICS · SINGLE-CELL</small>
-            </span>
-          </a>
-          <nav class="main-nav" aria-label="主导航">
-            {navItems.map(([href, label]) => (
-              <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
-            ))}
-          </nav>
-        </div>
-      </header>
-      <main class="wrap main-content"><slot /></main>
-      <footer class="site-footer">
-        <div class="wrap site-footer__inner">
-          <span>Genetic Daily Papers</span>
-          <span><a href="/rss.xml">RSS</a> · <a href="https://github.com/LucaJiang/genetic-daily-papers">GitHub</a></span>
-        </div>
-      </footer>
-    </div>
-  </body>
-</html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#fafaf8"/><link rel="icon" href="/favicon.svg"/><link rel="canonical" href={new URL(Astro.url.pathname,Astro.site)}/><link rel="alternate" type="application/rss+xml" title="Genetic Daily Papers" href="/rss.xml"/><title>{title}</title></head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="/"><span class="brand-symbol" aria-hidden="true">g<span>dp</span></span><span><strong>Genetic Daily Papers</strong><small>STATISTICS · GENETICS · SINGLE-CELL</small></span></a><nav aria-label="主导航">{nav.map(([href,label])=><a href={href} aria-current={active(href)?'page':undefined}>{label}</a>)}</nav></div></header>
+<main id="main" class="container"><slot/></main>
+<footer class="site-footer container"><span>Genetic Daily Papers</span><span><a href="/rss.xml">RSS</a><a href="https://github.com/LucaJiang/genetic-daily-papers">GitHub</a></span></footer>
+<dialog id="figure-viewer" aria-label="论文原图"><form method="dialog"><button aria-label="关闭原图">关闭 ×</button></form><img alt=""/><p></p></dialog>
+<script>
+ const viewer=document.querySelector<HTMLDialogElement>('#figure-viewer');
+ const image=viewer?.querySelector<HTMLImageElement>('img');
+ document.addEventListener('click',(event)=>{
+   const target=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[data-zoom]'):null;
+   if (!target || !viewer || !image || !viewer.showModal) return;
+   event.preventDefault(); image.src=target.href; image.alt=target.querySelector('img')?.alt??'论文原图';
+   const caption=viewer.querySelector('p'); if(caption) caption.textContent=image.alt;
+   viewer.showModal();
+ });
+ viewer?.addEventListener('click',(event)=>{if(event.target===viewer)viewer.close();});
+</script>
+</body></html>

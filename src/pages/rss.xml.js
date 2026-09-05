@@ -1,19 +1,3 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
-
-export async function GET(context) {
-  const issues = (await getCollection('daily'))
-    .filter((issue) => issue.data.papers.length > 0)
-    .sort((a, b) => +b.data.date - +a.data.date);
-  return rss({
-    title: 'Genetic Daily Papers',
-    description: 'Daily paper radar for statistical genetics, single-cell genomics and algorithm acceleration.',
-    site: context.site,
-    items: issues.map((issue) => ({
-      title: issue.data.title,
-      description: issue.data.summary,
-      pubDate: issue.data.date,
-      link: `/daily/${issue.id}/`
-    }))
-  });
-}
+import {catalog} from '../lib/catalog';
+export async function GET(context){const {issues}=await catalog();return rss({title:'Genetic Daily Papers',description:'遗传统计与细胞组学论文解读',site:context.site,items:issues.map(e=>({title:e.data.title,description:e.data.summary,pubDate:e.data.date,link:`/daily/${e.id}/`}))});}

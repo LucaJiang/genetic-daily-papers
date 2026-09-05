@@ -1,73 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import FigureGallery from '../../components/FigureGallery.astro';
-import PriorityBadge from '../../components/PriorityBadge.astro';
-import { getCollection, render } from 'astro:content';
-import { topicLabel } from '../../data/topics';
+import { render } from 'astro:content';
+import { catalog, isoDate } from '../../lib/catalog';
 import { figuresForPaper } from '../../lib/figures';
-
-export async function getStaticPaths() {
-  const papers = await getCollection('papers');
-  return papers.map((paper) => ({ params: { id: paper.id }, props: { paper } }));
-}
-
-const { paper } = Astro.props;
-const { Content } = await render(paper);
-const issues = (await getCollection('daily')).sort((a, b) => +b.data.date - +a.data.date);
-const issue = issues.find((entry) => entry.data.papers.includes(paper.id));
-const date = paper.data.date.toISOString().slice(0, 10);
-const figures = figuresForPaper(paper);
-const resultFigures = figures.filter((figure) => ['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
-const methodFigures = figures.filter((figure) => !['real-data', 'validation'].includes(figure.kind ?? 'real-data'));
+import { topicLabel } from '../../data/topics';
+export async function getStaticPaths(){const {papers}=await catalog();return papers.map(paper=>({params:{id:paper.id},props:{paper}}));}
+const {paper}=Astro.props; const p=paper.data; const {Content,headings}=await render(paper);
+const {issues}=await catalog(); const issue=issues.find(e=>e.data.papers.includes(paper.id));
+const figures=figuresForPaper(paper); const toc=headings.filter(h=>h.depth===2);
 ---
-<Base title={`${paper.data.shortTitle ?? paper.data.title} · Genetic Daily Papers`} description={paper.data.summary}>
-  <div class="article-shell">
-    {issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.data.date.toISOString().slice(0, 10)} 日报</a>}
-
-    <header class="paper-header">
-      <div class="paper-header__meta">
-        <PriorityBadge priority={paper.data.priority} />
-        <span>{paper.data.source}</span>
-        <span>·</span>
-        <time datetime={date}>{date}</time>
-        {paper.data.version && <><span>·</span><span>{paper.data.version}</span></>}
-      </div>
-      <h1>{paper.data.title}</h1>
-      <p class="paper-header__authors">{paper.data.authors}</p>
-      <p class="paper-header__summary">{paper.data.summary}</p>
-      <div class="paper-actions">
-        <a class="button button--primary" href={paper.data.paperUrl} target="_blank" rel="noreferrer">原文 ↗</a>
-        {paper.data.codeUrl && <a class="button" href={paper.data.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}
-        {paper.data.resourceUrl && <a class="button" href={paper.data.resourceUrl} target="_blank" rel="noreferrer">资源 ↗</a>}
-      </div>
-    </header>
-
-    {paper.data.keyResults.length > 0 && (
-      <section class="result-summary" aria-labelledby="result-summary-title">
-        <h2 id="result-summary-title">主要结果</h2>
-        <div class="result-summary__grid">
-          {paper.data.keyResults.map((result, index) => (
-            <div><span>{String(index + 1).padStart(2, '0')}</span><p>{result}</p></div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <FigureGallery id="result-figures" title="关键结果图" figures={resultFigures} />
-
-    <article class="paper-article"><Content /></article>
-
-    <FigureGallery id="method-figures" title="方法与验证图" figures={methodFigures} />
-
-    <footer class="paper-footer-meta">
-      <div>
-        <h2>文献信息</h2>
-        <p>{paper.data.authors}. <em>{paper.data.title}</em>. {paper.data.source}, {date}.</p>
-        {paper.data.doi && <p>DOI: <a href={`https://doi.org/${paper.data.doi}`} target="_blank" rel="noreferrer">{paper.data.doi}</a></p>}
-      </div>
-      <div class="tag-list">
-        {paper.data.topics.map((topic: string) => <a class="tag" href={`/topics/${topic}/`}>{topicLabel(topic)}</a>)}
-      </div>
-    </footer>
-  </div>
+<Base title={`${p.shortTitle??p.title} · Genetic Daily Papers`} description={p.summary}>
+{issue && <a class="back-link" href={`/daily/${issue.id}/`}>← {issue.id} 日报</a>}
+<header class="article-header"><div class="card-meta"><span class="journal">{p.source}</span><time datetime={isoDate(p.date)}>{isoDate(p.date)}</time>{p.readingType && <span class="reading-type">{p.readingType}</span>}{!p.peerReviewed && <span class="preprint">预印本 · 未经同行评议</span>}</div><h1>{p.shortTitle??p.title}</h1>{p.shortTitle && <p class="original-title">{p.title}</p>}<p class="authors">{p.authors}</p><p class="article-summary">{p.summary}</p><div class="paper-actions"><a class="button primary" href={p.paperUrl} target="_blank" rel="noreferrer">论文原文 ↗</a>{p.codeUrl && <a class="button" href={p.codeUrl} target="_blank" rel="noreferrer">代码 ↗</a>}{p.resourceUrl && <a class="button" href={p.resourceUrl} target="_blank" rel="noreferrer">数据资源 ↗</a>}</div></header>
+<div class="article-layout"><nav class="article-toc" aria-label="文章目录"><h2>本文内容</h2>{toc.map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</nav><div class="article-main"><article class="paper-article"><Content/></article>{!p.inlineFigures && <FigureGallery id="figures" title="实证结果与方法图" figures={figures}/>}<footer class="article-footer"><span>{p.source} · 发表于 {isoDate(p.date)}{p.version?` · ${p.version}`:''}</span>{p.doi && <p>DOI: <a href={`https://doi.org/${p.doi}`}>{p.doi}</a></p>}<div class="tags">{p.topics.map((t:string)=><a class="tag" href={`/topics/${t}/`}>{topicLabel(t)}</a>)}</div></footer></div></div>
 </Base>

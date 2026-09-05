@@ -1,25 +1,19 @@
 # Genetic Daily Papers
 
-A daily paper radar for statistical genetics, single-cell genomics, computational biology, QTL/GWAS resources, regulatory sequence models, and GPU-accelerated analysis.
+Statistical genetics, molecular QTL and cell/spatial genetics reading notes.
 
-The public site is intended to be served at `https://papers.lucajiang.com`.
+Production: https://papers.lucajiang.com
 
-## Local development
+## Content
 
-```bash
-npm install
-npm run dev
-```
+- `src/content/daily/YYYY-MM-DD.md`: dated issue with `published: true` and canonical paper IDs.
+- `src/content/papers/<slug>.md`: independent review, real publication date, bibliography and figure attribution.
+- `docs/selection-guide.md`: research scope and publication criteria.
+- New reviews can place `[figure:1]` / `[figure:2]` next to the corresponding results; set `inlineFigures: true`.
 
-## Production build
+## Build
 
-```bash
-npm run build
-```
+Requires Node.js 22. Run `npm install` and `npm run build`.
+The build retrieves verified image assets, checks Astro types, renders KaTeX and validates internal links, issue counts and inline figures. A failed check prevents deployment.
 
-Cloudflare Pages settings:
-
-- Production branch: `master`
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Root directory: repository root
+Cloudflare Pages listens to `master`, runs `npm run build`, and serves `dist`. GitHub Actions validates work branches before publishing. There is no scheduled paper-generation workflow in this repository; publishing remains manual during review.

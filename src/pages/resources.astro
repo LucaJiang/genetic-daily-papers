@@ -1,41 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-
-const releases = [
-  {
-    date: '2026-09-01',
-    title: 'OmicsPred',
-    body: 'Nature Genetics 发表的多组学遗传预测模型资源，统一收录转录组、蛋白组和代谢组权重及训练样本、祖源、平台和预测性能元数据。',
-    href: 'https://www.omicspred.org/',
-  },
-  {
-    date: '2026-05-28',
-    title: 'GTEx V11 bulk RNA-seq data',
-    body: 'Adult GTEx RNA-seq 数据更新到 GENCODE 47。V11 没有增加 donor 或 sample；表达和 QTL 文件按新注释重新处理，并提供 eQTL、sQTL 与 apaQTL 的 SuSiE fine-mapping 文件。',
-    href: 'https://gtexportal.org/home/downloads/adult-gtex/overview',
-  },
-  {
-    date: '2026-05-05',
-    title: 'Developmental GTEx V1',
-    body: 'dGTEx 首次发布，用于研究发育阶段和组织背景中的表达与遗传调控。',
-    href: 'https://www.gtexportal.org/',
-  },
-  {
-    date: '2026-05-05',
-    title: 'NHP-dGTEx V1',
-    body: '非人灵长类发育 GTEx 首次发布，覆盖 rhesus macaque 与 common marmoset，为跨物种发育调控比较提供数据入口。',
-    href: 'https://www.gtexportal.org/',
-  },
-].sort((a, b) => b.date.localeCompare(a.date));
+import PaperCard from '../components/PaperCard.astro';
+import {catalog} from '../lib/catalog';
+const {papers}=await catalog();
+const resources=papers.filter(p=>p.data.kind==='resource'||p.id==='omicspred');
+const releases=[
+ {date:'2026-05-28',title:'GTEx V11 bulk RNA-seq',body:'成人组织表达与 QTL 数据的新版本；各文件的基因注释、数据版本和分析说明以 GTEx 下载页为准。',href:'https://gtexportal.org/home/downloads/adult-gtex/overview'},
+ {date:'2026-05-05',title:'Developmental GTEx V1 / NHP-dGTEx V1',body:'人类与非人灵长类发育组织数据的首次发布。',href:'https://gtexportal.org/'}
+];
 ---
-<Base title="Data releases · Genetic Daily Papers">
-  <section class="hero"><div class="eyebrow">Data releases</div><h1>数据发布</h1><p>GWAS、QTL 和多组学资源的新数据与数据库论文。</p></section>
-  <div class="release-list">
-    {releases.map((release) => (
-      <article class="release-card">
-        <time datetime={release.date}>{release.date}</time>
-        <div><h2>{release.title}</h2><p>{release.body}</p><a href={release.href} target="_blank" rel="noreferrer">查看资源 ↗</a></div>
-      </article>
-    ))}
-  </div>
-</Base>
+<Base title="数据资源 · Genetic Daily Papers"><header class="page-head"><span class="eyebrow">Data resources</span><h1>数据资源</h1><p>遗传参考面板、分子 QTL 图谱与新发表的数据库论文。</p></header><div class="paper-list">{resources.map(p=><PaperCard paper={p}/>)}</div><div class="section-head"><h2>既往数据发布</h2></div>{releases.map(r=><article class="release-card"><time datetime={r.date}>{r.date}</time><div><h2>{r.title}</h2><p>{r.body}</p><a href={r.href} target="_blank" rel="noreferrer">官方数据与版本说明 ↗</a></div></article>)}</Base>

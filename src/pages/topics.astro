@@ -1,20 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
-import { topics } from '../data/topics';
-const papers = await getCollection('papers');
-const count = (slug: string) => papers.filter((paper) => paper.data.topics.includes(slug)).length;
+import {catalog} from '../lib/catalog';
+import {topics} from '../data/topics';
+const {papers}=await catalog();
 ---
-<Base title="Topics · Genetic Daily Papers">
-  <section class="hero hero--v4"><div class="eyebrow">Topics</div><h1>按研究方向浏览</h1></section>
-  <div class="topic-grid topic-grid--v4">
-    {topics.map((topic) => (
-      <a class="topic-card" href={`/topics/${topic.slug}/`}>
-        <span class="topic-card__count">{count(topic.slug)}</span>
-        <h2>{topic.label}</h2>
-        <p>{topic.description}</p>
-        <div class="topic-card__footer"><span>查看论文</span><span>→</span></div>
-      </a>
-    ))}
-  </div>
-</Base>
+<Base title="研究主题 · Genetic Daily Papers"><header class="page-head"><span class="eyebrow">Research areas</span><h1>研究主题</h1></header><div class="topic-grid">{topics.map(t=><a class="topic-card" href={`/topics/${t.slug}/`}><span>{papers.filter(p=>p.data.topics.includes(t.slug)).length} 篇</span><h2>{t.label}</h2><p>{t.description}</p></a>)}</div></Base>
