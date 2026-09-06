@@ -3420,5 +3420,1298 @@
       "EUR"
     ],
     "ancestry": "欧洲祖源；原论文的 cis-eQTL 方法明确将分析 donor 描述为欧洲祖源，并加入基因型主成分校正残余群体结构。"
+  },
+  {
+    "id": "oasis-japan-2025",
+    "name": "OASIS — Osaka Atlas of Immune Cells",
+    "version": "Edahiro et al., Nature Genetics 2025；E-GEAD-1054；2026-09-06 核验",
+    "category": "single-cell",
+    "group": "sc-immune",
+    "navLabel": "OASIS 日本免疫细胞",
+    "tissue": "日本人外周血 PBMC；COVID-19 患者及健康对照",
+    "qtlTypes": [
+      "cis-eQTL",
+      "dynamic eQTL",
+      "cell-state eQTL"
+    ],
+    "summary": "日本人多组学免疫图谱，整合 5′ 单细胞转录组、VDJ、遗传变异及其他组学，提供细胞类型与细胞状态依赖的表达调控结果；可用于东亚祖源免疫 QTL、跨祖源比较和 GWAS 共定位。",
+    "sampleSize": "Atlas 共 235 人（88 患者 + 147 健康对照），2,059,141 个测得细胞中保留 1,506,953 个高质量细胞。公开 eQTL 统计对应 234 人（88 + 146），含 40 个免疫细胞类型／注释层级结果；每类有效 n 不同。",
+    "cellsPerDonor": "按 atlas 总数计算约 6,413 个 QC cells/donor（1,506,953 ÷ 235）；这是总体算术均值，不是中位数，也不是 234 人 eQTL 子集的细胞均值。eQTL 子集总细胞数及 donor 分布未核实。",
+    "assay": "10x Genomics Chromium 5′ scRNA-seq 与 scVDJ-seq；RNA 测序使用 Illumina NovaSeq 6000；配套 WGS（HiSeq X / NovaSeq 6000）。",
+    "depth": "论文报告局部加深测序比较：目标由 20,000 提高至 100,000 reads/cell，并将 read 2 从 90 延长至 270 bp，用于提高 CN-LOH 检出。该深度属于特定子样本设计，不代表全队列平均测序深度；统一实测 RNA reads/cell 未核实。",
+    "access": "E-GEAD-1054 的 sc-eQTL summary statistics 为开放访问；Japan Omics Browser（JOB）提供浏览入口。原始 scRNA 数据经 JGA / hum0197 申请（JGAD000662、JGAD000722、JGAD000925）；234 人 WGS 在 EGA（EGAD00010002742）受控访问。",
+    "limitations": "235 人图谱与 234 人遗传分析需分开；40 个下载结果包含不同注释层级，不能直接相加为互不重叠细胞群。部分原始 scRNA 来自此前 148 人研究，合并旧数据前应核对重复 donor。",
+    "ancestry": "日本祖源（东亚）；atlas 235 人，公开 eQTL / WGS 子集 234 人。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://humandbs.dbcls.jp/en/dataset/E-GEAD-1054",
+    "sources": [
+      {
+        "label": "论文（Nature Genetics 2025）",
+        "url": "https://www.nature.com/articles/s41588-025-02266-3"
+      },
+      {
+        "label": "公开 sc-eQTL 数据与 234 人样本口径（HumanDBs）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/E-GEAD-1054"
+      },
+      {
+        "label": "WGS 数据与访问申请（EGA）",
+        "url": "https://ega-archive.org/studies/EGAS00001008016"
+      },
+      {
+        "label": "公开 summary statistics 文件目录（GEA）",
+        "url": "https://ddbj.nig.ac.jp/public/ddbj_database/gea/experiment/E-GEAD-1000/E-GEAD-1054/"
+      },
+      {
+        "label": "Japan Omics Browser（JOB）",
+        "url": "https://japan-omics.jp/"
+      },
+      {
+        "label": "研究代码与项目说明",
+        "url": "https://github.com/REdahiro/OASIS_project"
+      },
+      {
+        "label": "原始 RNA / 蛋白数据访问（HumanDBs）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/JGAD000925"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1,
+        2
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0,
+        1,
+        2,
+        5
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "ancestry": [
+        0,
+        1,
+        2
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "Nature Results first cohort paragraph reports 235 (88 +147), 2,059,141 initial cells and 1,506,953 QC cells. HumanDBs E-GEAD-1054 Materials and Participants explicitly reports 88 +146 =234, independently matched by EGA WGS dataset count. Atlas mean is calculated as 1506953/235=6412.57; not a reported median or QTL-only mean.",
+      "depthScope": "Nature CN-LOH analysis reports increased target 20,000 to100,000 reads/cell and R2 90to270bp. No claim that100k is the whole-cohort observed depth.",
+      "access": "HumanDBs E-GEAD-1054 labels Unrestricted-access; GEA directory lists a37G processed.zip. JOB news confirms OASIS released July30,2025. No claim that all individual data are public.",
+      "overlap": "Nature Data availability states prior deposited raw scRNA nCOVID73+ncontrol75. Keep as overlap caveat instead of adding the old148-donor study as an independent cohort."
+    }
+  },
+  {
+    "id": "immunexut-bulk",
+    "name": "ImmuNexUT — 日本分选免疫细胞 eQTL",
+    "version": "Ota et al., Cell 2021；E-GEAD-397 / 398 / 420；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-immune",
+    "navLabel": "ImmuNexUT 日本分选免疫",
+    "tissue": "外周血 28 类分选免疫细胞；10 类免疫介导疾病及健康对照",
+    "qtlTypes": [
+      "cis-eQTL",
+      "conditional eQTL",
+      "context-dependent eQTL"
+    ],
+    "summary": "东京大学免疫细胞表达及 eQTL 图谱。对同一 donor 的多个分选免疫细胞群分别进行 bulk RNA-seq，并与 WGS 联合分析，适合日本人免疫疾病、细胞类型特异调控与共定位研究。",
+    "sampleSize": "首发版本 416 名 donor（337 名免疫介导疾病患者、79 名健康对照），共 9,852 个分选细胞群 RNA-seq 样本，覆盖 28 类免疫细胞。9,852 是 donor × 细胞群样本数，独立遗传样本量最多为 416；各细胞群可用 n 不同。",
+    "cellsPerDonor": "不适用：分选细胞群 bulk RNA-seq，没有单细胞 barcode。按总数约 23.7 个分选 RNA 样本/donor（9,852 ÷ 416），不能解释为每人细胞数。",
+    "assay": "分选细胞群 bulk RNA-seq；SMART-seq v4；Illumina HiSeq 2500，100 bp paired-end；配套 WGS。",
+    "depth": "GEA 元数据规定 unique read counts < 6 × 10^6 的样本被排除；这是 RNA-seq 质控下限，不是平均深度。统一的目标／实测平均 reads/sample 未在已核验元数据中报告。",
+    "access": "门户可查询表达及 eQTL；E-GEAD-397 为公开表达计数，E-GEAD-398 为显著 conditional eQTL，E-GEAD-420 为含非显著关联的 nominal statistics。官网 FAQ 明确不提供个体基因型下载；不能把公开 summary statistics 当作开放 WGS。",
+    "limitations": "这是分选 bulk 资源。当前 hum0214-v10 还登记临床转录组及受体谱扩展，但公开 eQTL 仍列 2021 年的 E-GEAD-398 / 420；这些扩展不在此累计为新的独立 QTL cohort。疾病组成、用药和每类细胞有效 n 需结合原始协变量考虑。",
+    "ancestry": "日本人群（东亚祖源）；包含多类疾病和健康 donor，属于同一日本免疫图谱而非跨祖源 meta-analysis。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://www.immunexut.org/faqs",
+    "sources": [
+      {
+        "label": "论文（Cell 2021）",
+        "url": "https://doi.org/10.1016/j.cell.2021.03.056"
+      },
+      {
+        "label": "官方门户 FAQ 与数据入口",
+        "url": "https://www.immunexut.org/faqs"
+      },
+      {
+        "label": "表达数据 assay 与 QC 元数据（GEA）",
+        "url": "https://ddbj.nig.ac.jp/public/ddbj_database/gea/experiment/E-GEAD-000/E-GEAD-397/E-GEAD-397.idf.txt"
+      },
+      {
+        "label": "显著 conditional eQTL（HumanDBs）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/E-GEAD-398"
+      },
+      {
+        "label": "全量 nominal eQTL（HumanDBs）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/E-GEAD-420"
+      },
+      {
+        "label": "官方项目最新目录（hum0214）",
+        "url": "https://humandbs.dbcls.jp/en/research/hum0214"
+      },
+      {
+        "label": "研究机构公告（日本 / 亚洲人群与规模）",
+        "url": "https://www.chugai-pharm.co.jp/english/news/detail/20210506113000_824.html"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1,
+        3,
+        6
+      ],
+      "cellsPerDonor": [
+        1,
+        2
+      ],
+      "assay": [
+        2,
+        5
+      ],
+      "depth": [
+        2
+      ],
+      "access": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "ancestry": [
+        0,
+        6
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "Official FAQ reports416donors,9852samples,28types. E-GEAD-398 participant categories sum337cases plus79healthy=416. 23.6827libraries/donor is a calculated mean, explicitly not cells.",
+      "assay": "GEA E-GEAD-397 description explicitly sorted immune subsets, SMART-seqv4 and100bp paired-end HiSeq2500. Its sample-count QC is6million unique reads, not a reported average. HumanDBs E-GEAD-398 analysis heading misleadingly says Single-cell eQTL; use actual experiment description and original paper to classify as sorted bulk.",
+      "latestCheck": "hum0214 latest page wasv10, includes TCR repertoire release2026-06-12 but conditional/nominal eQTL remain E-GEAD-398/420 dated2021-04-28. No separate updated QTL cohort verified; not independently counted.",
+      "access": "Official FAQ gives397expression,398conditional,420nominal and explicitly declines genome downloads. HumanDBs independently labels all three unrestricted-access derived data."
+    }
+  },
+  {
+    "id": "pheweb-japan-mirna",
+    "name": "BBJ PheWeb · 日本 PBMC miRNA-eQTL",
+    "version": "Sonehara & Sakaue et al., Human Molecular Genetics 2022；在线发表于 2021-12-17；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "BBJ PheWeb · miRNA-eQTL",
+    "tissue": "日本人 PBMC；small RNA 表达",
+    "qtlTypes": [
+      "cis-miRNA-eQTL",
+      "CNV-miRNA-eQTL"
+    ],
+    "summary": "提供 miRNA 表达的遗传关联及与日本 GWAS 的整合结果，补充以 mRNA 为主的 QTL 资源；BBJ PheWeb 收录了该研究的浏览结果。",
+    "sampleSize": "141 名无亲缘 donor；343 个符合表达条件的常染色体 mature miRNA 用于 eQTL。40 个 miRNA 的 cis 关联通过研究采用的 FDR < 0.2。",
+    "cellsPerDonor": "不适用：PBMC 群体 small RNA-seq，没有单细胞 barcode。",
+    "assay": "SMARTer smRNA-Seq；Illumina HiSeq 2500，100 bp single-end；配套 WGS（HiSeq X，2 × 150 bp）。",
+    "depth": "每人比对到 miRNA 的 reads 中位数 1.9 × 10^5；这是 miRNA 比对量，不是原始文库总深度。WGS 平均覆盖 16.5×。",
+    "access": "HumanDBs hum0197.v6.eqtl.v1 公开 eQTL 汇总数据；BBJ PheWeb 可浏览。个体 miRNA read-count 数据 JGAD000621 为受控访问。",
+    "limitations": "PheWeb 是托管入口；本条 QTL N 为 141，不能使用 BBJ GWAS 的二十万级样本量。与下方 JAMIR 的血清 miRNA 芯片队列不同。FDR < 0.2 也不应改写成 0.05。",
+    "ancestry": "东亚祖源；原论文使用 HapMap 参考 PCA 确认全部参与者为 East Asian。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://humandbs.dbcls.jp/en/dataset/hum0197.v6.eqtl.v1",
+    "sources": [
+      {
+        "label": "原论文与数据可用性",
+        "url": "https://academic.oup.com/hmg/article/31/11/1806/6464692"
+      },
+      {
+        "label": "公开 miRNA-eQTL 数据（HumanDBs）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/hum0197.v6.eqtl.v1"
+      },
+      {
+        "label": "BBJ PheWeb：2022-03-12 miRNA-eQTL 发布",
+        "url": "https://pheweb.jp/"
+      },
+      {
+        "label": "研究目录与受控 read counts",
+        "url": "https://humandbs.dbcls.jp/en/research/hum0197/v28"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "primary": "HMG Methods directly confirms HiSeq2500 SE100, miRNA mapped reads median1.9e5, HiSeqX WGS16.5x, ancestry PCA. PheWeb release log explicitly hosts cis-miRNA-eQTL. HumanDBs labels hum0197.v6.eqtl.v1 unrestricted and JGAD000621 controlled. Paper distinguishes79person resequencing validation from141person eQTL."
+    }
+  },
+  {
+    "id": "jamir-eqtl",
+    "name": "JAMIR-eQTL — 日本血清 miRNA 遗传调控",
+    "version": "Akiyama et al., Database 2021；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "JAMIR · 血清 miRNA",
+    "tissue": "NCGG Biobank 日本患者血清；多种痴呆类型、轻度认知障碍及其他诊断",
+    "qtlTypes": [
+      "cis-miRNA-eQTL",
+      "trans-miRNA-eQTL"
+    ],
+    "summary": "血清 miRNA 表达芯片与基因型结合的数据库，提供分疾病及合并分析的 cis/trans 关联，适合研究循环 miRNA 的遗传调控。",
+    "sampleSize": "3,448 名 donor / 血清样本。AD 1,314、DLB 134、VaD 69、FTLD 31、NPH 39、MCI 504、其他 1,357；合并分析与疾病子集重叠。",
+    "cellsPerDonor": "不适用：血清循环 miRNA 的群体测量，不是单细胞测序。",
+    "assay": "Toray 3D-Gene Human miRNA Oligo Chip；Affymetrix Japonica 基因分型芯片并插补。",
+    "depth": "不适用：miRNA 表达来自芯片，无 reads/sample 或测序覆盖度。",
+    "access": "官方 JAMIR-eQTL 门户支持查询及下载各疾病组 FDR < 0.05 的 miR-eQTL。原论文明确可下载显著结果，未确认全量非显著关联或个体数据的开放下载。",
+    "limitations": "疾病组有效 N 从 31 到 1,314 不等。下载的显著关联不能当作全量 summary statistics；血清 miRNA 与 PBMC small RNA-seq 的组织背景及测量方式不同。",
+    "ancestry": "日本 / 东亚祖源；原研究以 1000 Genomes PCA 排除偏离东亚参考簇的样本。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://www.jamir-eqtl.org/",
+    "sources": [
+      {
+        "label": "数据库论文、样本表与下载范围",
+        "url": "https://academic.oup.com/database/article/doi/10.1093/database/baab072/6420097"
+      },
+      {
+        "label": "JAMIR-eQTL 官方门户",
+        "url": "https://www.jamir-eqtl.org/"
+      },
+      {
+        "label": "官方项目说明",
+        "url": "https://jamir-eqtl.org/about/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "primary": "Original paper Subjects and Table1 give3448 and disease-specificN. Actual assay is3D-Gene miRNA array, not smallRNAseq. Download section described as FDR<0.05 only; do not claim fullnominal file. Website is JS shell through web fetch, so no claim interactive current browser/download QA."
+    }
+  },
+  {
+    "id": "jenger-ishigaki-2017",
+    "name": "JENGER 日本免疫细胞 eQTL（BBJ 关联资源）",
+    "version": "Ishigaki et al., Nature Genetics 2017；hum0099.v1.eqtl.v1；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-immune",
+    "navLabel": "JENGER / BBJ · 免疫 eQTL",
+    "tissue": "CD4⁺ T、CD8⁺ T、B、NK、单核细胞及未分选外周血",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cell-type eQTL"
+    ],
+    "summary": "JENGER 收录的日本免疫细胞表达调控参考，也是 BBJ 官方成果目录收录的研究。每位供者的分选细胞群分别做 bulk RNA-seq，可用于东亚 GWAS 的细胞类型解释及 TWAS；实际 eQTL 来源是独立登记的 105 人健康志愿者队列。",
+    "sampleSize": "共 105 名日本健康志愿者（21 男、84 女），每人最多 5 类分选细胞和 1 份全血。后续同队列再分析报告 CD4⁺ T / CD8⁺ T 各 103 人、B / NK 各 104 人、单核细胞 105 人；全血最终 QC 人数本次未在原始元数据中核实。",
+    "cellsPerDonor": "不适用：分选细胞群的 bulk RNA-seq；同一供者的多类细胞样本不增加独立 donor 数。",
+    "assay": "TruSeq Stranded mRNA bulk RNA-seq；Illumina HiSeq 2500，paired-end 125 bp。基因型为 Infinium OmniExpressExome 芯片，经 IMPUTE2 / 1000 Genomes Phase 1 v3 填充；GRCh37。",
+    "depth": "NBDC 登记平均每样本 45.2 million total reads、43.9 million uniquely mapped reads；保留来源的 reads 单位，不换算为 read pairs。20 million reads 是样本 QC 下限，不是平均深度。",
+    "access": "hum0099.v1.eqtl.v1 的逐变异效应量与 P 值汇总统计为 unrestricted access；JENGER 提供关联数据入口。个体表达矩阵 JGAD000085（FPKM）需申请 controlled access；不将该矩阵归档描述成公开 FASTQ。",
+    "limitations": "BBJ / JENGER 同时提供大规模 GWAS，不能用 BBJ 总参与人数替代这里的 105 名 eQTL donor。本研究是分选 bulk，不能当作 scRNA-seq。Yamaguchi 2022 的 isoform / splicing QTL 复用了同一批样本，不能作为独立复制队列累计。",
+    "ancestry": "日本健康志愿者，东亚祖源；不是跨祖源 meta-analysis。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "sources": [
+      {
+        "label": "原论文（Nature Genetics 2017）",
+        "url": "https://doi.org/10.1038/ng.3885"
+      },
+      {
+        "label": "BBJ 官方成果目录",
+        "url": "https://biobankjp.org/publication/2835"
+      },
+      {
+        "label": "105 人队列与访问级别（NBDC hum0099）",
+        "url": "https://humandbs.dbcls.jp/en/research/hum0099/v1"
+      },
+      {
+        "label": "eQTL 汇总统计下载（NBDC）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/hum0099.v1.eqtl.v1"
+      },
+      {
+        "label": "测序平台、深度与表达矩阵申请",
+        "url": "https://humandbs.dbcls.jp/en/dataset/JGAD000085"
+      },
+      {
+        "label": "同队列后续 isoform / splicing QTL 分析（2022）",
+        "url": "https://doi.org/10.1038/s41467-022-32358-1"
+      },
+      {
+        "label": "JENGER 关联数据入口",
+        "url": "http://jenger.riken.jp/en/result"
+      },
+      {
+        "label": "JENGER eQTL 数据来源声明（原研究团队 2022）",
+        "url": "https://ard.eular.org/article/S0003-4967%2824%2920927-4/fulltext"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        2,
+        4,
+        5
+      ],
+      "cellsPerDonor": [
+        2,
+        4
+      ],
+      "assay": [
+        3,
+        4
+      ],
+      "depth": [
+        4
+      ],
+      "access": [
+        2,
+        3,
+        4,
+        7
+      ],
+      "ancestry": [
+        0,
+        2
+      ]
+    },
+    "dataUrl": "https://humandbs.dbcls.jp/en/dataset/hum0099.v1.eqtl.v1",
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "cohortIdentity": "NBDC hum0099 reports 105 Japanese healthy volunteers and the Ishigaki ng.3885 citation. BioBank Japan official publication/2835 independently lists this exact publication. JENGER hosts both BBJ GWAS and immune eQTL; no claim that these 105 donors are the entire BBJ cohort.",
+      "sampleCounts": "NBDC JGAD000085: five immune populations plus whole blood, six samples per participant maximum. Yamaguchi2022 Results explicitly reanalyzes the same 105 donors; Fig2 caption gives CD4 103, CD8 103, B104, NK104, Mono105. PBL n98 appears in later independent analyses but was omitted because no exact original-source confirmation was obtained.",
+      "depth": "JGAD000085 metadata reports HiSeq2500, TruSeq Stranded mRNA, paired-end125bp, mean total/uniquely mapped reads 4.52e7/4.39e7. These are library-level reads, not single-cell depth.",
+      "access": "Unrestricted eQTL summary hum0099.v1.eqtl.v1 released2017-04-24; controlled FPKM JGAD000085 released2020-09-28. JENGER itself timed out, so the stable NBDC download is the main dataUrl; original research-team 2022 data availability confirms eQTL hosted at JENGER."
+    }
+  },
+  {
+    "id": "hgvd-narahara-2014",
+    "name": "HGVD / Nagahama 日本人群全血 eQTL",
+    "version": "Narahara et al., PLOS ONE 2014；HGVD eQTL v8.1（2015-08-05）；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "HGVD / Nagahama",
+    "tissue": "外周血细胞；日本长滨市健康居民",
+    "qtlTypes": [
+      "cis-eQTL",
+      "trans-eQTL",
+      "lincRNA eQTL"
+    ],
+    "summary": "早期东亚人群全血 eQTL 参考，覆盖蛋白编码转录本及 lincRNA，提供日本人群的表达调控关联和等位基因频率。适合补充欧洲参考中频率较低或未覆盖的变异，HGVD 可按位点浏览并批量下载 cis 结果。",
+    "sampleSize": "原研究招募 301 人，最终关联分析为 298 名无亲缘日本参与者。HGVD 当前门户对 eQTL track 标注约 300 人；下载版本与原论文人数分开记录，不能使用门户另外的 3,135 人 WGS 或 4,344 人频率参考规模作为 eQTL n。",
+    "cellsPerDonor": "不适用：外周血 bulk 表达微阵列，没有单细胞捕获计数。",
+    "assay": "Agilent SurePrint G3 Human Gene Expression 8×60K 微阵列（design 028004）；SNP 基因型与转录本表达联合分析，原论文约 1.4 million SNPs。",
+    "depth": "不适用：RNA 表达来自微阵列，不存在 RNA-seq reads/sample 或 reads/cell 深度。",
+    "access": "HGVD 下载页提供 HGVDeQTL-V8_1-cis.tar.gz；eQTL 浏览轨道仅在 GRCh37/hg19。原论文补充文件提供 cis 及 trans 结果；商业用途依 HGVD 当前条款申请许可。",
+    "limitations": "微阵列受探针覆盖及交叉杂交影响；原文 cis 范围为距目标基因 500 kb 内，与 ±1 Mb 的资源定义不同。HGVD 2026 年 v3.10 是基因变异参考更新，不能称为新的 eQTL 测序队列。原始全量 cis 统计、显著关联表与 trans 附表使用时需区分。",
+    "ancestry": "日本长滨市参与者，东亚祖源；HGVD 的频率参考与本 eQTL 分析并非相同样本规模。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "sources": [
+      {
+        "label": "原论文与补充表（PLOS ONE 2014）",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0100924"
+      },
+      {
+        "label": "HGVD eQTL v8.1 下载",
+        "url": "https://www.hgvd.genome.med.kyoto-u.ac.jp/download.html"
+      },
+      {
+        "label": "HGVD 数据来源、样本规模及使用条款",
+        "url": "https://www.hgvd.genome.med.kyoto-u.ac.jp/about.html"
+      },
+      {
+        "label": "HGVD 变异与 eQTL 浏览",
+        "url": "https://www.hgvd.genome.med.kyoto-u.ac.jp/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        2
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2
+      ],
+      "ancestry": [
+        0,
+        2
+      ]
+    },
+    "dataUrl": "https://www.hgvd.genome.med.kyoto-u.ac.jp/download.html",
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "Primary PLOS paper Methods subjects301, Results final298 (102male196female). Current HGVD about page distinguishes eQTL300 from WGS3135, exome1209, SNP-array3248 and combined frequency4344. Do not silently overwrite original study298 with browser maximum300.",
+      "assay": "Primary paper transcript quantification uses Agilent SurePrint G3 Human Gene Expression8x60K design028004. This is expression array and RNA sequencing depth is not applicable.",
+      "release": "Current HGVD download page explicitly separates eQTL Release8.1 dated2015-08-05 from HGVD variants Release3.10 dated2026-08-07. HGVD about states eQTL tracks only GRCh37. Direct download archive linked on official page, not downloaded in this metadata audit."
+    }
+  },
+  {
+    "id": "jctf-job-bulk",
+    "name": "JCTF / JOB 日本人群全血 eQTL 与血浆 pQTL",
+    "version": "Wang et al., Nature Genetics 2024；hum0343.v3.qtl.v1；JOB 2025；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "JCTF / JOB · eQTL / pQTL",
+    "tissue": "日本 COVID-19 临床队列全血 RNA、血浆蛋白；Japan COVID-19 Task Force",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-pQTL",
+      "fine-mapping",
+      "sQTL（早期发布）"
+    ],
+    "summary": "日本全血表达与蛋白调控参考；JOB 将关联统计量、SuSiE / FINEMAP 的 PIP、功能预测和报告实验结果整合到位点浏览界面，可用于东亚 fine-mapping 与共定位。此条按可下载的 JCTF 数据集登记规模收录。",
+    "sampleSize": "hum0343.v3.qtl.v1 登记共 1,405 人：eQTL 实际 1,019 人、pQTL 1,384 人，交集 998 人；蛋白表型数为 2,932。2022 年早期 eQTL / sQTL 发布为 465 人。1,405 是整体队列口径，下载分析须使用相应子集 n。",
+    "cellsPerDonor": "不适用：全血 bulk RNA-seq 和血浆蛋白定量；JOB 另收录的 OASIS 单细胞数据属于其他条目。",
+    "assay": "Poly(A) mRNA、NEBNext Ultra Directional RNA-seq；Illumina NovaSeq 6000，paired-end 100 bp；GRCh38。蛋白为 Olink Explore 3072（2,932 个蛋白）；基因型为 Infinium Asian Screening Array。",
+    "depth": "已核验的 1,019 人发布元数据未给出统一 RNA reads/sample 深度；保留未核实。蛋白数、NPX 及基因表达过滤阈值均不作为 RNA 测序深度。",
+    "access": "JOB 免费浏览；hum0343.v3.qtl.v1 公开 e/pQTL 统计与 PIP，登记的文件保留 P < 0.05 或 PIP > 0.001 的变异—分子对，不能视作未过滤全量统计。E-GEAD-759 公开处理后的 RNA / 蛋白表达数据；早期 465 人 e/sQTL 为 hum0343.v2.qtl.v1。",
+    "limitations": "疾病状态可能改变表达、细胞组成及调控效应；不是健康人群参考。2022 与 2024 发布存在样本重叠，不能合并为独立队列。论文摘要用 1,405 和 2,932 的概括描述；这里以该论文对应的 NBDC 发布登记及 JOB Methods 明确的 1,019 / 1,384 人和 2,932 个蛋白为准。",
+    "ancestry": "日本临床参与者，东亚祖源。JOB 另外展示的 UK Biobank / GTEx 功能注释不改变 JCTF QTL 队列的祖源分类。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "sources": [
+      {
+        "label": "原论文（Nature Genetics 2024）",
+        "url": "https://doi.org/10.1038/s41588-024-01896-3"
+      },
+      {
+        "label": "已发布 e/pQTL：样本分母、统计与 PIP 下载",
+        "url": "https://humandbs.dbcls.jp/en/dataset/hum0343.v3.qtl.v1"
+      },
+      {
+        "label": "RNA / 蛋白表达元数据与平台（E-GEAD-759）",
+        "url": "https://humandbs.dbcls.jp/en/dataset/E-GEAD-759"
+      },
+      {
+        "label": "JOB 论文：Methods 明确 1,019 / 1,384 人",
+        "url": "https://link.springer.com/article/10.1186/s12864-025-11639-1"
+      },
+      {
+        "label": "JOB 下载入口",
+        "url": "https://japan-omics.jp/downloads"
+      },
+      {
+        "label": "早期 465 人 eQTL / sQTL 原论文",
+        "url": "https://doi.org/10.1038/s41467-022-32276-2"
+      },
+      {
+        "label": "NBDC hum0343 当前各版本数据目录",
+        "url": "https://humandbs.dbcls.jp/en/research/hum0343"
+      },
+      {
+        "label": "E-GEAD-759 公开处理数据文件",
+        "url": "https://ddbj.nig.ac.jp/public/ddbj_database/gea/experiment/E-GEAD-000/E-GEAD-759/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "cellsPerDonor": [
+        2,
+        4
+      ],
+      "assay": [
+        1,
+        2
+      ],
+      "depth": [
+        2
+      ],
+      "access": [
+        1,
+        2,
+        4,
+        6,
+        7
+      ],
+      "ancestry": [
+        3,
+        6
+      ]
+    },
+    "dataUrl": "https://japan-omics.jp/downloads",
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "releaseDefinition": "This record describes downloadable hum0343.v3.qtl.v1 released2024-06-24, metadata last modified2026-08-13. Not an assertion that every count in the paper abstract matches its methods; source0 abstract wording is loose. Source1 explicitly gives total1405 = e1019 + p1384 - intersection998; source2 explicitly gives2932 proteins. JOB2025 Methods independently confirms1019eQTL/1384pQTL. Current NBDC research-v5 adds COVID GWAS but QTL dataset remains v3.qtl.v1.",
+      "assayDepth": "E-GEAD-759 official metadata confirms NEBNext Poly(A) and Ultra Directional, NovaSeq6000 PE100bp. The metadata does not provide library-level read depth; RNA counts/TPM cutoffs are gene QC criteria, not sequencing depth.",
+      "access": "Source1 expressly says files summarized pairs with pvalue<0.05 or PIP>0.001, so these public files are filtered. Processed matrices E-GEAD-759 are unrestricted; its indexed public directory has processed.zip89MB. Did not download individual genotype or FASTQ; no claim they are open.",
+      "portalUpdates": "JOB homepage and downloads read live: OASIS release July30,2025 is now present, not merely planned. OASIS and JCTF donor sets may overlap in clinical recruitment; no assumption of independent individuals when combining."
+    }
+  },
+  {
+    "id": "best-bangladesh",
+    "name": "BEST — 孟加拉 PBMC eQTL",
+    "version": "Pierce et al., PLOS Genetics 2014；Dryad 2015-11-20 发布；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "BEST · 孟加拉",
+    "tissue": "外周血 PBMC；Bangladesh Vitamin E and Selenium Trial（BEST）",
+    "qtlTypes": [
+      "cis-eQTL",
+      "trans-eQTL"
+    ],
+    "summary": "大型南亚 PBMC 表达芯片队列，提供 cis / trans 关联及 cis 表达介导 trans 效应的统计结果，可用于南亚调控变异查找和中介分析方法比较。",
+    "sampleSize": "1,825 人同时具有表达及基因型，质控后 1,799 人进入 2014 年 eQTL 分析；不是 BEST 临床试验全部人数。",
+    "cellsPerDonor": "不适用：PBMC bulk 表达芯片；无单细胞层面的 cells/donor。",
+    "assay": "Illumina HumanHT-12 v4 表达芯片；配套基因分型与插补。",
+    "depth": "不适用：表达芯片，不产生 RNA-seq reads 或 reads/cell。",
+    "ancestryTags": [
+      "SAS"
+    ],
+    "ancestry": "1,799 名孟加拉国成年人；原研究明确为 South Asian 队列。",
+    "access": "Dryad 10.5061/dryad.tp097 公开 cis-eQTL（P < 0.05）、trans-eQTL（P < 10⁻⁴）以及 781 个候选 trans 关联的中介分析结果；不是所有检验的无阈值全量汇总统计。",
+    "limitations": "BEST 已贡献至 eQTLGen Phase I，二者不能视为独立复制。2018 年 eQTL–meQTL 扩展研究采用 BEST 的 992 人 eQTL 子集；HEALS 347 人仅用于 meQTL 复制，不是新增的 347 人 eQTL 队列。下载结果有 P 值截断，分析前需检查所需区域是否完整。",
+    "dataUrl": "https://datadryad.org/dataset/doi:10.5061/dryad.tp097",
+    "sources": [
+      {
+        "label": "原始 eQTL 论文与队列方法（PLOS Genetics 2014）",
+        "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1004818"
+      },
+      {
+        "label": "cis / trans / mediation 下载与筛选阈值（Dryad）",
+        "url": "https://datadryad.org/dataset/doi:10.5061/dryad.tp097"
+      },
+      {
+        "label": "eQTLGen Phase I 贡献队列",
+        "url": "https://www.eqtlgen.org/phase1.html"
+      },
+      {
+        "label": "BEST / HEALS 的 eQTL–meQTL 分析口径（Nature Communications 2018）",
+        "url": "https://www.nature.com/articles/s41467-018-03209-9"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0,
+        1
+      ],
+      "access": [
+        1
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "PLOS original methods: 1825 matched expression/genotype, 26 excluded, final1799. 2018 Nature Results independently separates992 BEST eQTL from337 BEST meQTL and347 HEALS meQTL replication.",
+      "assayDepth": "Original PLOS gene-expression section identifies HumanHT-12-v4. Microarray read depth is not applicable.",
+      "release": "Dryad live primary record lists cis145.96 MB/trans332.84 MB/mediation103.59 KB and explicitly reports P<0.05/P<0.0001 truncation. No claim of open individual genotypes or all-tested-pair statistics.",
+      "overlap": "eQTLGen official phase1 consortium list explicitly includes BEST."
+    }
+  },
+  {
+    "id": "hapmap3-lcl",
+    "name": "HapMap3 LCL — 多祖源表达芯片 eQTL",
+    "version": "Stranger et al., PLOS Genetics 2012；E-MTAB-264 / E-MTAB-198；2026-09-06 核验",
+    "category": "bulk",
+    "group": "cell-models",
+    "navLabel": "HapMap3 · 多祖源 LCL",
+    "tissue": "淋巴母细胞系（LCL）；8 个人群",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "覆盖东亚、南亚、欧洲、非洲及美洲混合祖源的经典 LCL 调控数据，适合研究 eQTL 的跨人群共享、祖源结构和表达遗传预测。",
+    "sampleSize": "论文实际分析 726 人：CHB 80、JPT 82、GIH 82、CEU 109、LWK 82、MKK 138、YRI 108、MEX 45。公开表达归档的原始样本计数与最终分析数略有差异。",
+    "cellsPerDonor": "不适用：每条 LCL 以 bulk 芯片测量；每条细胞系有 2 次技术重复，不能计为 2 个独立 donor。",
+    "assay": "Illumina Sentrix Human-6 Expression BeadChip v2；配套 HapMap3 SNP 基因型。",
+    "depth": "不适用：表达芯片，无 RNA-seq 测序深度。",
+    "ancestryTags": [
+      "EAS",
+      "SAS",
+      "EUR",
+      "AFR",
+      "AMR",
+      "MULTI"
+    ],
+    "ancestry": "东亚 CHB / JPT；南亚 GIH（居住美国休斯敦的 Gujarati Indians）；欧洲 CEU；非洲 LWK / MKK / YRI；美洲混合祖源 MEX。GIH 的采样地在美国，不改变其南亚人群归属。",
+    "access": "BioStudies / ArrayExpress E-MTAB-264 公开 7 个人群的表达数据，CEU 表达另见 E-MTAB-198；配套基因型参考 HapMap / IGSR。原论文将 eQTL 结果发布于 Genevar，旧服务当前可用性未核实；这里提供已核验的表达归档入口。",
+    "limitations": "该条是 bulk LCL 芯片资源。HapMap 与 1000 Genomes / GEUVADIS 有样本重叠，合并前需按 sample ID 去重；不同祖源的样本量应分别使用。旧版探针和基因组注释需与现代 GWAS 数据对齐。",
+    "dataUrl": "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-264",
+    "sources": [
+      {
+        "label": "原始论文与各人群样本量（PLOS Genetics 2012）",
+        "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1002639"
+      },
+      {
+        "label": "7 个人群表达数据（BioStudies E-MTAB-264）",
+        "url": "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-264"
+      },
+      {
+        "label": "CEU 表达数据（BioStudies E-MTAB-198）",
+        "url": "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-198"
+      },
+      {
+        "label": "表达归档与 1000 Genomes 重叠说明（IGSR）",
+        "url": "https://www.internationalgenome.org/category/gene-expression/"
+      },
+      {
+        "label": "HapMap 与 1000 Genomes 样本关系（IGSR）",
+        "url": "https://www.internationalgenome.org/category/data-analysis/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1,
+        2
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "Primary PLOS RNA-preparation and genetic-variation sections enumerate all8 population counts summing726. BioStudies API confirms E-MTAB-264 has618 archived samples from7 populations, not the726 final analysis; E-MTAB-198 separately stores CEU.",
+      "assayDepth": "PLOS gene-expression quantification: Sentrix Human-6 v2, two replicate hybridizations per cell line. No sequencing read depth.",
+      "release": "BioStudies live pages and E-MTAB-264 API accessible. IGSR official expression page links both accessions and describes overlap with1000 Genomes. Genevar publication-time availability stated explicitly as historical, not verified currently.",
+      "ancestry": "GIH82 South Asian origin sampled Houston; CHB80/JPT82 East Asian; do not label all samples Asian."
+    }
+  },
+  {
+    "id": "singapore-neutrophil-2015",
+    "name": "Singapore Chinese neutrophil eQTL（Andiappan）",
+    "version": "Andiappan et al., Nature Communications 2015；GSE70044；2026-09-06 核验",
+    "category": "bulk",
+    "group": "bulk-immune",
+    "navLabel": "新加坡华人 · 中性粒细胞",
+    "tissue": "纯化中性粒细胞；新加坡招募的健康华人",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "在新加坡华人中定位中性粒细胞表达调控变异，补充 PBMC 图谱通常缺少的粒细胞背景；提供公开表达矩阵及显著 cis-eQTL 表。",
+    "sampleSize": "114 名 donor 进入基因型–表达关联分析；论文报告年龄 18–29 岁、中位数 21 岁。",
+    "cellsPerDonor": "不适用：纯化细胞群的 bulk 表达芯片；没有逐细胞转录组。",
+    "assay": "Illumina HumanHT-12 v4 Expression BeadChip；Illumina Omni5Quad 基因分型。",
+    "depth": "不适用：表达芯片，不报告 RNA-seq reads/cell。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "ancestry": "114 名 Chinese ethnicity donor，新加坡国立大学招募；按论文人群描述归为东亚。新加坡是采样地点，不能据此推定为马来或其他东南亚祖源。",
+    "access": "GEO GSE70044 提供表达芯片数据；论文 Supplementary Data 1 提供 21,210 条显著 eQTL（832 个基因）的统计表。未确认无阈值全量汇总统计或个体基因型的公开下载入口。",
+    "limitations": "纯化 bulk 与单细胞 eQTL 的采样单位不同；公开 eQTL 表经过显著性筛选。不能将新加坡的不同研究自动视为独立 donor 队列，跨 SSIC / 其他新加坡研究合并时需另行确认样本重叠。",
+    "dataUrl": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70044",
+    "sources": [
+      {
+        "label": "原始论文、队列与技术平台（Nature Communications 2015）",
+        "url": "https://www.nature.com/articles/ncomms8971"
+      },
+      {
+        "label": "表达芯片数据（GEO GSE70044）",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70044"
+      },
+      {
+        "label": "显著 eQTL 下载（Supplementary Data 1）",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fncomms8971/MediaObjects/41467_2015_BFncomms8971_MOESM838_ESM.xlsx"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0,
+        1
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0,
+        1
+      ],
+      "ancestry": [
+        0
+      ],
+      "access": [
+        0,
+        1,
+        2
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-06",
+      "sampleCounts": "Nature abstract, Results and Samples sections independently state114 donors; Samples explicitly Chinese ethnicity recruited atNUS, medianage21 range18–29.",
+      "assayDepth": "Nature primary HTML fetched directly; exact platform HumanHT-12-v4 and Omni5Quad verified. Only cohort metadata recorded.",
+      "release": "Primary Nature Results reports21210 significant eQTLs and links Supplementary Data1; primary HTML supplies exact XLSX URL. GEO record initially opened successfully; repeat request later served CAPTCHA. No all-tested-pair/full-genotype access claim.",
+      "classification": "A Singapore recruitment study of Chinese-ethnicity donors belongs in EAS ancestry filter, not SEA inferred from country."
+    }
+  },
+  {
+    "id": "helios-bulk",
+    "name": "HELIOS — 新加坡多祖源全血 eQTL",
+    "navLabel": "HELIOS 新加坡",
+    "group": "bulk-blood",
+    "version": "Wang et al., Nature Communications 2026（2025-12-30 online）",
+    "tissue": "全血；新加坡一般人群",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "HELIOS 的群体 bulk RNA-seq 子队列，补充东亚、南亚和东南亚血液调控遗传学数据，并与代谢物及临床表型整合。",
+    "sampleSize": "整个 HELIOS 队列 10,004 人；RNA-seq 1,234 人，质控后 1,228 人进入表达及 cis-eQTL 分析，不能将整个队列人数作为 eQTL n。",
+    "assay": "NEBNext Ultra II Directional RNA Library Prep；globin / rRNA depletion；Illumina NovaSeq 6000，2 × 150 bp；配套 WGS。",
+    "depth": "RNA 实验目标至少 30 M aligned reads/library（正文同时写约 9 Gb，保留作者 reads 原单位，不换算为 read pairs）；未提供统一实测均值。WGS 约 30×。",
+    "access": "作者 GitHub Data-Blobs 可直接下载 HELIOS-ciseQTLs-novel.txt.gz；README 明确该文件是 novel cis-eQTL 子集。完整基因型、RNA及临床个体数据须向 HELIOS Data Access Committee 申请。",
+    "limitations": "现有公开文件是新发现 cis-eQTL 子集，不是所有基因、所有被检验 SNP–gene 对的全量统计量。HELIOS 同时为 AIDA 贡献 donor，联合使用前需核对个体重叠。",
+    "ancestry": "新加坡华人／其他东亚、印度人／其他南亚、马来人／其他东南亚。整体 10,004 人的族群比例不能直接套用于 1,228 人 QTL 子集；后者祖源分项 n 本次未核实。",
+    "ancestryTags": [
+      "EAS",
+      "SAS",
+      "SEA",
+      "MULTI"
+    ],
+    "dataUrl": "https://github.com/HELIOS-SG100K-LKC/HELIOS-Study-design-and-baseline-characteristics/tree/main/Data-Blobs",
+    "sources": [
+      {
+        "label": "原论文与样本、RNA-seq 方法",
+        "url": "https://www.nature.com/articles/s41467-025-65774-0"
+      },
+      {
+        "label": "作者公开 novel cis-eQTL 下载与说明",
+        "url": "https://github.com/HELIOS-SG100K-LKC/HELIOS-Study-design-and-baseline-characteristics/tree/main/Data-Blobs"
+      },
+      {
+        "label": "AIDA 原论文（HELIOS 来源）",
+        "url": "https://www.cell.com/cell/fulltext/S0092-8674%2825%2900202-8"
+      }
+    ],
+    "fieldSources": {
+      "access": [
+        0,
+        1
+      ],
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Official Nature full text retrieved locally. RNAseq methods: 1234 measured, six failed sex check, 1228 downstream; Fig.7 explicitly labels cis-eQTL n=1228. Target reported as 30M aligned reads/library (~9Gb).",
+      "release": "GitHub API tree and Data-Blobs README inspected: only HELIOS-ciseQTLs-novel.txt.gz (10.6MB) plus README, which states novel cis-eQTL summary statistics. Do not advertise full cis statistics.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "gusto-imomdb",
+    "name": "GUSTO / iMOMdb — 亚洲孕妇全血 eQTL / meQTL",
+    "navLabel": "GUSTO / iMOMdb",
+    "group": "bulk-blood",
+    "version": "Pan et al., Human Molecular Genetics 2022",
+    "tissue": "孕 26–28 周母体全血；DNA 甲基化来自 buffy coat",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-meQTL"
+    ],
+    "summary": "新加坡 GUSTO 孕妇的基因型、表达与 DNA 甲基化整合资源；提供孕期和亚洲多族群背景下的调控 QTL。",
+    "sampleSize": "基因型 1,079 人；RNA-seq 238 人，其中 233 人有配对基因型进入 eQTL；meQTL 为 915 人。不同组学人数不相加。",
+    "assay": "Whole-transcriptome bulk RNA-seq，Illumina HiSeq 4000，2 × 100 bp；Illumina OmniExpress + exome 基因型芯片，DNA 甲基化为 MethylationEPIC 芯片。",
+    "depth": "原论文所核验的 RNA-seq 方法未报告统一 reads/sample 目标或实测均值。文中 30× 是用于外部 Roadmap RRBS 对照的覆盖阈值，不是 GUSTO RNA-seq 深度。",
+    "access": "iMOMdb 公开查询 eQTL、meQTL 和族群相关分子特征；RNA 表达数据归档 GSE182409，甲基化 GSE158063。临床资料须申请；未核实存在所有不显著 SNP–gene 对的完整下载。",
+    "limitations": "孕妇特定生理状态，不能无条件外推至一般成人；RNA 总体 238 人与配对 eQTL 233 人应区分。",
+    "ancestry": "华人、马来人和印度人；238 人 RNA 子集分别为 146 / 48 / 44。该分项是 RNA 总体，不是 233 人 eQTL 配对子集的祖源计数。",
+    "ancestryTags": [
+      "EAS",
+      "SAS",
+      "SEA",
+      "MULTI"
+    ],
+    "dataUrl": "https://imomdb.bii.a-star.edu.sg/",
+    "sources": [
+      {
+        "label": "原论文（Table 1、Table 2 与方法）",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9476622/"
+      },
+      {
+        "label": "iMOMdb 官方数据门户",
+        "url": "https://imomdb.bii.a-star.edu.sg/"
+      },
+      {
+        "label": "RNA-seq 数据归档 GSE182409",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE182409"
+      },
+      {
+        "label": "甲基化数据归档 GSE158063",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158063"
+      }
+    ],
+    "fieldSources": {
+      "access": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Official PMC full text inspected locally. Table1 provides 238 RNA donors (146 Chinese/48 Malay/44 Indian); Table2 and cis-eQTL results provide matched n=233 and meQTL n=915. RNA methods provide HiSeq4000; Table1 PE100. No aggregate RNA sequencing depth found.",
+      "portal": "Portal is public but dynamic/browser compatibility page prevented full catalogue inspection; access scope is as stated in original article, not a claim that all full statistics were downloaded.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "cnbrainqtl-2024",
+    "name": "CNBrainQTL — 中国脑与跨祖源 eQTL",
+    "navLabel": "CNBrainQTL 中国脑",
+    "group": "bulk-brain",
+    "version": "Chen et al., American Journal of Human Genetics 2024",
+    "tissue": "死后前额叶皮层；中国脑库与 BrainGVEx",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-sQTL"
+    ],
+    "summary": "提供汉族前额叶 bulk QTL，并与非裔美国人及欧洲祖源结果比较；适合东亚脑疾病 GWAS 的功能解释和跨祖源调控效应分析。",
+    "sampleSize": "东亚汉族 217 人；比较组为 BrainGVEx 非裔美国人 158 人、欧洲祖源 408 人，共 783 人。",
+    "assay": "中国子队列：rRNA-depleted bulk RNA-seq，BGISEQ-500，single-end 50 bp；配套 BGISEQ-500 WGS。比较组沿用 BrainGVEx 数据。",
+    "depth": "中国子队列 DNA WGS 平均 10×；已核验 RNA 方法未给出统一 reads/sample 深度。10× 不用于 RNA。",
+    "access": "作者 GitHub eQTL_results 提供 EAS / AA / EUR 的 nominal.sig.eQTL.full.txt.gz；这些为显著 eQTL 配对结果。中国原始序列归档 GSA-Human HRA000108，个体数据按归档审批；sQTL 分析代码开放，未确认同目录有全量 sQTL 统计文件。",
+    "limitations": "比较组来自 PsychENCODE / BrainGVEx，不可视作全新独立 cohort。MetaBrain 等整合资源可能重复使用来源个体，联合分析前核对 donor；CNBrain 门户旧地址稳定性未核实，优先作者 GitHub。",
+    "ancestry": "东亚组为 217 名汉族 donor；另有 158 名非裔美国人和 408 名欧洲祖源 donor 的分层结果。",
+    "ancestryTags": [
+      "EAS",
+      "AFR",
+      "EUR",
+      "MULTI"
+    ],
+    "dataUrl": "https://github.com/liusihan/population-compare-pipeline/tree/master/eQTL_results",
+    "sources": [
+      {
+        "label": "原论文与数据可用性",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11568756/"
+      },
+      {
+        "label": "作者 eQTL 统计量下载",
+        "url": "https://github.com/liusihan/population-compare-pipeline/tree/master/eQTL_results"
+      },
+      {
+        "label": "中国原始序列 HRA000108",
+        "url": "https://ngdc.cncb.ac.cn/gsa-human/browse/HRA000108"
+      }
+    ],
+    "fieldSources": {
+      "access": [
+        0,
+        1,
+        2
+      ],
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Official PMC full text retrieved. Subjects/methods reports EAS Han Chinese n=217, RNA BGISEQ500 single end50, WGS10x. AA158/EUR408 source BrainGVEx confirmed in Results.",
+      "release": "Author repository README identifies CNBrainQTL and the GitHub folder. GitHub API contents independently confirmed exactly three ancestry-stratified nominal.sig.eQTL.full.txt.gz files; despite full in filename, sig indicates significant results, not all nominal tests.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "korean-cd-eqtl",
+    "name": "Korean Crohn’s disease — 全血 eQTL",
+    "navLabel": "韩国 Crohn’s disease",
+    "group": "bulk-blood",
+    "version": "Jung et al., Frontiers in Genetics 2020",
+    "tissue": "韩国 Crohn’s disease 患者全血；Asan Medical Center",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "韩国疾病背景的全血表达调控数据；可用于东亚 IBD GWAS 与表达调控整合，并补充健康人血液参考。",
+    "sampleSize": "101 名韩国 Crohn’s disease 患者，有配对基因型与 RNA-seq；检测约 645 万 SNP 和 21,718 个表达基因。",
+    "assay": "Illumina TruSeq Stranded Total RNA / Ribo-Zero Globin；HiSeq 2500，2 × 101 bp；基因型芯片与填补。",
+    "depth": "实测每份样本 >93 M raw reads，平均 117 M raw reads（作者 reads 单位，不换算 read pairs）；15 人曾补测，仍计为原 101 名 donor。",
+    "access": "RNA-seq 归档 GSE143507；论文提供 asan.crohneqtl.com eQTL browser 及补充结果。旧门户当前可用性未核实，GEO 与论文保留稳定来源；未确认全量非显著 SNP–gene 统计量下载。",
+    "limitations": "仅疾病队列；炎症状态、用药和细胞组成可能影响表达。门户链接及汇总数据完整性需在实际取数时再确认。",
+    "ancestry": "韩国人，东亚群体；101 名患者为此 eQTL 队列，文中的疾病 GWAS 更大样本量不属于 eQTL。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE143507",
+    "sources": [
+      {
+        "label": "原论文与 RNA 测序深度",
+        "url": "https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2020.00486/full"
+      },
+      {
+        "label": "RNA-seq 数据归档 GSE143507",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE143507"
+      },
+      {
+        "label": "作者 eQTL browser（历史入口）",
+        "url": "http://asan.crohneqtl.com/"
+      }
+    ],
+    "fieldSources": {
+      "access": [
+        0,
+        1,
+        2
+      ],
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Primary Frontiers methods and data-availability statement inspected. RNA depth exact report: >93 million raw reads in every sample,117 million average; 15 resequenced samples are not additional donors. Browser existence cited by original paper, not currently tested.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "korean-asthma-eqtl",
+    "name": "Korean asthma — PBMC bulk eQTL",
+    "navLabel": "韩国哮喘 PBMC",
+    "group": "bulk-blood",
+    "version": "Kim et al., BMC Medical Genomics 2023",
+    "tissue": "韩国哮喘患者 PBMC；bulk 测量",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "韩国哮喘患者 PBMC 的表达调控数据，用于比较疾病背景与健康血液 eQTL，并解释哮喘 GWAS。",
+    "sampleSize": "原始 436 人，基因型 QC 排除 3 人后 433 人进入 eQTL；分析 24,066 基因及约 668 万 SNP。",
+    "assay": "Swift RNA Library Kit 与 IDT Exome v2.0；Illumina NovaSeq 6000，2 × 100 bp；Korea Biobank Array 基因型芯片及填补。",
+    "depth": "已核验原论文未给出统一目标或实测 reads/sample；不由测序平台或 PBMC 数量推算。",
+    "access": "Table S1（Additional file 1）公开 340,274 个显著 cis-eQTL SNP–gene 配对；RNA-seq 归档 GSE226825。未确认所有未显著检验的全量统计量或公开个体基因型。",
+    "limitations": "PBMC 是混合细胞 bulk，不能据此称为 sc-eQTL。样本来自哮喘患者，不等同于一般人群或肺组织 eQTL。",
+    "ancestry": "433 名韩国患者，东亚群体；日本 GWAS 仅用于下游整合，不是此 eQTL 队列的 donor。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "dataUrl": "https://link.springer.com/article/10.1186/s12920-023-01677-7",
+    "sources": [
+      {
+        "label": "原论文、方法与补充 Table S1 下载",
+        "url": "https://link.springer.com/article/10.1186/s12920-023-01677-7"
+      },
+      {
+        "label": "RNA-seq 数据归档 GSE226825",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE226825"
+      }
+    ],
+    "fieldSources": {
+      "access": [
+        0,
+        1
+      ],
+      "sampleSize": [
+        0
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0
+      ],
+      "depth": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Primary Springer full text inspected: 436 original,3 genotype QC exclusions,433 final; Swift/IDT/NovaSeq6000 PE100. Supplement TableS1 explicitly results of cis-eQTLs in433 Korean asthma patients and Results reports340274 significant pairs.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "mage-lcl",
+    "name": "MAGE — 1000 Genomes 多祖源 LCL eQTL / sQTL",
+    "navLabel": "MAGE 多祖源 LCL",
+    "group": "cell-models",
+    "version": "Taylor et al., Nature 2024；Zenodo v1.0，含 2026-04-03 样本更正通知",
+    "tissue": "1000 Genomes Project 淋巴母细胞系（LCL）",
+    "qtlTypes": [
+      "cis-eQTL",
+      "cis-sQTL",
+      "fine-mapping"
+    ],
+    "summary": "开放的全球多祖源转录组与遗传调控资源，覆盖东亚和南亚；提供表达、剪接、QTL、aFC、SuSiE fine-mapping 与 GWAS 共定位。",
+    "sampleSize": "2024 年已发表 QTL 分析为 731 名 donor，779 个 RNA 文库；26 个群体各 27–30 人。2025 年后续 RNA 扩展数据发布应与该 731 人 QTL 版本分开。",
+    "assay": "Poly(A)-selected、unstranded NEBNext Ultra II RNA Library Prep；Illumina NovaSeq 6000，2 × 150 bp；配套 1KGP 高覆盖度 WGS。",
+    "depth": "原研究 RNA 设计最低目标 25 M reads/sample（Supplementary Methods 原单位）；实测逐文库 sequencing metrics 随 Zenodo 提供，本次未汇总为均值。",
+    "access": "Zenodo 10535719 公开表达／剪接矩阵、eQTL / sQTL 与 fine-mapping 结果；原始 RNA 为 SRA PRJNA851328，基因型来自开放 1KGP。IGSR 提供后续 RNA 扩展数据。",
+    "limitations": "官方 2026-03-27 发现 HG00237 / NA11919 文库标签互换；4月3日 SRA 已新增更正 runs（SRR37907959、SRR37907958），但当前 Zenodo 通知仍称统计量尚未更新，分析应固定版本并处理此问题。与 GEUVADIS 等 1KGP 转录组资源有 donor 重叠。",
+    "ancestry": "26 个 1KGP 群体，覆盖东亚、南亚、非洲、欧洲及美洲混合祖源；东亚／南亚可由 sample metadata 选择，不能把 731 视为亚洲 donor 数。",
+    "ancestryTags": [
+      "EAS",
+      "SAS",
+      "AFR",
+      "EUR",
+      "AMR",
+      "MULTI"
+    ],
+    "dataUrl": "https://zenodo.org/records/10535719",
+    "sources": [
+      {
+        "label": "原论文与样本规模",
+        "url": "https://www.nature.com/articles/s41586-024-07708-2"
+      },
+      {
+        "label": "统计量、样本 metadata 与 2026 更正通知",
+        "url": "https://zenodo.org/records/10535719"
+      },
+      {
+        "label": "测序方法（Supplementary Information）",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-024-07708-2/MediaObjects/41586_2024_7708_MOESM1_ESM.pdf"
+      },
+      {
+        "label": "IGSR 后续 MAGE RNA 数据发布",
+        "url": "https://www.internationalgenome.org/announcements/New-MAGE-rnaseq-data-release/"
+      },
+      {
+        "label": "原始 RNA 数据 PRJNA851328",
+        "url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA851328"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        3
+      ],
+      "assay": [
+        2
+      ],
+      "depth": [
+        1,
+        2
+      ],
+      "access": [
+        0,
+        1,
+        3,
+        4
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "ancestry": [
+        0
+      ]
+    },
+    "evidence": {
+      "primaryAccess": "Official Nature full text and supplementary PDF inspected; Supplementary Methods lines137-142 specify unstranded NEBNextUltraII polyA, NovaSeq6000 PE150,desired minimum25Mreads/sample.",
+      "release": "Zenodo page checked2026-09-06, modified2026-04-08; explicit sample swap notice and April3 correction states repository NOT yet updated. Dataset v1.0 remains59.5GB. Current SRA sample swap affects a library used in QTL mapping.",
+      "checkedAt": "2026-09-06"
+    },
+    "category": "bulk",
+    "cellsPerDonor": "不适用：bulk RNA-seq，每个样本为混合细胞群，不提供单细胞计数。"
+  },
+  {
+    "id": "cbea-maeea-bulk",
+    "name": "CBEA / MAEEA — 中国血液 eQTL 与东亚 meta-analysis",
+    "version": "Wang et al., National Science Review 2026；2026-09-02 accepted manuscript；Zenodo v2",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "CBEA / MAEEA 东亚",
+    "tissue": "全血；中国 CBEA 与日本 JCTF",
+    "qtlTypes": [
+      "cis-eQTL"
+    ],
+    "summary": "中国全血 cis-eQTL 队列 CBEA 及其与日本队列整合的 MAEEA，为东亚复杂性状研究提供祖源匹配的表达调控统计量。MAEEA 报告约 280 万项 cis-eQTL 关联，涉及 13,376 个 eGenes。",
+    "sampleSize": "中国 CBEA 1,005 人；与日本 JCTF 1,019 人 meta-analysis 后 MAEEA 共 2,024 人。MAEEA 包含两个来源队列，不能与 CBEA、JCTF 重复累计为独立 donor。",
+    "cellsPerDonor": "不适用：全血 bulk 表达测量，不提供单细胞计数。",
+    "assay": "全血群体转录组与基因型关联分析；本次未核实 CBEA 的建库方式、测序平台及读长，不套用 JCTF 的实验参数。",
+    "depth": "本次未核实 CBEA RNA 的每样本实测深度及目标深度；不根据片段检索结果推断 reads 或 read pairs。",
+    "access": "Zenodo 10.5281/zenodo.21296030 明确存放 CBEA 与 MAEEA 全量 cis SNP–gene association statistics。2026-09-06 检查时记录可公开浏览，但文件标记 Restricted，需获得相应访问权限；不能当作免申请下载。",
+    "limitations": "MAEEA 为 CBEA 与 JCTF 的整合结果，不是第三个独立队列。论文目前为 accepted manuscript，元数据及文件访问条件可能随正式版本更新；本次未验证显著结果的独立公开下载入口。",
+    "ancestry": "东亚：中国 CBEA 与日本 JCTF。中国子队列的民族分项人数本次未核实。",
+    "ancestryTags": [
+      "EAS"
+    ],
+    "sources": [
+      {
+        "label": "原论文与 CBEA / MAEEA 样本量（accepted manuscript）",
+        "url": "https://academic.oup.com/nsr/advance-article/doi/10.1093/nsr/nwag566/8779978"
+      },
+      {
+        "label": "作者原稿 PDF 与数据声明",
+        "url": "https://academic.oup.com/nsr/advance-article-pdf/doi/10.1093/nsr/nwag566/70922582/nwag566.pdf"
+      },
+      {
+        "label": "全量 CBEA / MAEEA cis-eQTL 统计量（当前 Restricted）",
+        "url": "https://zenodo.org/records/21296030"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "cellsPerDonor": [
+        0
+      ],
+      "assay": [
+        0,
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "ancestry": [
+        0,
+        1
+      ],
+      "access": [
+        2
+      ]
+    },
+    "dataUrl": "https://zenodo.org/records/21296030",
+    "evidence": {
+      "primaryAccess": "Official OUP abstract directly verified: Chinese cis-eQTL n=1005; East Asian meta-analysis n=2024; about 2.8M associations and 13,376 eGenes. Published 2 September 2026, accepted manuscript. Indexed primary PDF identifies CBEA and Japanese JCTF source cohorts; detailed RNA methods could not be reliably retrieved.",
+      "release": "Zenodo record retrieved directly with HTTP 200 and saved as cbea_zenodo_page.txt. Description explicitly all cis SNP-gene associations in CBEA and MAEEA, version v2, published 10 July 2026. Files Restricted; public record does not imply public files.",
+      "checkedAt": "2026-09-06"
+    }
   }
 ]

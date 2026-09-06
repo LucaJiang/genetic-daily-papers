@@ -9,7 +9,7 @@ const { groups } = Astro.props;
     <a class="directory-category" href={`#${group.id}`}><span>{group.shortTitle}</span><span class="directory-count">{group.records.length}</span></a>
     <ul>{group.records.map(r => <li data-qtl-directory-record={r.id}><a href={`#${r.id}`} data-qtl-nav={r.id}>{r.navLabel ?? r.name}</a></li>)}</ul>
   </div>)}
-  <a class="directory-category archive-link" href="#resource-papers">资源简报与论文</a>
+  <a class="directory-category archive-link" href="#resource-papers">资源简报</a>
 </nav>
 <style>
   .directory-group + .directory-group { margin-top: 18px; }
