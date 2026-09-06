@@ -8,9 +8,10 @@
     "prebuild": "node scripts/check-content.mjs && node scripts/cache-review-figures.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "postbuild": "node scripts/check-built.mjs && node scripts/validate-site.mjs",
+    "postbuild": "node scripts/check-built.mjs && node scripts/validate-site.mjs && node scripts/check-search.mjs",
     "check:content": "node scripts/check-content.mjs",
-    "check:built": "node scripts/check-built.mjs"
+    "check:built": "node scripts/check-built.mjs",
+    "check:search": "node scripts/check-search.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
