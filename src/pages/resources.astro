@@ -35,7 +35,7 @@ const ancestries = qtlAncestries.map(ancestry => ({
       <button type="button" data-ancestry="all" data-label="全部" aria-pressed="true" aria-controls="qtl-results">全部 <span>{qtlResources.length}</span></button>
       {ancestries.map(a => <button type="button" data-ancestry={a.id} data-label={a.label} aria-pressed="false" aria-controls="qtl-results">{a.label} <span>{a.count}</span></button>)}
     </div>
-    <p class="ancestry-note">优先按 QTL 分析人群标注；招募地区不直接等同于遗传祖源。多祖源资源可归入多个分类，数量不可相加；具体组成、自报信息及研究阶段见各条目。</p>
+    <p class="ancestry-note">优先按 QTL 分析人群标注；未报告遗传祖源时，按队列来源暂归类并在条目中注明。招募地区不直接等同于遗传祖源，标签也不保证提供独立的祖源分层统计量。多祖源资源可归入多个分类，数量不可相加；具体人数及分析版本见各条目。</p>
   </section>
   <details class="mobile-directory">
     <summary>资源目录 <span data-qtl-directory-summary>{groups.length} 类 / {qtlResources.length} 项</span></summary>
