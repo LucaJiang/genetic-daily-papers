@@ -4,8 +4,8 @@
 
 | 论文 | 核验范围 | 说明 |
 |---|---|---|
-| Dynema | bioRxiv 官方摘要、作者文档与代码 | 全文请求返回 429；以论文简报发布，不作为全文精读。 |
-| ColocBoost | v3 官方摘要、可读 v2 全文和原图 | v3 全文返回 403。方法、详细结果及图片均标明依据 v2，不推断 v3 具体修改。 |
+| Dynema | 用户补充的 v1 全文、Methods、Supplementary Notes 1–2 与原图 | 已由简报更新为全文解读；59 页 PDF 未含补充图、数值表本体。 |
+| ColocBoost | 用户补充的 v3 全文、Methods、Table 2 与原图 | 已替换基于 v2 的解读与图；61 页 PDF 未含独立 Supplementary Note 及补充数值表。 |
 | 非线性 ML 与标准 PRS | medRxiv 全文 PDF/JATS、作者代码 | 未完整核验补充材料；记录评价集重新拟合校准模型的范围。 |
 | 影像视野混杂 | medRxiv 全文 PDF/JATS | 区分表征分析 69,932 人与主 GWAS 53,436 人；区分裁剪、重新训练和残差化顺序的组合变化。 |
 | 空间转录组 CNA 评测 | Nature Communications 接受稿全文 | Article in Press；未逐一核验全部补充材料。区分切片、donor 和参考标准。 |
@@ -25,12 +25,10 @@
 
 ## 原图来源与完整性
 
-8 张原图均已视觉核对；没有生成、放大重绘或重建数据图。PRS 图来自作者仓库；影像图保留完整原图并裁去页面外边距；CNA 图保留接受稿完整页面；ColocBoost 使用 PMC v2 原始 JPEG。ColocBoost 可读整图分辨率有限，未用不完整 panel 冒充整图。
+当前 11 张原图均已视觉核对；没有生成、放大重绘或重建数据图。PRS 图来自作者仓库；影像图保留完整原图并裁去页面外边距；CNA 图保留接受稿完整页面。Dynema 新增 Figure 2、6、7，ColocBoost Figure 2、6 已替换为 v3 PDF 的原生完整嵌入图，保留面板、文字和原始分辨率，透明蒙版按原 PDF 白底呈现。历史 v2 图片保留在版本历史中，不再由本期文章引用。
 
 | 文件 | 原图与许可 | 尺寸 | SHA-256 |
 |---|---|---|---|
-| `colocboost-multiomics-v2-fig2.jpg` | [v2 Figure 2 · 共定位功效与错误发现率](https://cdn.ncbi.nlm.nih.gov/pmc/blobs/4fba/12083576/126a45eb540c/nihpp-2025.04.17.25326042v2-f0002.jpg) · CC BY 4.0 | 655 × 720 | `ea826d5107f713af33c52614e71f5b2916e5f7ad92ea3222a46309c89d027234` |
-| `colocboost-multiomics-v2-fig6.jpg` | [v2 Figure 6 · AD–QTL 共定位与 BLNK、CTSH 位点](https://cdn.ncbi.nlm.nih.gov/pmc/blobs/4fba/12083576/0392eaab0259/nihpp-2025.04.17.25326042v2-f0006.jpg) · CC BY 4.0 | 611 × 899 | `56fc377b3b90881f32692bcfb273978a5ed1a1f20139e4a4a826a7ffc19284b8` |
 | `nonlinear-ml-standard-prs-fig2.png` | [Figure 2 · 交互方差与样本量对预测的影响](https://github.com/JZhu919/NonlinearMLvsStandardPRS/blob/01f2f33421a754273fe8900cb2d916823830a622/simulation/figures/lambdaI_comparison_all.png) · CC BY 4.0 | 3600 × 4500 | `450dcc807926de4070eb82738816c3f9a40ef0127167ebd54eaa9c64b29be443` |
 | `nonlinear-ml-standard-prs-fig4.png` | [Figure 4 · UKB 缺血性心脏病预测](https://github.com/JZhu919/NonlinearMLvsStandardPRS/blob/01f2f33421a754273fe8900cb2d916823830a622/ukb_ihd/figures/incremental_metrics_test_4x2.png) · CC BY 4.0 | 2850 × 2550 | `0af62e3482429cd915f73a13adad213de1241a04f7eb7d68694627cacb660bd2` |
 | `imaging-fov-confounding-fig2.png` | [Figure 2 · 处理流程、残留混杂与心脏信息保留](https://www.medrxiv.org/content/medrxiv/early/2026/09/04/2026.09.01.26361959.full.pdf#page=6) · CC BY 4.0 | 1431 × 1365 | `d7f7a9e4cc416a4c4c944fea9f2a687fc86c27b2edb12aedca94e989118fab17` |
@@ -38,6 +36,18 @@
 | `spatial-cna-benchmark-fig2.png` | [Figure 2 · CNA 谱与事件恢复](https://www.nature.com/articles/s41467-026-77500-5_reference.pdf#page=4) · CC BY-NC-ND 4.0 | 1241 × 1648 | `bc48a6ac67796540a2b061c1c0d92f095bd957b4f4f5013c3f70e0d426a0e073` |
 | `spatial-cna-benchmark-fig6.png` | [Figure 6 · 任务表现与数据条件](https://www.nature.com/articles/s41467-026-77500-5_reference.pdf#page=12) · CC BY-NC-ND 4.0 | 1241 × 1648 | `622354e81fc5f9531a32dd541fe13984abb8d4b8eb0fd6e5d4862c5b919daa64` |
 
+| `dynema-context-eqtl-v1-fig2.png` | [Figure 2 · 统计校准、计算时间与功效](https://www.biorxiv.org/content/10.64898/2026.08.25.747138v1.full.pdf#page=51) · CC BY-NC-ND 4.0 | 1331 × 1394 | `7c61465de5b4b1c4441dd64e2a041c09aef1b66f808a1022e090922d36bbbc1b` |
+| `dynema-context-eqtl-v1-fig6.png` | [Figure 6 · 全 cis 扫描与条件交互信号](https://www.biorxiv.org/content/10.64898/2026.08.25.747138v1.full.pdf#page=55) · CC BY-NC-ND 4.0 | 972 × 1174 | `4c012593bb9a78b797896200e753ab059701c82967b95021db107fc4c09e6d70` |
+| `dynema-context-eqtl-v1-fig7.png` | [Figure 7 · TSPAN32、CTSS 与自身免疫病共定位](https://www.biorxiv.org/content/10.64898/2026.08.25.747138v1.full.pdf#page=56) · CC BY-NC-ND 4.0 | 1020 × 1400 | `bfa9eecdbcf36b7a5d3504f6f62c2f3c86d60bfc8dca41ca1ccadb3b7e41180b` |
+| `colocboost-multiomics-v3-fig2.png` | [v3 Figure 2 · 共定位功效与概率校准](https://www.medrxiv.org/content/10.1101/2025.04.17.25326042v3.full.pdf#page=9) · CC BY 4.0 | 1946 × 2640 | `c6cf56bed01a5bf7f6558c3a8935638e3ba9d5bf26fff02deb8c3ba3c96fd637` |
+| `colocboost-multiomics-v3-fig6.png` | [v3 Figure 6 · AD 共定位与 BLNK、CTSH 位点](https://www.medrxiv.org/content/10.1101/2025.04.17.25326042v3.full.pdf#page=26) · CC BY 4.0 | 1831 × 2697 | `2c0da26d7f10c2c2059f98ce40c0b39b09f7d77bab61bbb2e80e10a7ba9de8ad` |
+
+## 全文补充与版本核验
+
+- Dynema：主效应检验使用无交互模型；多状态交互和总效应为 3/4 d.f.。记录条件独立判定、CTSS 图文 PP.H4 的不一致及多自由度统计量进入 coloc 的说明不足。
+- ColocBoost：解释平滑概率到 VCP 的层次，区分 FineBoost 单性状校准与多性状 VCP；补充强残差相关下 FDR 膨胀和分样本重现的范围。保留 16,503/16,504 的差异，并校正 AD 位点数量与遗传力比较对象。
+- 全文补充保留两篇原有 URL、9 月 6 日归档和真实发表／修订日期。没有新增重复论文或改变历史日报的引用数量。
+
 ## 构建核验
 
-生产构建通过内容、Astro 类型、静态产物、公式与图片检查。浏览器预览服务运行正常，但浏览器访问被环境拦截，未完成本次桌面及移动端视觉复核；没有将此记为通过。
+两篇全文补充后的生产构建通过：36 个页面、162 处公式、29 处图片引用及 108 条搜索记录检查均无错误；两篇详情不再包含旧简报或 v2 原图引用，9 月 6 日仍为 5 篇。原图已逐一视觉核验。浏览器预览服务运行正常，但浏览器访问被环境拦截，未完成本次桌面及移动端视觉复核；没有将此记为通过。
