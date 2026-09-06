@@ -1,0 +1,233 @@
+---
+import { createHash } from 'node:crypto';
+import Base from '../layouts/Base.astro';
+import { buildSearchIndex } from '../lib/search-data';
+import { searchLabels } from '../lib/search';
+import '../styles/search.css';
+
+const index = await buildSearchIndex();
+const version = createHash('sha256').update(JSON.stringify(index)).digest('hex').slice(0, 12);
+const counts = Object.fromEntries(Object.keys(searchLabels).map(type => [type, index.documents.filter(d => d.type === type).length]));
+const filters = [['all', '全部'], ...Object.entries(searchLabels)];
+---
+<Base title="搜索 · Genetic Daily Papers" description="搜索论文解读、QTL 数据资源和历史日报，按方法、作者、组织、祖源及关键词查找。">
+  <div class="search-page" data-search-root data-index-url={`/search-index.json?v=${version}`}>
+    <header class="page-heading search-heading">
+      <div class="eyebrow">SEARCH</div>
+      <h1>搜索</h1>
+      <p>{counts.paper} 篇论文 · {counts.resource} 项数据资源与简报 · {counts.daily} 期日报</p>
+    </header>
+    <form class="search-form" role="search" action="/search/" method="get" aria-label="全站搜索">
+      <label for="search-query">搜索论文、方法或数据资源</label>
+      <div class="search-input-row">
+        <input id="search-query" name="q" type="search" maxlength="200" placeholder="如 SuSiE、TenK10K、东亚 eQTL" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="search-help" aria-controls="search-results"/>
+        <button type="submit" class="search-submit">搜索</button>
+      </div>
+      <p id="search-help">检索标题、作者、正文和资源详情。空格分隔的多个关键词会同时匹配。</p>
+      <div class="search-filters" role="group" aria-label="搜索范围">
+        {filters.map(([type, label]) => <button type="button" data-search-type={type} aria-pressed={type === 'all' ? 'true' : 'false'} aria-controls="search-results">{label}<span data-filter-count></span></button>)}
+      </div>
+    </form>
+    <div class="search-status-row">
+      <p id="search-status" role="status" aria-live="polite" aria-atomic="true">输入关键词开始搜索</p>
+      <button type="button" class="search-clear" hidden>清空搜索</button>
+    </div>
+    <section aria-label="搜索结果" id="search-results" aria-busy="false"></section>
+    <div class="search-empty" data-search-empty>
+      <p data-empty-message>可以从方法名、数据集、组织或祖源开始。</p>
+      <div class="search-examples" aria-label="搜索示例">
+        {['SuSiE', 'ColocBoost', 'eQTL Catalogue', 'TenK10K', '东亚', '非洲'].map(query => <a href={`/search/?q=${encodeURIComponent(query)}`} data-search-example={query}>{query}</a>)}
+      </div>
+    </div>
+    <button type="button" class="search-retry" hidden>重新加载搜索</button>
+    <button type="button" class="search-more" hidden>显示更多结果</button>
+    <noscript><p class="search-noscript">搜索需要启用 JavaScript。也可以浏览<a href="/topics/">研究主题</a>、<a href="/resources/">数据资源</a>和<a href="/archive/">日报归档</a>。</p></noscript>
+  </div>
+</Base>
+
+<script>
+  import { highlightParts, prepareSearch, queryTokens, searchDocuments, searchLabels, searchSnippet, type SearchDocument, type SearchType } from '../lib/search';
+
+  const root = document.querySelector<HTMLElement>('[data-search-root]')!;
+  const form = root.querySelector<HTMLFormElement>('form')!;
+  const input = root.querySelector<HTMLInputElement>('#search-query')!;
+  const results = root.querySelector<HTMLElement>('#search-results')!;
+  const status = root.querySelector<HTMLElement>('#search-status')!;
+  const empty = root.querySelector<HTMLElement>('[data-search-empty]')!;
+  const emptyMessage = root.querySelector<HTMLElement>('[data-empty-message]')!;
+  const clear = root.querySelector<HTMLButtonElement>('.search-clear')!;
+  const retry = root.querySelector<HTMLButtonElement>('.search-retry')!;
+  const more = root.querySelector<HTMLButtonElement>('.search-more')!;
+  const filterButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-search-type]')];
+  let type: 'all' | SearchType = 'all';
+  let indexPromise: Promise<ReturnType<typeof prepareSearch>> | undefined;
+  let hits: ReturnType<typeof searchDocuments> = [];
+  let tokens: string[] = [];
+  let shown = 0, revision = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  const loadIndex = () => indexPromise ??= (async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch(root.dataset.indexUrl!, { signal: controller.signal });
+      if (!response.ok) throw new Error('Search index unavailable');
+      const payload: { version: number; documents: SearchDocument[] } = await response.json();
+      if (payload.version !== 1 || !Array.isArray(payload.documents)) throw new Error('Invalid search index');
+      return prepareSearch(payload.documents);
+    } finally { clearTimeout(timeout); }
+  })().catch(error => { indexPromise = undefined; throw error; });
+
+  function highlight(element: HTMLElement, value: string) {
+    for (const part of highlightParts(value, tokens)) {
+      if (part.matched) {
+        const mark = document.createElement('mark');
+        mark.textContent = part.text;
+        element.append(mark);
+      } else element.append(document.createTextNode(part.text));
+    }
+  }
+
+  function appendResults(focusFirst = false) {
+    const fragment = document.createDocumentFragment();
+    let firstLink: HTMLAnchorElement | undefined;
+    for (const { document: item } of hits.slice(shown, shown + 20)) {
+      const article = document.createElement('article');
+      article.className = 'search-result';
+      const meta = document.createElement('div');
+      meta.className = 'search-result-meta';
+      const badge = document.createElement('span');
+      badge.className = 'search-result-type';
+      badge.textContent = searchLabels[item.type];
+      meta.append(badge);
+      for (const value of item.meta) {
+        const span = document.createElement('span');
+        highlight(span, value);
+        meta.append(span);
+      }
+      const heading = document.createElement('h2');
+      const link = document.createElement('a');
+      link.href = item.url;
+      highlight(link, item.title);
+      firstLink ??= link;
+      heading.append(link);
+      article.append(meta, heading);
+      if (item.subtitle) {
+        const subtitle = document.createElement('p');
+        subtitle.className = 'search-result-subtitle';
+        highlight(subtitle, item.subtitle);
+        article.append(subtitle);
+      }
+      const snippet = document.createElement('p');
+      snippet.className = 'search-result-snippet';
+      highlight(snippet, searchSnippet(item, tokens));
+      article.append(snippet);
+      fragment.append(article);
+    }
+    results.append(fragment);
+    shown = Math.min(shown + 20, hits.length);
+    more.hidden = shown >= hits.length;
+    more.textContent = `显示更多结果（还有 ${hits.length - shown} 条）`;
+    status.textContent = `找到 ${hits.length} 条${type === 'all' ? '结果' : searchLabels[type]}${shown < hits.length ? `，已显示 ${shown} 条` : ''} · 按相关性排序`;
+    if (focusFirst) firstLink?.focus();
+  }
+
+  function syncURL() {
+    const url = new URL(window.location.href);
+    const query = input.value.trim();
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    if (type === 'all') url.searchParams.delete('type');
+    else url.searchParams.set('type', type);
+    if (url.href !== window.location.href) window.history.replaceState(null, '', url);
+  }
+
+  async function update() {
+    const currentRevision = ++revision;
+    const query = input.value.trim();
+    tokens = queryTokens(query);
+    clear.hidden = !input.value && type === 'all';
+    retry.hidden = more.hidden = true;
+    results.replaceChildren();
+    results.setAttribute('aria-busy', 'false');
+    filterButtons.forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.searchType === type));
+      button.querySelector('[data-filter-count]')!.textContent = '';
+    });
+    if (!tokens.length) {
+      status.textContent = query ? '请输入文字、数字或方法名' : '输入关键词开始搜索';
+      empty.hidden = false;
+      emptyMessage.textContent = '可以从方法名、数据集、组织或祖源开始。';
+      return;
+    }
+    empty.hidden = true;
+    status.textContent = '正在搜索…';
+    results.setAttribute('aria-busy', 'true');
+    try {
+      const index = await loadIndex();
+      if (currentRevision !== revision) return;
+      const allHits = searchDocuments(index, query);
+      filterButtons.forEach(button => {
+        const selected = button.dataset.searchType;
+        const count = selected === 'all' ? allHits.length : allHits.filter(hit => hit.document.type === selected).length;
+        button.querySelector('[data-filter-count]')!.textContent = ` ${count}`;
+      });
+      hits = type === 'all' ? allHits : allHits.filter(hit => hit.document.type === type);
+      shown = 0;
+      appendResults();
+      if (!hits.length) {
+        empty.hidden = false;
+        emptyMessage.textContent = allHits.length
+          ? '当前范围没有匹配项，可切换到“全部”查看其他结果。'
+          : '没有找到匹配项。试试更短的关键词，或减少同时搜索的词。';
+      }
+    } catch {
+      if (currentRevision !== revision) return;
+      status.textContent = '暂时无法加载搜索，请重试。';
+      retry.hidden = false;
+    } finally {
+      if (currentRevision === revision) results.setAttribute('aria-busy', 'false');
+    }
+  }
+
+  function runSearch() {
+    clearTimeout(timer);
+    syncURL();
+    void update();
+  }
+
+  form.addEventListener('submit', event => { event.preventDefault(); runSearch(); });
+  input.addEventListener('input', event => {
+    clearTimeout(timer);
+    // Prevent a pending load from painting results for a previous query.
+    revision++;
+    if (!(event as InputEvent).isComposing) timer = setTimeout(runSearch, 150);
+  });
+  input.addEventListener('compositionend', () => { clearTimeout(timer); timer = setTimeout(runSearch, 150); });
+  input.addEventListener('search', runSearch);
+  filterButtons.forEach(button => button.addEventListener('click', () => {
+    type = button.dataset.searchType as typeof type;
+    runSearch();
+  }));
+  root.querySelectorAll<HTMLAnchorElement>('[data-search-example]').forEach(link => link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    input.value = link.dataset.searchExample!;
+    type = 'all';
+    runSearch();
+    input.focus();
+  }));
+  clear.addEventListener('click', () => { input.value = ''; type = 'all'; runSearch(); input.focus(); });
+  retry.addEventListener('click', runSearch);
+  more.addEventListener('click', () => appendResults(true));
+  function restoreURL() {
+    clearTimeout(timer);
+    const params = new URLSearchParams(window.location.search);
+    input.value = (params.get('q') ?? '').slice(0, 200);
+    const selected = params.get('type');
+    type = selected === 'paper' || selected === 'resource' || selected === 'daily' ? selected : 'all';
+    void update();
+  }
+  window.addEventListener('popstate', restoreURL);
+  restoreURL();
+</script>
