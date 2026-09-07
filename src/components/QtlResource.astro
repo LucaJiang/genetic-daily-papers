@@ -39,13 +39,13 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
     <p class="qtl-summary">{r.summary}</p>
   </header>
   <dl class="qtl-fields">{fields.slice(0, 2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
-  <details class="qtl-record-details" open={r.group === 'directories'}>
-    <summary><span>{r.detailSections?.length ? '完整说明：数据构成、方法、结果与下载' : '测序、下载与来源'}</span><span class="qtl-detail-hint">展开查看</span></summary>
+  <details class="qtl-record-details" open={r.group === 'directories'} data-collapsed-on-navigation={r.detailSections?.length ? '' : undefined}>
+    <summary><span>{r.detailSections?.length ? '完整说明：数据构成、方法、结果与下载' : '测序、下载与来源'}</span><span class="qtl-detail-hint"><span class="when-closed">展开查看</span><span class="when-open">收起内容</span></span></summary>
     <div class="qtl-detail-body">
       <dl class="qtl-fields method-fields">{fields.slice(2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
       <p class="qtl-access"><strong>数据获取</strong>{r.access}</p>
-      {r.detailSections?.map((section, index) => <section class="resource-detail-section" aria-labelledby={`${r.id}-detail-${index}`}>
-        <h4 id={`${r.id}-detail-${index}`}>{section.title}</h4>
+      {r.detailSections?.map((section, index) => <details class="resource-detail-section" aria-labelledby={`${r.id}-detail-${index}`}>
+        <summary id={`${r.id}-detail-${index}`}><span class="resource-section-title">{section.title}</span><span class="resource-section-state" aria-hidden="true"><span class="when-closed">展开</span><span class="when-open">收起</span></span></summary>
         {section.paragraphs?.map(paragraph => <p>{paragraph}</p>)}
         {section.table && <div class="resource-table-scroll" role="region" aria-label={`${section.title}数据表`} tabindex="0">
           <table>
@@ -58,7 +58,7 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
           <figcaption>{section.figure.caption} <a href={section.figure.sourceUrl} target="_blank" rel="noreferrer">原论文</a> · <a href={section.figure.src} target="_blank" rel="noreferrer">查看原图</a></figcaption>
         </figure>}
         {section.sourceIndices?.length && <p class="resource-detail-sources">来源：{section.sourceIndices.map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer">[{index + 1}] {r.sources[index].label}</a>)}</p>}
-      </section>)}
+      </details>)}
       <div class="qtl-provenance"><p><strong>使用注意</strong> {r.limitations}</p><ol>{r.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer">{source.label}<span class="sr-only">（新窗口）</span></a></li>)}</ol></div>
     </div>
   </details>
@@ -87,7 +87,10 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
   .qtl-record-details { border-top: 1px solid var(--line); }
   summary { cursor: pointer; color: var(--accent); padding: 12px 0 0; font-weight: 600; font-size: .875rem; }
   .qtl-detail-hint { float: right; color: var(--muted); font-weight: 400; }
-  details[open] .qtl-detail-hint { display: none; }
+  details > summary .when-open { display: none; }
+  details[open] > summary .when-open { display: inline; }
+  details[open] > summary .when-closed { display: none; }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   .qtl-detail-body { padding-top: 12px; }
   .method-fields { border-top: 0; padding-top: 5px; }
   .qtl-provenance p { line-height: 1.85; margin: 12px 0; }
@@ -96,8 +99,11 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
   .qtl-cites { display: inline-flex; gap: 5px; margin-left: 6px; font-size: .875rem; vertical-align: baseline; }
   .qtl-cites a { color: var(--accent); text-decoration: none; }
   .qtl-cites a:hover { text-decoration: underline; }
-  .resource-detail-section { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 18px; }
-  .resource-detail-section h4 { font-size: 1.125rem; line-height: 1.6; color: var(--ink); margin: 0 0 12px; }
+  .resource-detail-section { border-top: 1px solid var(--line); }
+  .resource-detail-section > summary { padding: 14px 0; font-size: 1rem; line-height: 1.7; }
+  .resource-section-title { color: var(--ink); }
+  .resource-section-state { display: inline-block; margin-left: 10px; color: var(--muted); font-size: .875rem; font-weight: 400; }
+  .resource-detail-section[open] { padding-bottom: 8px; }
   .resource-detail-section p { font-size: 1rem; line-height: 1.85; margin: 12px 0; }
   .resource-table-scroll { overflow-x: auto; margin: 16px 0; }
   .resource-table-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

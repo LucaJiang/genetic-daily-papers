@@ -53,7 +53,7 @@ const ancestries = qtlAncestries.map(ancestry => ({
           <p>收录已提供遗传关联分析的研究、明确的数据发布与跨研究目录，并将用于表达注释和算法评估的单细胞参考图谱单独分类。参考图谱不自动视为 QTL 队列；是否提供遗传关联汇总统计以具体条目为准。资源按实验类型和组织分类，尚不能视为所有公开数据的穷尽清单。</p>
           <p>donor、组织样本及每个细胞类型的有效 N 分开记录。总细胞数 ÷ donor 数仅标为计算均值。reads、read pairs、UMI 及 ATAC fragments 不互换；目标深度与实测深度分开标注，未核实字段保留状态。跨资源分析需先核对样本重叠。</p>
         </details>
-        <button type="button" class="qtl-expand-all" hidden aria-expanded="false">展开全部测序与来源</button>
+        <button type="button" class="qtl-expand-all" hidden aria-expanded="false" aria-controls="qtl-results">展开全部详情</button>
       </div>
       <div id="qtl-results">{groups.map((group, index) => <section aria-labelledby={`${group.id}-heading`} id={group.id} class="qtl-group">
         <header class="qtl-group-heading"><div><span class="group-number">{String(index + 1).padStart(2, '0')}</span><h2 id={`${group.id}-heading`}>{group.title}</h2></div><span class="group-count">{group.records.length} 项</span></header>
@@ -70,15 +70,16 @@ const ancestries = qtlAncestries.map(ancestry => ({
 </Base>
 <script>
   const expansionButton = document.querySelector<HTMLButtonElement>('.qtl-expand-all');
-  const records = [...document.querySelectorAll<HTMLDetailsElement>('.qtl-record-details')];
+  const records = [...document.querySelectorAll<HTMLDetailsElement>('.qtl-record-details, .resource-detail-section')];
   const cards = [...document.querySelectorAll<HTMLElement>('.qtl-resource')];
   const visibleDetails = () => records.filter(record => !record.closest<HTMLElement>('.qtl-resource')?.hidden);
   const refreshExpansion = () => {
     const visible = visibleDetails();
     const expanded = visible.length > 0 && visible.every(record => record.open);
     if (!expansionButton) return;
-    expansionButton.textContent = expanded ? '收起全部测序与来源' : '展开全部测序与来源';
+    expansionButton.textContent = expanded ? '收起全部详情' : '展开全部详情';
     expansionButton.setAttribute('aria-expanded', String(expanded));
+    expansionButton.disabled = visible.length === 0;
   };
   if (expansionButton) {
     expansionButton.hidden = false;
@@ -143,7 +144,7 @@ const ancestries = qtlAncestries.map(ancestry => ({
     });
     if (!target?.matches('.qtl-resource')) return;
     const details = target.querySelector<HTMLDetailsElement>('.qtl-record-details');
-    if (details) details.open = true;
+    if (details && !details.hasAttribute('data-collapsed-on-navigation')) details.open = true;
   };
   document.addEventListener('click', event => {
     const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href^="#"]') : null;
