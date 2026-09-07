@@ -1,5 +1,72 @@
 [
   {
+    "id": "tabula-sapiens-2",
+    "name": "Tabula Sapiens 2.0 — 人类多组织单细胞参考图谱",
+    "version": "2.0；Cell 在线发表 2026-09-02；v2 数据公开 2024-12-06；2026-09-07 核验",
+    "category": "single-cell reference atlas",
+    "tissue": "28 种成人组织 / 器官；覆盖上皮、内皮、间质与免疫等细胞群，部分供体贡献多个器官",
+    "qtlTypes": [],
+    "summary": "人类多组织 scRNA-seq 参考图谱，整合第一版与新增数据，可用于细胞类型注释、跨组织整合、参考映射及百万细胞规模的算法性能评估。候选基因与转录因子的细胞类型表达特异性可辅助解释 GWAS/QTL 结果；该资源不提供 eQTL/sQTL 效应估计，表达特异性本身不构成遗传关联或因果证据。",
+    "sampleSize": "整合图谱含 24 位供体、超过 110 万个细胞、28 种组织 / 器官；男性 11 人、女性 13 人，22–74 岁。相比 1.0 新增 9 位供体和 4 种组织，细胞数约翻倍；其中新增供体有 4 人贡献多个器官。各组织并非均覆盖 24 人。",
+    "cellsPerDonor": "未核实每位供体的细胞数均值、中位数及分布。总细胞数汇集同一供体的多个组织；具体组织及细胞类型的有效供体数需根据下载版本的 metadata 统计，不能将细胞视为独立的供体重复。",
+    "assay": "单细胞 RNA 测序，包含 10x Genomics 液滴法与 SmartSeq 板式测序数据。CZI 数据说明提供 H5AD 格式及按组织、供体拆分的处理版本；分析时需区分技术平台和数据处理版本。",
+    "depth": "本次核验的正式论文摘要及官方数据说明未提供可直接比较的统一 reads/cell 深度。具体建库版本、测序深度和每细胞检测量需进一步查阅方法与文库元数据；不以 UMI 数替代 reads 深度。",
+    "access": "Figshare 提供 v2 处理数据（CC BY 4.0），官方门户与 CELLxGENE 可浏览表达及注释。原始 FASTQ 按官方数据政策需申请并签署数据使用协议后获取。另有 CZI benchmark 处理子集，来自新增 9 位供体，不等同于含 24 位供体的完整 2.0 图谱。",
+    "limitations": "Cell 论文发表于 2026-09-02，v2 数据已于 2024-12-06 公开，不能把论文发表日期写成数据首次发布日。完整图谱仅有 24 位供体；跨组织比较需考虑供体配对与组织覆盖不均，模型评估应检查与训练数据的供体重叠。此条目依据正式论文摘要及官方数据说明整理，尚未完成正式全文精读。",
+    "sources": [
+      {
+        "label": "正式论文：Tabula Sapiens 2.0（Cell，2026）",
+        "url": "https://doi.org/10.1016/j.cell.2026.08.010"
+      },
+      {
+        "label": "PubMed：正式论文摘要与在线发表日期",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42685689/"
+      },
+      {
+        "label": "官方图谱说明：整合规模、供体与组织覆盖",
+        "url": "https://tabula-sapiens.sf.czbiohub.org/about"
+      },
+      {
+        "label": "Figshare：v2 处理数据下载、发布日期与许可",
+        "url": "https://figshare.com/articles/dataset/Tabula_Sapiens_v2/27921984"
+      },
+      {
+        "label": "CELLxGENE：Tabula Sapiens 数据集合",
+        "url": "https://cellxgene.cziscience.com/collections/e5f58829-1a66-40b5-a624-9046778e74f5"
+      },
+      {
+        "label": "官方数据访问政策：处理数据与原始 FASTQ",
+        "url": "https://tabula-sapiens.sf.czbiohub.org/whereisthedata"
+      },
+      {
+        "label": "CZI benchmark：新增供体子集、测序平台与处理说明",
+        "url": "https://virtualcellmodels.cziscience.com/dataset/tabula-sapiens"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [1, 2, 3],
+      "cellsPerDonor": [2],
+      "assay": [6],
+      "depth": [],
+      "access": [3, 5, 6],
+      "ancestry": []
+    },
+    "evidence": {
+      "checkedAt": "2026-09-07",
+      "primaryAccess": "Cell full text returned 403. The formal title, DOI, online publication date and abstract were verified through the PubMed indexed record; the official atlas About page, Figshare record, data access policy and CZI data card were read directly. This is a resource entry, not a full paper review.",
+      "sampleCounts": "Official About and Figshare describe the combined v1+v2 atlas: >1.1M cells, 28 tissues, 24 donors (11 male, 13 female; ages 22–74), with nine additional donors and four additional tissues. The formal abstract reports four new multiorgan donors. No exact cells-per-donor mean was derived from rounded atlas totals.",
+      "release": "PubMed PMID 42685689 reports Cell online publication 2026-09-02, DOI 10.1016/j.cell.2026.08.010. Figshare 27921984 reports dataset publication 2024-12-06 and CC BY 4.0. The atlas portal still cites the earlier preprint; do not substitute that older citation for the Cell version of record.",
+      "benchmarkSubset": "CZI describes a nine-new-donor benchmarking subset, with 27 input tissues and 26 after filtering. It excludes v1 samples to reduce overlap with training data. These subset counts must not replace the complete atlas counts.",
+      "access": "The official data access policy makes processed data available but requires a signed data use agreement before raw FASTQ access. The policy does not support describing every data layer as unrestricted download.",
+      "ancestry": "Genetic ancestry composition was not verified from donor metadata. NR is an uncertainty tag; no ancestry is inferred from recruitment location."
+    },
+    "group": "sc-reference",
+    "navLabel": "Tabula Sapiens 2.0",
+    "dataUrl": "https://figshare.com/articles/dataset/Tabula_Sapiens_v2/27921984",
+    "ancestryTags": ["NR"],
+    "ancestry": "24 位供体的遗传祖源构成尚未核实，暂列“未明确 / 待核实”；不根据机构或招募地区推断祖源。"
+  },
+  {
     "id": "tenk10k-phase1-eqtl",
     "name": "TenK10K Phase 1 — 单细胞 eQTL / WGS",
     "version": "Cuomo et al., medRxiv；summary statistics v2（2026-01-30）；2026-09-05 核验",

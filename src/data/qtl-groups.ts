@@ -1,5 +1,6 @@
 export const qtlGroups = [
   { id: 'directories', title: '综合数据库与联盟', shortTitle: '综合目录', note: '跨研究查找数据、汇总统计与版本记录。目录的累计样本量不等于独立 donor 总数。' },
+  { id: 'sc-reference', title: '单细胞参考图谱', shortTitle: '单细胞｜参考图谱', note: '用于细胞类型注释、跨组织表达比较与算法评估的参考数据。此类条目不代表已发布 QTL 效应估计；细胞数与独立供体数分开记录。' },
   { id: 'sc-immune', title: '单细胞 · 血液与免疫', shortTitle: '单细胞｜血液与免疫', note: 'PBMC、分选免疫细胞、刺激响应及免疫 multiome；覆盖表达、剪接与染色质可及性 QTL。' },
   { id: 'sc-brain', title: '单核 · 脑组织', shortTitle: '单核｜脑组织', note: '脑细胞类型、亚型与疾病状态相关 QTL。整合研究与其来源队列需核对 donor 重叠。' },
   { id: 'sc-tissue', title: '单细胞 / 单核 · 其他组织', shortTitle: '单细胞｜其他组织', note: '肺、脂肪等组织的群体单细胞遗传调控队列。图谱总规模与进入 QTL 分析的样本量分开记录。' },

@@ -23,10 +23,10 @@ const ancestries = qtlAncestries.map(ancestry => ({
   ...ancestry, count: qtlResources.filter(r => r.ancestryTags.includes(ancestry.id)).length,
 })).filter(ancestry => ancestry.count > 0);
 ---
-<Base title="QTL 数据资源 · Genetic Daily Papers" description="按祖源、组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源，比较 donor 数、每 donor 细胞数、测序方法、深度及数据访问条件。">
+<Base title="QTL 与单细胞数据资源 · Genetic Daily Papers" description="按祖源、组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源及单细胞参考图谱，比较 donor 数、细胞数、测序方法、深度、数据版本及访问条件。">
   <header class="page-heading qtl-head" id="resources-top">
-    <div class="eyebrow">QTL RESOURCE DIRECTORY</div>
-    <div class="qtl-heading-row"><h1>QTL 数据资源</h1><span class="qtl-updated">更新 <time datetime="2026-09-06">2026-09-06</time></span></div>
+    <div class="eyebrow">QTL & SINGLE-CELL RESOURCES</div>
+    <div class="qtl-heading-row"><h1>QTL 与单细胞数据资源</h1><span class="qtl-updated">更新 <time datetime="2026-09-07">2026-09-07</time></span></div>
     <p>{qtlResources.length} 项资源 · {groups.length} 个分类 · 论文、数据入口与方法参数</p>
   </header>
   <section class="ancestry-filter" hidden aria-labelledby="ancestry-heading">
@@ -50,7 +50,7 @@ const ancestries = qtlAncestries.map(ancestry => ({
       <div class="qtl-tools">
         <details class="qtl-conventions">
           <summary>收录范围与样本口径</summary>
-          <p>收录已提供遗传关联分析的研究、明确的数据发布与跨研究目录；普通表达图谱不自动视为 QTL 队列。资源按实验类型和组织分类，尚不能视为所有公开 QTL 数据的穷尽清单。</p>
+          <p>收录已提供遗传关联分析的研究、明确的数据发布与跨研究目录，并将用于表达注释和算法评估的单细胞参考图谱单独分类。参考图谱不自动视为 QTL 队列；是否提供遗传关联汇总统计以具体条目为准。资源按实验类型和组织分类，尚不能视为所有公开数据的穷尽清单。</p>
           <p>donor、组织样本及每个细胞类型的有效 N 分开记录。总细胞数 ÷ donor 数仅标为计算均值。reads、read pairs、UMI 及 ATAC fragments 不互换；目标深度与实测深度分开标注，未核实字段保留状态。跨资源分析需先核对样本重叠。</p>
         </details>
         <button type="button" class="qtl-expand-all" hidden aria-expanded="false">展开全部测序与来源</button>
