@@ -45,13 +45,15 @@ export async function buildSearchIndex() {
       id: `resource:${resource.id}`, type: 'resource', title: resource.name, subtitle: '',
       url: `/resources/#${resource.id}`,
       meta: [group?.shortTitle ?? resource.category, ...ancestryLabels],
-      tags: [resource.navLabel, resource.category, ...resource.qtlTypes, ...resource.ancestryTags,
+      tags: [resource.navLabel, resource.category, ...(resource.resourceTypes ?? resource.qtlTypes), ...resource.ancestryTags,
         ...ancestryLabels, group?.title ?? ''],
       summary: resource.summary,
       // Deliberately select reader-visible fields, excluding internal evidence notes.
       body: [resource.version, resource.tissue, resource.ancestry, resource.sampleSize,
         resource.cellsPerDonor, resource.assay, resource.depth, resource.access,
-        resource.limitations, ...resource.sources.map(source => `${source.label} ${source.url}`)].join(' '),
+        resource.limitations, ...resource.sources.map(source => `${source.label} ${source.url}`),
+        ...(resource.detailSections ?? []).flatMap(section => [section.title, ...(section.paragraphs ?? []),
+          ...(section.table?.headers ?? []), ...(section.table?.rows.flat() ?? []), section.figure?.caption ?? ''])].join(' '),
       date: '',
     });
   }

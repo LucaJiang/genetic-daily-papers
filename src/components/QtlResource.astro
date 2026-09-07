@@ -10,6 +10,14 @@ interface Props {
     dataUrl?: string;
     ancestry: string;
     ancestryTags: string[];
+    resourceTypes?: string[];
+    detailSections?: {
+      title: string;
+      paragraphs?: string[];
+      table?: { headers: string[]; rows: string[][] };
+      sourceIndices?: number[];
+      figure?: { src: string; alt: string; caption: string; width: number; height: number; sourceUrl: string };
+    }[];
   };
 }
 const { resource: r } = Astro.props;
@@ -27,15 +35,30 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
     <div class="qtl-title-row"><h3 id={`${r.id}-title`}><a href={`#${r.id}`}>{r.name}</a></h3>{dataSource && <a class="qtl-data-link" href={dataSource} target="_blank" rel="noreferrer">数据入口 ↗</a>}</div>
     <p class="qtl-tissue">{r.tissue}</p>
     <p class="qtl-ancestry"><strong>祖源</strong> {r.ancestry}<span class="qtl-cites">{(r.fieldSources?.ancestry ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`祖源来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></p>
-    <div class="qtl-types">{r.qtlTypes.map(type => <span>{type}</span>)}</div>
+    <div class="qtl-types">{(r.resourceTypes ?? r.qtlTypes).map(type => <span>{type}</span>)}</div>
     <p class="qtl-summary">{r.summary}</p>
   </header>
   <dl class="qtl-fields">{fields.slice(0, 2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
   <details class="qtl-record-details" open={r.group === 'directories'}>
-    <summary><span>测序、下载与来源</span><span class="qtl-detail-hint">展开查看</span></summary>
+    <summary><span>{r.detailSections?.length ? '完整说明：数据构成、方法、结果与下载' : '测序、下载与来源'}</span><span class="qtl-detail-hint">展开查看</span></summary>
     <div class="qtl-detail-body">
       <dl class="qtl-fields method-fields">{fields.slice(2).map(([key, label, value]) => <div><dt>{label}</dt><dd>{value}<span class="qtl-cites">{(r.fieldSources?.[key] ?? []).map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer" aria-label={`${label}来源：${r.sources[index].label}`}>[{index + 1}]</a>)}</span></dd></div>)}</dl>
       <p class="qtl-access"><strong>数据获取</strong>{r.access}</p>
+      {r.detailSections?.map((section, index) => <section class="resource-detail-section" aria-labelledby={`${r.id}-detail-${index}`}>
+        <h4 id={`${r.id}-detail-${index}`}>{section.title}</h4>
+        {section.paragraphs?.map(paragraph => <p>{paragraph}</p>)}
+        {section.table && <div class="resource-table-scroll" role="region" aria-label={`${section.title}数据表`} tabindex="0">
+          <table>
+            <thead><tr>{section.table.headers.map(header => <th scope="col">{header}</th>)}</tr></thead>
+            <tbody>{section.table.rows.map(row => <tr>{row.map((cell, column) => column === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody>
+          </table>
+        </div>}
+        {section.figure && <figure class="resource-figure">
+          <a href={section.figure.src} target="_blank" rel="noreferrer" aria-label={`${section.figure.alt}，查看原图`}><img src={section.figure.src} alt={section.figure.alt} width={section.figure.width} height={section.figure.height} loading="lazy" decoding="async" /></a>
+          <figcaption>{section.figure.caption} <a href={section.figure.sourceUrl} target="_blank" rel="noreferrer">原论文</a> · <a href={section.figure.src} target="_blank" rel="noreferrer">查看原图</a></figcaption>
+        </figure>}
+        {section.sourceIndices?.length && <p class="resource-detail-sources">来源：{section.sourceIndices.map(index => <a href={r.sources[index].url} target="_blank" rel="noreferrer">[{index + 1}] {r.sources[index].label}</a>)}</p>}
+      </section>)}
       <div class="qtl-provenance"><p><strong>使用注意</strong> {r.limitations}</p><ol>{r.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer">{source.label}<span class="sr-only">（新窗口）</span></a></li>)}</ol></div>
     </div>
   </details>
@@ -73,6 +96,21 @@ const dataSource = r.dataUrl ?? r.sources.find(s => /下载|数据入口|官方�
   .qtl-cites { display: inline-flex; gap: 5px; margin-left: 6px; font-size: .875rem; vertical-align: baseline; }
   .qtl-cites a { color: var(--accent); text-decoration: none; }
   .qtl-cites a:hover { text-decoration: underline; }
+  .resource-detail-section { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 18px; }
+  .resource-detail-section h4 { font-size: 1.125rem; line-height: 1.6; color: var(--ink); margin: 0 0 12px; }
+  .resource-detail-section p { font-size: 1rem; line-height: 1.85; margin: 12px 0; }
+  .resource-table-scroll { overflow-x: auto; margin: 16px 0; }
+  .resource-table-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .resource-table-scroll table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: .9375rem; line-height: 1.75; }
+  .resource-table-scroll th, .resource-table-scroll td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .resource-table-scroll thead th { background: var(--pale); color: var(--ink); }
+  .resource-table-scroll tbody th { min-width: 110px; font-weight: 600; }
+  .resource-detail-section .resource-detail-sources { font-size: .875rem; color: var(--muted); }
+  .resource-detail-sources a { display: inline-block; margin-right: 12px; color: var(--accent); }
+  .resource-figure { margin: 20px 0; }
+  .resource-figure img { display: block; max-width: 100%; width: 100%; height: auto; background: white; }
+  .resource-figure figcaption { margin-top: 10px; font-size: .875rem; line-height: 1.8; color: var(--muted); }
+  .resource-figure figcaption a { color: var(--accent); }
   .qtl-provenance li { padding-block: 3px; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
   @media (max-width: 1000px) { .qtl-resource { scroll-margin-top: 76px; } }

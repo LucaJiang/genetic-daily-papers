@@ -2,69 +2,1152 @@
   {
     "id": "tabula-sapiens-2",
     "name": "Tabula Sapiens 2.0 — 人类多组织单细胞参考图谱",
-    "version": "2.0；Cell 在线发表 2026-09-02；v2 数据公开 2024-12-06；2026-09-07 核验",
+    "version": "Cell 正式论文 · 在线发表 2026-09-02；v2 数据公开 2024-12-06；全文与逐细胞元数据核验 2026-09-07",
     "category": "single-cell reference atlas",
-    "tissue": "28 种成人组织 / 器官；覆盖上皮、内皮、间质与免疫等细胞群，部分供体贡献多个器官",
+    "tissue": "28 种成人组织 / 器官、123 个供体×组织组合；同一供体多器官取材，组织覆盖不均且移植优先",
     "qtlTypes": [],
-    "summary": "人类多组织 scRNA-seq 参考图谱，整合第一版与新增数据，可用于细胞类型注释、跨组织整合、参考映射及百万细胞规模的算法性能评估。候选基因与转录因子的细胞类型表达特异性可辅助解释 GWAS/QTL 结果；该资源不提供 eQTL/sQTL 效应估计，表达特异性本身不构成遗传关联或因果证据。",
-    "sampleSize": "整合图谱含 24 位供体、超过 110 万个细胞、28 种组织 / 器官；男性 11 人、女性 13 人，22–74 岁。相比 1.0 新增 9 位供体和 4 种组织，细胞数约翻倍；其中新增供体有 4 人贡献多个器官。各组织并非均覆盖 24 人。",
-    "cellsPerDonor": "未核实每位供体的细胞数均值、中位数及分布。总细胞数汇集同一供体的多个组织；具体组织及细胞类型的有效供体数需根据下载版本的 metadata 统计，不能将细胞视为独立的供体重复。",
-    "assay": "单细胞 RNA 测序，包含 10x Genomics 液滴法与 SmartSeq 板式测序数据。CZI 数据说明提供 H5AD 格式及按组织、供体拆分的处理版本；分析时需区分技术平台和数据处理版本。",
-    "depth": "本次核验的正式论文摘要及官方数据说明未提供可直接比较的统一 reads/cell 深度。具体建库版本、测序深度和每细胞检测量需进一步查阅方法与文库元数据；不以 UMI 数替代 reads 深度。",
-    "access": "Figshare 提供 v2 处理数据（CC BY 4.0），官方门户与 CELLxGENE 可浏览表达及注释。原始 FASTQ 按官方数据政策需申请并签署数据使用协议后获取。另有 CZI benchmark 处理子集，来自新增 9 位供体，不等同于含 24 位供体的完整 2.0 图谱。",
-    "limitations": "Cell 论文发表于 2026-09-02，v2 数据已于 2024-12-06 公开，不能把论文发表日期写成数据首次发布日。完整图谱仅有 24 位供体；跨组织比较需考虑供体配对与组织覆盖不均，模型评估应检查与训练数据的供体重叠。此条目依据正式论文摘要及官方数据说明整理，尚未完成正式全文精读。",
+    "summary": "以同一供体的多器官采样为特色的人类单细胞表达参考图谱。整合 10x 与板式测序，覆盖 182 个精细细胞类型及 701 个组织×细胞类型群体；正式论文进一步分析转录因子表达特异性与推定衰老细胞的基因程序。适合参考注释、跨组织表达比较和算法评估；供体组成、平台差异、富集取样与标签层级需一并纳入分析设计。",
+    "sampleSize": "24 位供体（11 男、13 女，22–74 岁），合计 1,136,218 条表达记录：10x 1,093,048；plate 43,170。正文两平台计数、Figure 1 源表、GEO 元数据与当前 CELLxGENE All Cells 总数一致。每种组织实际仅覆盖 1–9 位供体，不能将 24 人作为所有组织的有效 N。",
+    "cellsPerDonor": "根据 Figure 1 原表并经 GEO 元数据核对：均值 47,342.4，中位数 16,758.5，范围 461（TSP13）–213,530（TSP14）条记录/供体。均值和中位数为本站计算；每位供体汇集 1–20 种组织，细胞数最多的 4 人贡献 61.35% 记录。完整逐供体及逐组织表见下方。",
+    "assay": "10x Chromium Next GEM 3′ v3.1（1,025,717 条）与 5′ v2（67,331 条）；FACS/plate 的 SS2 为 41,501 条，SS3 标签为 1,669 条。SS3 在本研究卵巢样本中实际指 Smart-seq2.5 改良方案。约 2/3 器官经过细胞 compartment 富集；另有 9 个未经解离的整卵泡 bulk 表达谱，不能把全部板式记录机械视为单细胞。",
+    "depth": "STAR Methods 明确：10x 在 Illumina NovaSeq 6000 S4 上测序，目标 50,000–75,000 reads/cell；SmartSeq 目标 1,000,000 reads/cell。均为设计深度，不能写成各文库实测均值。每器官通常两条 10x reactions、各加载约 7,000 cells，目标保留 10,000 个 QC-passed cells；也不是各组织实际达到的样本量。",
+    "access": "处理数据公开：Figshare 提供 28 个组织 H5AD（合计 57.14 GB / 53.21 GiB），CELLxGENE 提供 All Cells 及分组浏览/下载；GEO GSE306755 提供每细胞 CSV.gz 元数据等文件。只查看供体、组织、平台及注释分布时，可先下载约 42.46 MB 的元数据，无需整批下载表达矩阵。原始 reads 按官方流程签署 DTA；作者 paper2 目录提供分析代码。",
+    "limitations": "这是表达参考图谱，不是提供 eQTL/sQTL 效应估计的遗传关联队列。供体并非全部严格健康；解离、活细胞选择及 compartment 富集改变捕获组成，因此图谱细胞比例不代表原组织丰度。V2 包含 V1，用于模型评估时须核对训练集重叠并按供体划分。RNA 标记定义的推定衰老群及表达推断的 TF 活性均需额外功能验证。",
     "sources": [
       {
-        "label": "正式论文：Tabula Sapiens 2.0（Cell，2026）",
+        "label": "Cell 正式论文与 STAR Methods：图谱、实验、分析及限制",
         "url": "https://doi.org/10.1016/j.cell.2026.08.010"
       },
       {
-        "label": "PubMed：正式论文摘要与在线发表日期",
+        "label": "PubMed：正式论文在线发表日期",
         "url": "https://pubmed.ncbi.nlm.nih.gov/42685689/"
       },
       {
-        "label": "官方图谱说明：整合规模、供体与组织覆盖",
+        "label": "官方图谱与供体说明",
         "url": "https://tabula-sapiens.sf.czbiohub.org/about"
       },
       {
-        "label": "Figshare：v2 处理数据下载、发布日期与许可",
+        "label": "Figshare v2：28 个组织 H5AD 文件",
         "url": "https://figshare.com/articles/dataset/Tabula_Sapiens_v2/27921984"
       },
       {
-        "label": "CELLxGENE：Tabula Sapiens 数据集合",
+        "label": "CELLxGENE：完整图谱、组织与细胞群数据集合",
         "url": "https://cellxgene.cziscience.com/collections/e5f58829-1a66-40b5-a624-9046778e74f5"
       },
       {
-        "label": "官方数据访问政策：处理数据与原始 FASTQ",
+        "label": "官方数据访问政策与原始 reads 申请",
         "url": "https://tabula-sapiens.sf.czbiohub.org/whereisthedata"
       },
       {
-        "label": "CZI benchmark：新增供体子集、测序平台与处理说明",
+        "label": "CZI benchmark：新增供体子集及处理规则",
         "url": "https://virtualcellmodels.cziscience.com/dataset/tabula-sapiens"
+      },
+      {
+        "label": "GEO GSE306755：正式发表配套数据与元数据",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE306755"
+      },
+      {
+        "label": "作者分析代码：paper2",
+        "url": "https://github.com/czbiohub-sf/tabula-sapiens/tree/master/paper2"
+      },
+      {
+        "label": "AWS Open Data：原始测序、比对及参考文件",
+        "url": "https://registry.opendata.aws/tabula-sapiens/"
+      },
+      {
+        "label": "Figure 1 供体×组织计数原表（固定版本）",
+        "url": "https://github.com/czbiohub-sf/tabula-sapiens/blob/14de8b082a25dba79e12c39626843543ab92e5b5/paper2/Figure1/circos/tissuedonorcounts.csv"
+      },
+      {
+        "label": "GEO 每细胞元数据 CSV.gz（20241112 文件版本）",
+        "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306755/suppl/GSE306755_TSP1_30_metadata_min200_2500_decontx_scvi_donorassay_version2d_20241112.csv.gz"
+      },
+      {
+        "label": "ChatTS：供体临床史辅助查询工具代码",
+        "url": "https://github.com/Harper-Hua/ChatTS"
       }
     ],
     "fieldSources": {
-      "sampleSize": [1, 2, 3],
-      "cellsPerDonor": [2],
-      "assay": [6],
-      "depth": [],
-      "access": [3, 5, 6],
-      "ancestry": []
+      "sampleSize": [
+        0,
+        4,
+        10,
+        11
+      ],
+      "cellsPerDonor": [
+        10,
+        11
+      ],
+      "assay": [
+        0,
+        11
+      ],
+      "depth": [
+        0
+      ],
+      "access": [
+        3,
+        4,
+        5,
+        7,
+        8,
+        11
+      ],
+      "ancestry": [
+        11
+      ]
     },
     "evidence": {
       "checkedAt": "2026-09-07",
-      "primaryAccess": "Cell full text returned 403. The formal title, DOI, online publication date and abstract were verified through the PubMed indexed record; the official atlas About page, Figshare record, data access policy and CZI data card were read directly. This is a resource entry, not a full paper review.",
-      "sampleCounts": "Official About and Figshare describe the combined v1+v2 atlas: >1.1M cells, 28 tissues, 24 donors (11 male, 13 female; ages 22–74), with nine additional donors and four additional tissues. The formal abstract reports four new multiorgan donors. No exact cells-per-donor mean was derived from rounded atlas totals.",
-      "release": "PubMed PMID 42685689 reports Cell online publication 2026-09-02, DOI 10.1016/j.cell.2026.08.010. Figshare 27921984 reports dataset publication 2024-12-06 and CC BY 4.0. The atlas portal still cites the earlier preprint; do not substitute that older citation for the Cell version of record.",
-      "benchmarkSubset": "CZI describes a nine-new-donor benchmarking subset, with 27 input tissues and 26 after filtering. It excludes v1 samples to reduce overlap with training data. These subset counts must not replace the complete atlas counts.",
-      "access": "The official data access policy makes processed data available but requires a signed data use agreement before raw FASTQ access. The policy does not support describing every data layer as unrestricted download.",
-      "ancestry": "Genetic ancestry composition was not verified from donor metadata. NR is an uncertainty tag; no ancestry is inferred from recruitment location."
+      "primaryAccess": "The complete user-supplied formal Cell corrected-proof PDF PIIS0092867426009372.pdf (25 pages: main text pp.1-16 and STAR Methods e1-e8) was read. Methods/data and TF/senescence results were independently audited. This revision replaces the earlier abstract-only entry.",
+      "pdfSha256": "e727d5209221009c095b9f207b1581108587fe5cf5d01c127d977873988b6b87",
+      "sourceCommit": "14de8b082a25dba79e12c39626843543ab92e5b5",
+      "sampleCounts": {
+        "donor_count": 24,
+        "tissue_count": 28,
+        "tissue_donor_pairs": 123,
+        "cell_total": 1136218,
+        "mean_cells_per_donor": 47342.416666666664,
+        "median_cells_per_donor": 16758.5,
+        "min_cells_per_donor": 461,
+        "max_cells_per_donor": 213530,
+        "min_donor": "TSP13",
+        "max_donor": "TSP14",
+        "top4_cells_proportion": 0.6134500597596588,
+        "sum_of_donor_cells_equals_sum_of_tissue_cells": true,
+        "female_donor_count": 13,
+        "male_donor_count": 11
+      },
+      "metadataAgreement": "All donor and tissue counts, donor ages and sexes from GEO per-cell metadata agree with the authors Figure1 source CSV. Platform counts sum to 1,093,048 droplet plus 43,170 plate, equal to 1,136,218 and the live CELLxGENE All Cells count.",
+      "metadataEthnicity": {
+        "donors": {
+          "Black": 2,
+          "White": 10,
+          "Hispanic": 8,
+          "Asian": 4
+        },
+        "cells": {
+          "Black": 172971,
+          "White": 387969,
+          "Hispanic": 228204,
+          "Asian": 347074
+        },
+        "field_name": "ethnicity",
+        "interpretation": "Source metadata category, not genotype-inferred genetic ancestry. Source uses White/Black/Hispanic/Asian; no EUR/AFR/EAS inference."
+      },
+      "metadataAssayCounts": {
+        "SS2": 41501,
+        "SS3": 1669,
+        "10X_3Prime_v3.1": 1025717,
+        "10X_5Prime_v2": 67331
+      },
+      "annotationScopes": {
+        "unique_cell_ontology_class_strings": 182,
+        "unique_broad_cell_class_strings": 40,
+        "manually_annotated": {
+          "True": 869107,
+          "False": 267111
+        },
+        "fine_cell_type_by_tissue_combinations": 701,
+        "assay_semantics": {
+          "fine_by_assay": {
+            "smartseq": 143,
+            "10X": 175
+          },
+          "broad_by_assay": {
+            "smartseq": 37,
+            "10X": 38
+          },
+          "fine_types_exclusive_smartseq": [
+            "epithelial fate stem cell",
+            "erythroid lineage cell",
+            "fat cell",
+            "follicle",
+            "mesenchymal cell",
+            "myeloid cell",
+            "t follicular helper cell"
+          ],
+          "broad_types_exclusive_smartseq": [
+            "fat cell",
+            "follicle"
+          ],
+          "fine_tissue_combinations_by_assay": {
+            "smartseq": 449,
+            "10X": 663
+          },
+          "broad_assay_counts": {
+            "t cell": {
+              "smartseq": 7089,
+              "10X": 201107
+            },
+            "lymphocyte of b lineage": {
+              "smartseq": 4116,
+              "10X": 137728
+            },
+            "innate lymphoid cell": {
+              "smartseq": 1539,
+              "10X": 13663
+            },
+            "endothelial cell": {
+              "smartseq": 3717,
+              "10X": 59389
+            },
+            "erythroid lineage cell": {
+              "smartseq": 93,
+              "10X": 14520
+            },
+            "dendritic cell": {
+              "smartseq": 218,
+              "10X": 452
+            },
+            "contractile cell": {
+              "smartseq": 2808,
+              "10X": 53394
+            },
+            "granulocyte": {
+              "smartseq": 2621,
+              "10X": 75578
+            },
+            "duct epithelial cell": {
+              "smartseq": 217,
+              "10X": 22490
+            },
+            "hematopoietic cell": {
+              "smartseq": 323,
+              "10X": 2693
+            },
+            "myeloid leukocyte": {
+              "smartseq": 5138,
+              "10X": 123156
+            },
+            "cardiac endothelial cell": {
+              "smartseq": 210,
+              "10X": 9882
+            },
+            "meso-epithelial cell": {
+              "smartseq": 28,
+              "10X": 1530
+            },
+            "glandular epithelial cell": {
+              "smartseq": 483,
+              "10X": 21459
+            },
+            "epithelial cell": {
+              "smartseq": 1527,
+              "10X": 34114
+            },
+            "epithelial cell of lung": {
+              "smartseq": 819,
+              "10X": 13891
+            },
+            "stem cell": {
+              "smartseq": 2674,
+              "10X": 40853
+            },
+            "stromal cell": {
+              "smartseq": 2233,
+              "10X": 37686
+            },
+            "fibroblast": {
+              "smartseq": 2825,
+              "10X": 97966
+            },
+            "endo-epithelial cell": {
+              "smartseq": 516,
+              "10X": 14003
+            },
+            "ciliated epithelial cell": {
+              "smartseq": 203,
+              "10X": 2039
+            },
+            "female germ cell": {
+              "smartseq": 12,
+              "10X": 6
+            },
+            "adventitial cell": {
+              "smartseq": 450,
+              "10X": 595
+            },
+            "stratified epithelial cell": {
+              "smartseq": 72,
+              "10X": 12251
+            },
+            "fat cell": {
+              "smartseq": 39
+            },
+            "conjunctival epithelial cell": {
+              "smartseq": 23,
+              "10X": 11064
+            },
+            "secretory cell": {
+              "smartseq": 69,
+              "10X": 687
+            },
+            "melanocyte": {
+              "smartseq": 29,
+              "10X": 205
+            },
+            "glial cell": {
+              "smartseq": 83,
+              "10X": 1751
+            },
+            "neuron": {
+              "smartseq": 46,
+              "10X": 1639
+            },
+            "intestinal epithelial cell": {
+              "smartseq": 2184,
+              "10X": 31994
+            },
+            "transitional epithelial cell": {
+              "smartseq": 578,
+              "10X": 26663
+            },
+            "hepatocyte": {
+              "smartseq": 14,
+              "10X": 7400
+            },
+            "retinal pigment epithelial cell": {
+              "smartseq": 3,
+              "10X": 64
+            },
+            "ecto-epithelial cell": {
+              "smartseq": 10,
+              "10X": 4550
+            },
+            "kidney epithelial cell": {
+              "smartseq": 152,
+              "10X": 9126
+            },
+            "follicle": {
+              "smartseq": 9
+            },
+            "male germ cell": {
+              "10X": 7259
+            },
+            "vestibular dark cell": {
+              "10X": 49
+            },
+            "connective tissue cell": {
+              "10X": 152
+            }
+          }
+        }
+      },
+      "sequencing": "PDF p22/e5 Sequencing: 10x NovaSeq6000 S4 target50,000-75,000 reads/cell, SmartSeq target1M reads/cell. Not observed means. PDF p20/e3: nine intact ovarian follicles are bulk transcriptomes. PDF p22/e5: SS3 is Smart-seq2.5 in ovarian plate data.",
+      "qcIntegration": "PDF pp22-23/e5-e6: GENCODEv41/GRCh38, STAR2.7.11b, HTSeq2.0.5, CellRanger7.0.1, DecontX/celda1.16.1, nonmitochondrial gene/count thresholds. scVI0.20.0 donor+technology correction per organ; no organ batch removal; n_latent50, n_layers5, dropout0.1, dispersion gene, 50 iterations.",
+      "biologicalResults": "PDF pp4-7 and e6-e7:1635 detected TFs;890 tau>0.85,745 non-specific;839 SCENIC-supported regulons among1390 eligible TFs. PDF pp8-10/e7-e8:48,114 putative CDKN2A+MKI67- cells in21donors/25tissues;3792 SAGs; donor-tissue-type stratified cell-level Wilcoxon and cross-donor support filtering, not a pseudobulk GLM; cNMF K34 and17 pathways at GSEA FDR<0.05.",
+      "limitations": "Formal limitations p11: no donor perfectly healthy, all donors miss tissues due transplant priority; enrichment/dissociation affect observed proportions. Author Figure1 CSV and GEO show kidney1female and mammary2female despite broad both-sex overview sentence; discrepancy is explicitly retained.",
+      "release": "Formal online publication2026-09-02 verified with PubMed42685689; PDF issue date2026-10-29. Figshare27921984v1 published2024-12-06. GEO series public2026-08-26; metadata filename20241112 is a processing identifier.",
+      "dataInventory": "Figshare28H5AD total57,136,733,314 bytes; GEO metadata42,461,568bytes; current CELLxGENE AllCells1,136,218cells H5AD45,013,733,785bytes. CZI9new-donor benchmark is a filtered subset, not an independent full atlas.",
+      "figure": {
+        "source": "Formal PDF p3, original Figure1 image xref13, unchanged extraction",
+        "license": "CC BY4.0",
+        "dimensions": [
+          1743,
+          1887
+        ],
+        "sha256": "50f6e5a371b271b75cccab1cc747fe7806dab5bd971b6ad479e83476fe4c201f",
+        "visuallyVerified": true
+      }
     },
     "group": "sc-reference",
     "navLabel": "Tabula Sapiens 2.0",
     "dataUrl": "https://figshare.com/articles/dataset/Tabula_Sapiens_v2/27921984",
-    "ancestryTags": ["NR"],
-    "ancestry": "24 位供体的遗传祖源构成尚未核实，暂列“未明确 / 待核实”；不根据机构或招募地区推断祖源。"
+    "ancestryTags": [
+      "NR"
+    ],
+    "ancestry": "GEO 的 ethnicity 字段按供体计为 White 10、Hispanic 8、Asian 4、Black 2；这些是来源元数据的人群分类，不是基因型推断的遗传祖源。Asian 未细分东亚/南亚等，故不直接换算为 EUR、AFR 或 EAS 标签。",
+    "resourceTypes": [
+      "scRNA-seq 参考图谱",
+      "多组织供体配对",
+      "Cell Ontology",
+      "公开 H5AD / 元数据"
+    ],
+    "detailSections": [
+      {
+        "title": "数据构成与新增供体：完整图谱不是平衡的 24×28 设计",
+        "paragraphs": [
+          "Tabula Sapiens 2.0 在第一版基础上新增 9 位供体与 4 种组织。新增供体中，TSP25、TSP27、TSP21、TSP26 分别贡献 20、18、15、2 种组织，其余五位各贡献一种。多器官配对使同一个体内的组织比较成为可能，但器官移植优先、供体病史和取材条件造成大量缺失组合。",
+          "计数单位需要区分：182 是完整元数据的精细细胞类型数，701 是细胞类型与组织来源的组合数。论文概述写 38 个大类，但完整 GEO broad_cell_class 实际有 40 类；10x 子集恰好是 175 个细类型、38 个大类。另两类 fat cell（39 条）和 follicle（9 条）只存在于板式数据，不能把完整数据与 TF 分析子集混为同一口径。",
+          "下列供体和组织计数来自作者 Figure 1 原始 CSV，并逐项核对 GEO 每细胞元数据。记录总数 1,136,218 与正文的 1,093,048 + 43,170 以及当前 CELLxGENE All Cells 一致；记录包含不同取材、富集和平台，不代表对人体细胞的等概率抽样。"
+        ],
+        "sourceIndices": [
+          0,
+          4,
+          10,
+          11
+        ],
+        "table": {
+          "headers": [
+            "层级",
+            "规模",
+            "分析时的含义"
+          ],
+          "rows": [
+            [
+              "独立供体",
+              "24 人；11 男、13 女；22–74 岁",
+              "个体层面的生物学重复，不能用细胞数替代"
+            ],
+            [
+              "供体×组织",
+              "123 个非空组合；每供体 1–20 种组织",
+              "不是 672 个完全配对样本；不等于独立文库数"
+            ],
+            [
+              "表达记录",
+              "1,136,218",
+              "10x 与 plate 合计；卵巢另含整卵泡表达记录"
+            ],
+            [
+              "完整元数据注释",
+              "182 fine types；40 broad labels；701 tissue–type populations",
+              "完整 broad 字段比正文概述的 38 多 fat cell 和 follicle 两类"
+            ],
+            [
+              "TF / droplet 分析子集",
+              "175 fine types；38 broad labels；663 tissue–type combinations",
+              "这是平台子集，不能替代完整图谱的注释总数"
+            ]
+          ]
+        },
+        "figure": {
+          "src": "/figures/tabula-sapiens-2-fig1.png",
+          "width": 1743,
+          "height": 1887,
+          "alt": "Tabula Sapiens 2.0 Figure 1：28 种组织的供体、细胞数、年龄和性别组成",
+          "caption": "Figure 1｜各组织的供体覆盖与细胞构成。不同组织的供体数和细胞数明显不均；图中捕获比例不能直接解释为原组织的细胞丰度。摘自正式论文 Figure 1，图像完整保留；© 2026 The Authors，CC BY 4.0；原始示意绘图 B. Tojo。",
+          "sourceUrl": "https://doi.org/10.1016/j.cell.2026.08.010"
+        }
+      },
+      {
+        "title": "全部 24 位供体：记录数、组织数与人口学元数据",
+        "paragraphs": [
+          "以下“记录数”为该供体跨所有组织和平台的总和。均值 47,342.4 明显高于中位数 16,758.5，反映少数多器官供体贡献较大；TSP14、TSP25、TSP21、TSP2 共贡献 61.35% 的记录。单纯随机划分细胞进行训练/测试，会让这类供体同时大量出现在两侧。",
+          "人群列原样保留 GEO ethnicity 标签；它不表示遗传主成分或基因型推断祖源。ID 不连续且最大达到 TSP30，不等于有 30 位供体。"
+        ],
+        "sourceIndices": [
+          10,
+          11
+        ],
+        "table": {
+          "headers": [
+            "供体",
+            "记录数",
+            "组织数",
+            "年龄",
+            "性别",
+            "ethnicity"
+          ],
+          "rows": [
+            [
+              "TSP1",
+              "46,507",
+              "5",
+              "59",
+              "女",
+              "White"
+            ],
+            [
+              "TSP2",
+              "146,849",
+              "16",
+              "61",
+              "女",
+              "Black"
+            ],
+            [
+              "TSP3",
+              "4,228",
+              "1",
+              "57",
+              "女",
+              "White"
+            ],
+            [
+              "TSP4",
+              "26,122",
+              "4",
+              "38",
+              "女",
+              "Black"
+            ],
+            [
+              "TSP5",
+              "2,876",
+              "1",
+              "40",
+              "女",
+              "White"
+            ],
+            [
+              "TSP6",
+              "12,606",
+              "2",
+              "67",
+              "男",
+              "White"
+            ],
+            [
+              "TSP7",
+              "61,205",
+              "5",
+              "69",
+              "女",
+              "White"
+            ],
+            [
+              "TSP8",
+              "19,980",
+              "2",
+              "56",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP9",
+              "7,057",
+              "1",
+              "37",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP10",
+              "25,123",
+              "3",
+              "33",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP11",
+              "2,552",
+              "1",
+              "42",
+              "男",
+              "Asian"
+            ],
+            [
+              "TSP12",
+              "12,047",
+              "1",
+              "74",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP13",
+              "461",
+              "1",
+              "22",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP14",
+              "213,530",
+              "19",
+              "59",
+              "男",
+              "White"
+            ],
+            [
+              "TSP15",
+              "6,048",
+              "1",
+              "46",
+              "男",
+              "Hispanic"
+            ],
+            [
+              "TSP17",
+              "2,114",
+              "1",
+              "60",
+              "男",
+              "White"
+            ],
+            [
+              "TSP19",
+              "7,888",
+              "1",
+              "36",
+              "女",
+              "Asian"
+            ],
+            [
+              "TSP20",
+              "9,575",
+              "1",
+              "56",
+              "女",
+              "White"
+            ],
+            [
+              "TSP21",
+              "158,024",
+              "15",
+              "45",
+              "女",
+              "Asian"
+            ],
+            [
+              "TSP25",
+              "178,610",
+              "20",
+              "60",
+              "男",
+              "Asian"
+            ],
+            [
+              "TSP26",
+              "13,537",
+              "2",
+              "37",
+              "女",
+              "White"
+            ],
+            [
+              "TSP27",
+              "137,422",
+              "18",
+              "56",
+              "女",
+              "Hispanic"
+            ],
+            [
+              "TSP28",
+              "21,791",
+              "1",
+              "55",
+              "女",
+              "White"
+            ],
+            [
+              "TSP30",
+              "20,066",
+              "1",
+              "26",
+              "女",
+              "Hispanic"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "全部 28 种组织：实际供体覆盖决定可做的比较",
+        "paragraphs": [
+          "供体数按每种组织存在至少一条记录计算，尚未施加某个细胞类型的最小细胞数阈值；开展细胞类型差异分析后，有效 N 还会下降。例如胰腺虽有 3 位供体，TSP27 仅贡献 41 条记录，不能把这三人的信息量看作相同。",
+          "作者 Figure 1 源表和 GEO 元数据均显示：肾脏仅 TSP2，睾丸仅 TSP25，乳腺为 2 位女性供体。正文概述中“非生殖组织男女均有覆盖”的笼统描述与这些具体数据不完全一致；这里保留可复核的计数，不据概述补出不存在的供体。"
+        ],
+        "sourceIndices": [
+          0,
+          10,
+          11
+        ],
+        "table": {
+          "headers": [
+            "组织 / 数据标识",
+            "记录数",
+            "供体数",
+            "女 / 男"
+          ],
+          "rows": [
+            [
+              "膀胱 / Bladder",
+              "66,385",
+              "6",
+              "4 / 2"
+            ],
+            [
+              "血液 / Blood",
+              "85,233",
+              "9",
+              "5 / 4"
+            ],
+            [
+              "骨髓 / Bone_Marrow",
+              "27,112",
+              "7",
+              "3 / 4"
+            ],
+            [
+              "内耳（椭圆囊） / Ear",
+              "3,055",
+              "2",
+              "1 / 1"
+            ],
+            [
+              "眼 / Eye",
+              "34,273",
+              "4",
+              "3 / 1"
+            ],
+            [
+              "脂肪 / Fat",
+              "94,415",
+              "6",
+              "3 / 3"
+            ],
+            [
+              "心脏 / Heart",
+              "25,832",
+              "6",
+              "3 / 3"
+            ],
+            [
+              "肾脏 / Kidney",
+              "11,376",
+              "1",
+              "1 / 0"
+            ],
+            [
+              "大肠 / Large_Intestine",
+              "30,084",
+              "5",
+              "3 / 2"
+            ],
+            [
+              "肝脏 / Liver",
+              "22,214",
+              "4",
+              "1 / 3"
+            ],
+            [
+              "肺 / Lung",
+              "65,847",
+              "4",
+              "2 / 2"
+            ],
+            [
+              "淋巴结 / Lymph_Node",
+              "129,062",
+              "6",
+              "4 / 2"
+            ],
+            [
+              "乳腺 / Mammary",
+              "30,936",
+              "2",
+              "2 / 0"
+            ],
+            [
+              "肌肉 / Muscle",
+              "46,772",
+              "6",
+              "4 / 2"
+            ],
+            [
+              "卵巢 / Ovary",
+              "48,951",
+              "3",
+              "3 / 0"
+            ],
+            [
+              "胰腺 / Pancreas",
+              "14,140",
+              "3",
+              "2 / 1"
+            ],
+            [
+              "前列腺 / Prostate",
+              "21,030",
+              "3",
+              "0 / 3"
+            ],
+            [
+              "唾液腺 / Salivary_Gland",
+              "39,821",
+              "4",
+              "2 / 2"
+            ],
+            [
+              "皮肤 / Skin",
+              "17,786",
+              "4",
+              "2 / 2"
+            ],
+            [
+              "小肠 / Small_Intestine",
+              "42,036",
+              "5",
+              "3 / 2"
+            ],
+            [
+              "脾脏 / Spleen",
+              "70,448",
+              "6",
+              "4 / 2"
+            ],
+            [
+              "胃 / Stomach",
+              "33,064",
+              "3",
+              "2 / 1"
+            ],
+            [
+              "睾丸 / Testis",
+              "7,513",
+              "1",
+              "0 / 1"
+            ],
+            [
+              "胸腺 / Thymus",
+              "42,729",
+              "5",
+              "3 / 2"
+            ],
+            [
+              "舌 / Tongue",
+              "38,754",
+              "5",
+              "3 / 2"
+            ],
+            [
+              "气管 / Trachea",
+              "22,671",
+              "6",
+              "3 / 3"
+            ],
+            [
+              "子宫 / Uterus",
+              "22,029",
+              "2",
+              "2 / 0"
+            ],
+            [
+              "血管 / Vasculature",
+              "42,650",
+              "5",
+              "3 / 2"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "取材、富集与测序：覆盖细胞类型，不是测量自然细胞比例",
+        "paragraphs": [
+          "样本主要来自 Donor Network West 的成人器官与组织供体，经冰上运输，取材到初步处理尽量控制在 1 小时内。各组织由有相应经验的实验室解离为活细胞；作者明确承认没有供体是“完全健康”的，因此需要结合供体病史和组织来源选择参考样本。",
+          "约 2/3 器官用 MACS 等方法平衡 epithelial、endothelial、immune、stromal 四个 compartment，部分样本使用 FACS 富集。这样能增加稀有细胞类型的覆盖，却使下载矩阵中的细胞比例偏离原位比例；存活率和解离敏感性进一步影响捕获。",
+          "卵巢有两个特殊点：元数据 SS3 实际对应 Smart-seq2.5 改良建库，不能直接当标准 Smart-seq3；另外 9 个完整卵泡没有解离，代表整卵泡 bulk transcriptomes。对真正的单细胞方法做 benchmark 时需单独识别这些记录。"
+        ],
+        "sourceIndices": [
+          0,
+          11
+        ],
+        "table": {
+          "headers": [
+            "平台 / 设计",
+            "实际记录或安排",
+            "深度与解读"
+          ],
+          "rows": [
+            [
+              "10x 3′ v3.1",
+              "1,025,717 条",
+              "Chromium Next GEM；NovaSeq 6000 S4；目标 50,000–75,000 reads/cell"
+            ],
+            [
+              "10x 5′ v2",
+              "67,331 条",
+              "同属 droplet；3′ 与 5′ 不能默认测量特征完全相同"
+            ],
+            [
+              "SS2",
+              "41,501 条",
+              "FACS / Smart-seq2；目标 1 million reads/cell"
+            ],
+            [
+              "SS3 标签",
+              "1,669 条，来自卵巢",
+              "论文实际方案为 Smart-seq2.5；不要只按标签解释技术"
+            ],
+            [
+              "每器官 10x 设计",
+              "通常 2 个反应，各加载约 7,000 cells",
+              "目标获得 10,000 个 QC-passed cells，不是实测均值"
+            ],
+            [
+              "每器官 plate 设计",
+              "通常 4 块 384 孔板，按 compartment 分配",
+              "保留 ERCC 控制孔；稀有细胞分配可调整"
+            ],
+            [
+              "组织学配套",
+              "邻近取材组织的冷冻 / FFPE 与 H&E 数字切片",
+              "可通过门户查看；不等同于逐细胞空间坐标"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "比对、去污染与 QC：保留可复现的阈值",
+        "paragraphs": [
+          "Plate 数据使用 GENCODE v41 / GRCh38 参考，采用 STAR/HTSeq；droplet 数据用 CellRanger，正文未独立注明其 10x reference 的具体版本。以下为正式 STAR Methods 的参数，不采用数据库样本页中可能沿用旧模板的处理描述。",
+          "DecontX 按每个 10x run 独立运行，使用完整背景与筛选细胞；之后重新施加非线粒体基因数和 counts 阈值。论文还处理 barcode swapping，并排除同供体不同样本中可疑的重叠 barcode。不要额外假设作者使用了未报告的统一线粒体比例阈值或某个双细胞检测软件。"
+        ],
+        "sourceIndices": [
+          0
+        ],
+        "table": {
+          "headers": [
+            "步骤",
+            "方法 / 参数",
+            "适用范围"
+          ],
+          "rows": [
+            [
+              "Plate 比对与计数",
+              "STAR 2.7.11b；HTSeq 2.0.5；stranded=false；intersection-nonempty",
+              "GENCODE v41 / GRCh38"
+            ],
+            [
+              "Droplet 比对与计数",
+              "CellRanger 7.0.1，默认参数",
+              "10x 文库"
+            ],
+            [
+              "初步过滤",
+              "100 genes / 1,000 counts 的初筛阈值",
+              "用于后续去污染与严格筛选"
+            ],
+            [
+              "Ambient RNA",
+              "DecontX，celda 1.16.1；每个 run 分别运行",
+              "10x，利用背景液滴信息"
+            ],
+            [
+              "10x 严格过滤",
+              "≥200 非线粒体基因；≥2,500 非线粒体 counts",
+              "去污染后重新筛选"
+            ],
+            [
+              "SmartSeq 严格过滤",
+              "≥500 非线粒体基因；≥5,000 非线粒体 counts",
+              "Plate；counts 不应一概解释为 10x UMI"
+            ],
+            [
+              "Barcode 污染校正",
+              "检查跨样本 barcode / transcript barcode 异常重叠并排除可疑记录",
+              "不把污染标签与常规 doublet 检测混为一项"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "整合与注释：保留组织差异，逐层核对标签",
+        "paragraphs": [
+          "作者按器官分别使用 scVI（scvi-tools 0.20.0）整合 donor 和 technology：n_latent=50、n_layers=5、dropout_rate=0.1、dispersion=\"gene\"，训练设置为 50 iterations。整合潜空间用于 UMAP 和参考探索；作者特意不把 organ 当作要移除的 batch，以减少消除真实组织差异的风险。",
+          "注释结合组织专家、CELLxGENE、Cell Ontology 和 popV。早期供体上使用五折交叉验证检查标签可预测性，随后采用自动初注、专家检查与人工清理的迭代流程。Ontology 尚未覆盖的类型加入项目 provisional ontology。因此，参考标签是有来源和层级的注释结果，并非独立实验确认的无误真值。",
+          "公开 H5AD 包含基因计数、细胞元数据、基因元数据及降维表示。GEO 的 cell_ontology_class、cell_ontology_id、broad_cell_class、free_annotation 分别保留不同标签信息；manually_annotated 是注释来源字段，False 不能直接解释为“没有接受后续人工检查”。完整数据的 40 个 broad 字段值与正文概述的 38 必须按平台与标签映射核对。",
+          "进行差异表达或训练 count model 前，应检查所选 H5AD 的 .X、.raw 和 layers 实际存放的是原始计数、去污染结果还是标准化表达，不能把 scVI latent 或 UMAP 当表达矩阵，也不能因为做过整合就忽略供体相关性。"
+        ],
+        "sourceIndices": [
+          0,
+          8,
+          11
+        ]
+      },
+      {
+        "title": "转录因子结果：890 个特异表达 TF 是怎样得到的",
+        "paragraphs": [
+          "为避免平台差异，作者只在 droplet 数据的 175 种细胞类型中计算每个 TF 的 log-normalized expression 均值，再按该 TF 在所有细胞类型中的最高均值归一化，使用 τ 衡量表达集中程度。τ 越接近 1，表达越集中于少数类型；0.85 是参照分布及其他图谱选择的操作阈值，不是显著性检验的 P 值阈值。",
+          "在 1,635 个可检出 TF 中，890 个满足 τ>0.85，其余 745 个为非特异表达。非特异并不等于所有细胞都表达或功能必需。Figure 2E 的内皮例子显示 HEY1、LHX6、FOXC2 分别呈现动脉、静脉/微静脉和淋巴内皮相关表达；LHX6 的潜在静脉作用属于待验证线索。",
+          "作者另用 pySCENIC 0.12.1 推断 regulon：进入相应数据库与预筛范围的 1,390 个 TF 中，839 个在至少一类细胞中获得 regulon 支持。它结合共表达与 motif 信息推断调控活性，不是直接测得 TF 结合或扰动效应；未获得 regulon 支持也不能据此判定 TF 没有活性。",
+          "对统计遗传学，可先用候选基因/TF 的表达特异性定位值得研究的细胞背景，再结合 QTL、fine-mapping、共定位及功能实验形成证据链。此图谱的表达信号本身不产生变异效应估计、PIP 或因果靶基因结论。"
+        ],
+        "sourceIndices": [
+          0,
+          8
+        ]
+      },
+      {
+        "title": "衰老相关结果：定义、供体内对照与跨细胞类型异质性",
+        "paragraphs": [
+          "作者将检测到 CDKN2A、未检测到 MKI67 转录本的群体定义为推定衰老细胞。排除某性别仅有单一供体的相应组织样本后，分析覆盖约 108 万条记录、21 位供体和 25 个组织，其中 48,114 条为 CDKN2A⁺ MKI67⁻，约占 4.4%，分布于 145 个细类型和 34 个大类。此分析子集不能用完整图谱 24 人作为分母。",
+          "衰老相关基因（SAG）先在同一 donor×tissue×cell type 内，比较推定衰老群与其余细胞：双侧 Wilcoxon/Mann–Whitney U，log₂FC>0.5、BH-adjusted P<0.001，且目标群至少 50% 细胞非零表达；再要求相应组织–细胞类别内至少 50% 供体支持，汇总得到 3,792 个 SAG。这里不是 donor-level pseudobulk GLM 或混合效应模型；平均表达的 pseudobulk 主要用于后续可视化。",
+          "结果支持明显的细胞背景依赖性：在出现稳健 SAG 的 30 个大类中，CDKN2B 上调覆盖约 60%（18/30），CXCL8 和 MIF 各约 16%（5/30），IL6、IL1B 未达到作者的稳健筛选条件。未通过筛选不等于这些基因在所有细胞中都不表达。",
+          "作者对 48,114×3,792 的 SAG 表达矩阵作 cNMF，在 K=10–50 间比较重建误差与稳定性，选择 K=34；随后用各因子的高权重基因作富集分析，并以 pre-ranked GSEA（FDR<0.05）呈现 17 条细胞类型相关通路。细胞黏附、液泡酸化、蛋白代谢和能量代谢的富集各有不同，不能概括为一个通用的衰老程序。",
+          "CDKN2A⁺ MKI67⁻ 是 RNA 操作定义，可能包含非衰老细胞并漏掉其他衰老程序；MKI67 未检出也可能受到测量灵敏度影响。作者没有据此验证不可逆细胞周期停滞。正式论文的两项主要应用是 TF 与衰老分析，不应将早期预印本中的独立性别差异分析直接照搬为正式版结果。"
+        ],
+        "sourceIndices": [
+          0,
+          8
+        ]
+      },
+      {
+        "title": "下载哪一层数据：先元数据，再按任务选矩阵",
+        "paragraphs": [
+          "如果只需要选择供体、核对组织覆盖、检查建库平台或统计注释分布，先用 GEO 的 CSV.gz 元数据即可。该文件共 1,136,218 行记录，压缩大小 42,461,568 bytes；包含 donor、tissue、age、sex、ethnicity、assay、细胞类型等字段。不要为了这些信息先下载几十 GB 的 H5AD。",
+          "Figshare 的 28 个组织 H5AD 合计 57,136,733,314 bytes，即 57.14 GB（十进制）/ 53.21 GiB。当前 CELLxGENE collection 有 35 个重叠对象：All Cells、28 个组织和 6 个 compartment；All Cells 为 1,136,218 条记录、60,606 个 features。不能把所有对象的细胞数相加。不同门户可能有不同再处理版本和字段规范，下载后先核对总数、annotation 与 assay。",
+          "GEO accession、Figshare v2、CELLxGENE All Cells 和 CZI benchmark 不是四个相互独立的队列。尤其 CZI benchmark 是为模型评估处理的新增 9 位供体子集，经过注释/基因/细胞筛选，输入覆盖 27 种组织，最终 26 种；不能把其数量替换成完整 24 人图谱的规模。",
+          "按当前 GEO metadata，新增九位供体 TSP17、TSP19、TSP20、TSP21、TSP25、TSP26、TSP27、TSP28、TSP30 合计 549,027 条记录；但 published_2022=False 有 692,102 条，且包含原先供体的记录。该字段不能直接等同于“新增九位供体”，实际留出评估应明确按 donor 筛选并再核对预训练语料。"
+        ],
+        "sourceIndices": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          11,
+          12
+        ],
+        "table": {
+          "headers": [
+            "入口",
+            "具体内容",
+            "适用任务 / 访问条件"
+          ],
+          "rows": [
+            [
+              "GEO GSE306755 / CSV.gz",
+              "逐细胞 metadata；约 42.46 MB",
+              "统计供体、组织、平台和标签；公开下载，链接见本节来源"
+            ],
+            [
+              "Figshare v2",
+              "28 个按组织划分的 H5AD；约 57.14 GB 总量",
+              "按研究组织选取矩阵；CC BY 4.0"
+            ],
+            [
+              "CELLxGENE",
+              "All Cells：1,136,218 条、60,606 features；当前 H5AD 约 45.01 GB",
+              "35 个对象包含重叠分组，不可累加其细胞数"
+            ],
+            [
+              "作者 GitHub / paper2",
+              "Figure 1 计数与 TF、衰老等分析代码",
+              "复核图表、方法参数和分析层级"
+            ],
+            [
+              "AWS 原始数据",
+              "FASTQ、比对、参考基因组等分供体/技术目录",
+              "原始 reads 需签署 DTA；重新比对或从 reads 重做分析"
+            ],
+            [
+              "Portal / ChatTS",
+              "图谱浏览、临床史辅助查询和组织学图像",
+              "核对取材背景；工具回答需追溯供体原始记录"
+            ],
+            [
+              "CZI benchmark",
+              "新增 9 位供体的处理子集，非完整整合图谱",
+              "检查模型训练数据重叠后做外部或新增供体评估"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "适合的分析问题与必要的设计边界",
+        "paragraphs": [
+          "下表是根据资源设计给出的使用建议。分析时需要同时考虑供体数、每供体细胞数、组织覆盖、测量平台和参考标签来源；scVI 整合不能替代对这些层次的建模。"
+        ],
+        "sourceIndices": [
+          0,
+          6,
+          10,
+          11
+        ],
+        "table": {
+          "headers": [
+            "研究任务",
+            "可以怎样使用",
+            "需要防止的误解"
+          ],
+          "rows": [
+            [
+              "细胞类型注释与 reference mapping",
+              "以 Cell Ontology 和专家注释作为参考；按供体留出验证",
+              "不能把同一参考产生的自动标签当完全独立金标准"
+            ],
+            [
+              "跨组织表达与候选基因解释",
+              "优先在有相同供体覆盖的组织中比较，并核对细胞类别层级",
+              "组织缺失及平台/富集差异不能自动归因于组织生物学"
+            ],
+            [
+              "GPU / 大规模算法性能评估",
+              "使用百万记录稀疏矩阵；报告平台、稀疏度、预处理和运行条件",
+              "仅随机抽细胞验证不能评估跨供体泛化"
+            ],
+            [
+              "单细胞 foundation model 评估",
+              "核对预训练语料，单独选择新增供体；组织外推另设任务",
+              "完整 V2 包含 V1，不能直接充当 V1 训练模型的独立测试集"
+            ],
+            [
+              "TF 与细胞背景选择",
+              "使用 τ、表达模式和 regulon 推断筛选候选实验体系",
+              "RNA 特异性与 SCENIC 不替代结合或扰动实验"
+            ],
+            [
+              "衰老 signature 研究",
+              "按细胞类别评估 SAG 与通路，并采用替代标签做敏感性分析",
+              "CDKN2A⁺ MKI67⁻ 不是临床或功能验证的衰老真值"
+            ],
+            [
+              "群体统计 / QTL",
+              "图谱可提供表达背景，群体效应需另有基因型匹配队列",
+              "细胞数不能充当供体 N；单供体组织不能支持该组织内的群体关联估计"
+            ]
+          ]
+        }
+      },
+      {
+        "title": "版本、时间与可复核口径",
+        "paragraphs": [
+          "正式论文在线发表与数据首次公开是不同事件。PDF 的页脚印有 2026-10-29 的期刊排期，而 PubMed 记录的在线日期为 2026-09-02；二者不应相互替换。",
+          "这里的方法和生物学结果依据正式 Cell PDF 正文及 STAR Methods；供体、组织、平台和人群字段依据作者 Figure 1 计数文件与 GEO 实际元数据。论文分析层级与下载文件原始标签不一致时，应保留两种口径并核对映射，不凭标签字符串数推断新的细胞分类。"
+        ],
+        "sourceIndices": [
+          0,
+          1,
+          3,
+          4,
+          7,
+          10,
+          11
+        ],
+        "table": {
+          "headers": [
+            "对象",
+            "日期 / 版本",
+            "应如何引用"
+          ],
+          "rows": [
+            [
+              "Figshare 数据",
+              "2024-12-06；article 27921984 version 1",
+              "表示 v2 数据公开，不是 Cell 论文在线日期"
+            ],
+            [
+              "GEO 元数据文件",
+              "文件名 20241112；GSE306755 于 2026-08-26 公开",
+              "文件名处理日期不等于 accession 公开日期"
+            ],
+            [
+              "CELLxGENE collection",
+              "本次核对修订日期 2026-06-11",
+              "记录选用的 collection/dataset 版本，避免混合不同再处理对象"
+            ],
+            [
+              "Cell 正式论文",
+              "2026-09-02 在线；DOI 10.1016/j.cell.2026.08.010",
+              "正式题名为 A comprehensive transcriptomic atlas of human cell types"
+            ],
+            [
+              "本条目数据核对",
+              "2026-09-07",
+              "逐供体/组织/平台计数均与 1,136,218 条总数相符"
+            ]
+          ]
+        }
+      }
+    ]
   },
   {
     "id": "tenk10k-phase1-eqtl",

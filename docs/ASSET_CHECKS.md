@@ -62,3 +62,23 @@ Eleven complete figures were extracted or rendered from the four user-provided P
 The AlphaGenome figures are CC BY-NC 4.0 and are reproduced unchanged for noncommercial scholarly commentary. The other three papers carry CC BY 4.0. Attribution and license links are included in each figure. No uploaded full PDF is republished.
 
 Browser QA limitation: the supervised preview reports running, but the cloud browser returns `net::ERR_BLOCKED_BY_CLIENT` for the prescribed preview URL and for the production domain. Desktop/mobile browser layout and interaction checks could not be completed. The failure is recorded as an environment limitation, not a successful visual check. Source-figure visual verification is complete; production build and HTML/image/search validation are required before publication.
+
+## Tabula Sapiens 2.0 resource revision — 2026-09-07
+
+The supplied formal Cell PDF `PIIS0092867426009372.pdf` (DOI
+`10.1016/j.cell.2026.08.010`) was read through its STAR Methods. Figure 1 was
+extracted unchanged from PDF page 3 (printed page 2, original image xref 13).
+Both the complete PDF page and the extracted image were visually inspected:
+the 28 tissue sectors, donor legend, cell-count tracks, age and sex tracks match
+the resource commentary. The publication carries CC BY 4.0; attribution to the
+authors and the original schematic artist B. Tojo is retained in the caption.
+
+| Local asset | Dimensions | SHA-256 |
+| --- | ---: | --- |
+| `tabula-sapiens-2-fig1.png` | 1743 × 1887 | `50f6e5a371b271b75cccab1cc747fe7806dab5bd971b6ad479e83476fe4c201f` |
+
+Exact donor and tissue counts were computed from the authors' Figure 1 source
+CSV and independently checked against all 1,136,218 GEO metadata rows. No
+numeric values were estimated from bar heights. The resource entry records
+the source URLs, author-repository commit, platform and annotation scope
+differences. The supplied full PDF is not republished.
