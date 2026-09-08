@@ -82,3 +82,27 @@ CSV and independently checked against all 1,136,218 GEO metadata rows. No
 numeric values were estimated from bar heights. The resource entry records
 the source URLs, author-repository commit, platform and annotation scope
 differences. The supplied full PDF is not republished.
+
+## 2026-09-08 draft notes
+
+Eleven complete original figure regions were extracted from the four supplied PDFs and visually checked for panels, axes and legends. GSR, GLORB and MILK carry CC BY 4.0; the AJHG paper is All rights reserved and is accurately attributed without an invented CC licence. The complete PDFs are not included.
+
+| Local asset | Source | Dimensions | SHA-256 |
+| --- | --- | ---: | --- |
+| `gsr-fig2.png` | PDF p. 6, Figure 2 · 不同随机通路参照下的名义显著率 | 1635 × 1656 | `bba208924acafeee3369da277fd6e3a7ab38290d8335bf9454086968725c180b` |
+| `gsr-fig3.png` | PDF p. 7, Figure 3 · 真实富集与两类随机参照 | 1689 × 429 | `5fae5ea8d7b890867a642ae2252fceb3853102692799f86682a47bb59dddb551` |
+| `gsr-fig6.png` | PDF p. 11, Figure 6 · 调整前后的外部证据一致性 | 1635 × 1743 | `447ab9180cfa37cf4ea490f65e0380a563a80c255a7498d3c0ba2617dd1bb2b6` |
+| `glorb-fig4.png` | PDF p. 14, Figure 4 | 1389 × 1257 | `28a391e483197d239baca443264463cdd1494789a7c07d74ffc66d9001544ce4` |
+| `glorb-figS4.png` | PDF p. 24, Supplementary Figure S4 | 1314 × 1719 | `c8f29830b9556f2c081ddccdf3118c8d2f851d3aa5edf8f9e212f9e0e0ed27e1` |
+| `glorb-figS6.png` | PDF p. 26, Supplementary Figure S6 | 1314 × 867 | `be3214cb1e6d25348668e4525a1e81ed89a162adcd57f12c4e9702ee82dad1cd` |
+| `vep-fig1.png` | PDF p. 5, Figure 1｜突变率如何进入功能预测分数 | 1482 × 1038 | `b1563645c7b6ae5e94a03470fefbaa87489958bde39921380badc0c9a5566362` |
+| `vep-fig4.png` | PDF p. 9, Figure 4｜实验稳定性中的真实但微弱的突变缓冲 | 1482 × 897 | `beff29443e8651d3e718904979aa9e0ab3a2cd2a2c0dcd0c68406eef6e34bfef` |
+| `milk-fig1.png` | PDF p. 5, Figure 1 | 1286 × 1105 | `b1e1189b3551946ac84454ad5f826011d72705261be3e72eabb66806077b723e` |
+| `milk-fig2.png` | PDF p. 7, Figure 2 | 1286 × 1365 | `035ab7b8bc0965b915da39afbb618f7239f126700e224bf214a7596a8a337b60` |
+| `milk-fig4.png` | PDF p. 13, Figure 4 | 1286 × 1080 | `85ba727621d085deaab122b6e7b9fc034355bbb2ada60ec61f2ed448c3384632` |
+
+Local validation included the five draft routes by temporarily enabling their publication flags solely for the local build, then restoring all five source files to `published:false` in a finally block. `npm run build` passed: 45 HTML pages, 373 rendered math expressions, 50 image references, no validation errors, and 118 search records. The standalone reading copy contains all four notes, 11 embedded PNGs and 92 rendered formula expressions; all internal links resolve and embedded image integrity checks pass.
+
+This change is unpublished. A new desktop/mobile browser visual pass has not been completed; do not treat build validation or source-figure inspection as browser QA. Source checks and missing supplementary-material boundaries are recorded in `research-sources-2026-09-08.md`.
+
+Publication approval — 2026-09-08: the user explicitly requested publication. The approved issue and four paper flags are now true; the final production build passed the same 45-page, 373-math-expression, 50-image-reference and 118-search-record checks with zero errors. The healthy supervised preview was retried, but the cloud browser still returned `ERR_BLOCKED_BY_CLIENT`; no successful desktop/mobile visual check is claimed. The release preserves the reviewed notes and figures and does not alter historical pages or site code.
