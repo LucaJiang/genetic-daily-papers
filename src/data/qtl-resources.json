@@ -1,5 +1,82 @@
 [
   {
+    "id": "generation-scotland-ms-pqtl",
+    "name": "Generation Scotland 质谱血清 pQTL",
+    "version": "Nature Communications 2026-09-09，Article in Press；汇总统计 2026-02-01 已开放；2026-09-10 核读",
+    "category": "bulk",
+    "group": "bulk-blood",
+    "navLabel": "Generation Scotland · MS pQTL",
+    "tissue": "血清；Generation Scotland 家庭队列；高丰度循环蛋白与蛋白组测量",
+    "qtlTypes": [
+      "cis-pQTL",
+      "trans-pQTL"
+    ],
+    "summary": "质谱平台补充 Olink/SomaScan 之外的血清蛋白遗传调控证据。15,035 人的 439 项测量中，398 项有显著 pQTL；fastGWA 与 GCTA-COJO 报告 1,553 个条件独立信号。439 项包括 133 个唯一映射蛋白和 306 个 protein groups，并非 439 个独立单蛋白靶点。",
+    "sampleSize": "15,035 名同时有基因型与质谱表型的参与者；家庭队列，约 58% 女性、中位年龄 49 岁。439 项测量＝133 个唯一映射蛋白＋306 个蛋白组，后者包括 199 个同基因异构体相关分组和 107 个涉及不同蛋白的分组。逐表型有效 n 尚未检查统计文件。",
+    "cellsPerDonor": "不适用：血清 bulk 蛋白测量，不是单细胞 RNA 或染色质实验。",
+    "assay": "LC–MS/MS、Scanning SWATH；Agilent 1290 / TripleTOF 6600，约 3 分钟梯度，DIA-NN 1.8.12；池化 QC 校正批内漂移，limma 校正批间差异，表型作秩逆正态转换。HRC 填补；fastGWA 固定调整年龄、性别、20 PCs，并用稀疏 GRM 处理亲缘关系。",
+    "depth": "RNA reads/sample 不适用。论文设置前体 FDR 1% 和 gene-group q 值 1%，保留至少识别 2,000 个前体的样本；439 项蛋白测量与质谱 QC 阈值都不是测序深度。",
+    "access": "Edinburgh DataShare（DOI 10.7488/ds/8011）公开汇总统计，记录显示 2026-02-01 已可获取，summarydata.zip 约 66.42 GB。个体级遗传和临床资料须按 Generation Scotland 规则申请；未下载完整压缩包。论文于 2026-09-09 发表，不是数据在当天首次开放。",
+    "limitations": "偏向高丰度血清蛋白；protein groups 的共享肽段可能不能唯一对应单蛋白/异构体。P<1.2×10⁻¹⁰，cis 为 TSS±1 Mb；COJO 独立信号不是因果变异。跨平台高效应相关仅来自成功复制子集。完整统计文件的基因组版本、列名、等位基因方向及逐表型 n 未核验；使用时先核实，不能由 HRC 名称推定坐标版本。",
+    "ancestry": "苏格兰家庭队列，欧洲祖源分析背景；不是跨祖源 pQTL 资源。缺少本研究对非欧洲祖源的独立验证。",
+    "ancestryTags": [
+      "EUR"
+    ],
+    "sources": [
+      {
+        "label": "论文：已接受提前公开版本",
+        "url": "https://www.nature.com/articles/s41467-026-76474-8"
+      },
+      {
+        "label": "原文 PDF：方法、样本与测量分组",
+        "url": "https://www.nature.com/articles/s41467-026-76474-8_reference.pdf"
+      },
+      {
+        "label": "DataShare 汇总统计与开放日期",
+        "url": "https://datashare.ed.ac.uk/handle/10283/9082"
+      },
+      {
+        "label": "分析代码记录",
+        "url": "https://doi.org/10.5281/zenodo.20082557"
+      },
+      {
+        "label": "详细论文 notes",
+        "url": "https://papers.lucajiang.com/papers/generation-scotland-ms-pqtl/"
+      }
+    ],
+    "fieldSources": {
+      "sampleSize": [
+        0,
+        1
+      ],
+      "cellsPerDonor": [
+        1
+      ],
+      "assay": [
+        1
+      ],
+      "depth": [
+        1
+      ],
+      "access": [
+        1,
+        2
+      ],
+      "ancestry": [
+        1
+      ]
+    },
+    "dataUrl": "https://datashare.ed.ac.uk/handle/10283/9082",
+    "evidence": {
+      "checkedAt": "2026-09-10",
+      "primaryAccess": "Read the accepted 12-page primary PDF and the public DataShare record. Figure 1–2 and Table 1 checked visually. Supplementary spreadsheets and the 66.42 GB statistics archive were not exhaustively reviewed or reanalysed.",
+      "releaseDefinition": "Paper first published 2026-09-09 as Article in Press; DataShare availability 2026-02-01. Distinguish paper publication from first data access.",
+      "pdfSha256": "6e0b9bbcf097966f63ac4e1c7e9fa53d8af96ddf4888f4d5c20a35383d39a7f5",
+      "measurementUnit": "439 phenotypes comprise 133 uniquely mapped proteins and 306 protein groups. The 1199 signals classified as 656 cis and 543 trans refer to the uniquely mapped subset, not all 1553 signals.",
+      "statisticsBoundary": "No claim that file-level genome build, allele alignment, effective per-phenotype n, complete coverage or file schemas were inspected. Confirm actual files and ancestry-matched LD before fine-mapping/colocalization. No individual-level data downloaded."
+    }
+  },
+  {
     "id": "tabula-sapiens-2",
     "name": "Tabula Sapiens 2.0 — 人类多组织单细胞参考图谱",
     "version": "Cell 正式论文 · 在线发表 2026-09-02；v2 数据公开 2024-12-06；全文与逐细胞元数据核验 2026-09-07",

@@ -1,0 +1,16 @@
+{
+  "pymupdf": "1.26.7",
+  "figures": {
+    "gpn-star-fig2.png": "ce1865b4db3b75c7e5b474a7736c2e1d06ad845a88fbe874463e4fdf8a56cab3",
+    "gpn-star-fig3.png": "5a6392881b6870843e52f231edfe14e42735a4cc68acc5b8cfe3ad56cc3ba340",
+    "within-family-ancestry-fig2.png": "8dbe703df4707d1fc88c2a4d3de843bc5e604d955493f696fd9e2e8fa22e8cfd",
+    "within-family-ancestry-fig3.png": "e2bfda11ba99ead5abff598f10a6bedd26c7a7e5d9c621d582891b5e3362eb2f",
+    "iris-signaling-fig2.png": "de0e25125a2639af6936aca5661ef2a2c07dfb806a653f8faca16fb3aaf35913",
+    "iris-signaling-fig4.png": "622be1cd3d863571e27b12a9b7ed153cf3a5de1d715ae01308b3def6fda313e8",
+    "alphagenome-atlas-fig3.png": "d3c9c4148c496c59044c4bf311fbcf40a7f4a5aa7850709be8702a7ecd0d44ca",
+    "alphagenome-atlas-fig4.png": "c8a9f293092a021967b0014afadee09b3aa1cc219fbafc1fcdc8fabe900218f2",
+    "generation-scotland-ms-pqtl-fig1.png": "8eae7e23ec8b1a2083bea6f5e793f019d9fb28727c86a2157b84c99953e7bd6b",
+    "generation-scotland-ms-pqtl-fig2.png": "e118bb4e2bf05c943fb739774b38410c72f49478c777492083abc42d3d89670f"
+  },
+  "catalogRecords": 90
+}

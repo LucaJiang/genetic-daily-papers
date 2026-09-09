@@ -1,0 +1,33 @@
+{
+  "reviewedAt": "2026-09-10",
+  "issue": "2026-09-09",
+  "note": "All panels visually inspected against the source. Native publisher PNGs are byte-for-byte unchanged. PDF figures are rendered complete at the listed page coordinates, with no redrawing or panel rearrangement. Page indices below are zero-based. Rasterization changes file encoding, not figure content. IRIS CC BY-NC-ND figures use native unmodified publisher PNGs only.",
+  "nativeFigures": [
+    {"asset": "gpn-star-fig2.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-026-11005-5/MediaObjects/41586_2026_11005_Fig2_HTML.png", "sha256": "ce1865b4db3b75c7e5b474a7736c2e1d06ad845a88fbe874463e4fdf8a56cab3"},
+    {"asset": "gpn-star-fig3.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-026-11005-5/MediaObjects/41586_2026_11005_Fig3_HTML.png", "sha256": "5a6392881b6870843e52f231edfe14e42735a4cc68acc5b8cfe3ad56cc3ba340"},
+    {"asset": "within-family-ancestry-fig2.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-026-11039-9/MediaObjects/41586_2026_11039_Fig2_HTML.png", "sha256": "8dbe703df4707d1fc88c2a4d3de843bc5e604d955493f696fd9e2e8fa22e8cfd"},
+    {"asset": "within-family-ancestry-fig3.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-026-11039-9/MediaObjects/41586_2026_11039_Fig3_HTML.png", "sha256": "e2bfda11ba99ead5abff598f10a6bedd26c7a7e5d9c621d582891b5e3362eb2f"},
+    {"asset": "iris-signaling-fig2.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41592-026-03213-8/MediaObjects/41592_2026_3213_Fig2_HTML.png", "sha256": "de0e25125a2639af6936aca5661ef2a2c07dfb806a653f8faca16fb3aaf35913"},
+    {"asset": "iris-signaling-fig4.png", "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41592-026-03213-8/MediaObjects/41592_2026_3213_Fig4_HTML.png", "sha256": "622be1cd3d863571e27b12a9b7ed153cf3a5de1d715ae01308b3def6fda313e8"}
+  ],
+  "pdfFigures": [
+    {
+      "url": "https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphagenome-atlas-a-predictive-map-of-every-possible-dna-letter-change-in-the-human-genome/alphagenome-atlas.pdf",
+      "sha256": "07011853872613cb7bd3ce8ca62cd2621ad50b0a16e6f5dec3e480b3d190af2c",
+      "scale": 3,
+      "figures": [
+        {"asset": "alphagenome-atlas-fig3.png", "pageIndex": 8, "rect": [60, 85, 536, 604]},
+        {"asset": "alphagenome-atlas-fig4.png", "pageIndex": 10, "rect": [60, 70, 536, 593]}
+      ]
+    },
+    {
+      "url": "https://www.nature.com/articles/s41467-026-76474-8_reference.pdf",
+      "sha256": "6e0b9bbcf097966f63ac4e1c7e9fa53d8af96ddf4888f4d5c20a35383d39a7f5",
+      "scale": 3,
+      "figures": [
+        {"asset": "generation-scotland-ms-pqtl-fig1.png", "pageIndex": 2, "rect": [55, 48, 555, 474]},
+        {"asset": "generation-scotland-ms-pqtl-fig2.png", "pageIndex": 3, "rect": [50, 525, 553, 690]}
+      ]
+    }
+  ]
+}
