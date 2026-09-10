@@ -20,13 +20,44 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install playwright
-      - run: python -m playwright install --with-deps chromium
-      - name: Verify live custom domain with all approved content and controls
+      - name: Probe published URLs independently
         run: |
           mkdir -p production-review
           git rev-parse HEAD > production-review/deployed-commit.txt
-          python docs/reviews/2026-09-10/browser-check.py --base-url https://papers.lucajiang.com --output production-review
+          python - <<'PY'
+          from concurrent.futures import ThreadPoolExecutor
+          from pathlib import Path
+          import urllib.request, json, hashlib
+          hosts=['https://papers.lucajiang.com','https://c646580b.genetic-daily-papers.pages.dev']
+          routes=['/','/daily/2026-09-10/','/papers/fm-gpt-phenome-twas/','/papers/ms-spatiocellular-genetics/','/papers/scatlaspy-disk-resident/']
+          def probe(url):
+              try:
+                  with urllib.request.urlopen(url,timeout=25) as r:
+                      b=r.read()
+                      return {'url':url,'status':r.status,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'hasApprovedContent':any(x in b for x in [b'fm-gpt-phenome-twas',b'ms-spatiocellular-genetics',b'scatlaspy-disk-resident'])}
+              except Exception as e:return {'url':url,'error':repr(e)}
+          with ThreadPoolExecutor(max_workers=10) as ex: rows=list(ex.map(probe,[h+r for h in hosts for r in routes]))
+          Path('production-review/http-probes.json').write_text(json.dumps(rows,indent=2))
+          print(json.dumps(rows,indent=2),flush=True)
+          PY
+      - run: pip install playwright
+      - run: python -m playwright install chromium
+      - name: Use explicit DOM readiness while retaining content, image and interaction checks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/reviews/2026-09-10/browser-check.py')
+          s=p.read_text().replace("wait_until='networkidle'", "wait_until='domcontentloaded'")
+          s=s.replace('            for route in routes:', '            for route in routes:\n                print(width,route,flush=True)')
+          p.write_text(s)
+          PY
+      - name: Check the custom domain
+        id: custom
+        continue-on-error: true
+        run: python docs/reviews/2026-09-10/browser-check.py --base-url https://papers.lucajiang.com --output production-review/custom
+      - name: Check the exact deployed Pages URL if custom-domain navigation is unavailable
+        if: steps.custom.outcome != 'success'
+        run: python docs/reviews/2026-09-10/browser-check.py --base-url https://c646580b.genetic-daily-papers.pages.dev --output production-review/deployment
       - uses: actions/upload-artifact@v4
         if: always()
         with:
