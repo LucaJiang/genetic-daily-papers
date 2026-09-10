@@ -4,22 +4,72 @@ on:
     branches: [review-sep10-fulltext]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
+  actions: read
+concurrency:
+  group: sep10-review-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  sources:
+  review:
+    if: github.ref == 'refs/heads/review-sep10-fulltext'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: review-sep10-fulltext
+      - uses: actions/download-artifact@v4
+        with:
+          name: sep10-primary-sources
+          run-id: 34487150577
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: .source-review
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install requests beautifulsoup4 pymupdf
-      - run: python docs/reviews/2026-09-10/fetch-sources.py
+      - run: pip install pymupdf==1.26.7 playwright
+      - run: python docs/reviews/2026-09-10/materialize-assets.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: python -m playwright install --with-deps chromium
+      - name: Test real Astro preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/astro-preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break || sleep 1; done
+          python docs/reviews/2026-09-10/browser-check.py --output review-output
+      - name: Record verified assets and checks on review branch only
+        run: |
+          cp review-output/browser-report.json docs/reviews/2026-09-10/browser-report.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/figures/fm-gpt-fig*.png public/figures/ms-spatiocellular-fig*.png public/figures/scatlaspy-*.png
+          git add src/content/papers/fm-gpt-phenome-twas.md src/content/papers/ms-spatiocellular-genetics.md
+          git add docs/reviews/2026-09-10/materialized-assets.json docs/reviews/2026-09-10/browser-report.json
+          git diff --cached --stat
+          git commit -m 'review: materialize nine verified figures and record September 10 preview checks [skip ci]'
+          git push origin HEAD:review-sep10-fulltext
+          git rev-parse HEAD > review-output/reviewed-commit.txt
+      - name: Export verified source
+        if: success()
+        run: tar --exclude=.git --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.source-review --exclude=review-output -czf /tmp/sep10-reviewed-source.tgz .
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: sep10-reviewed-site
+          path: dist/
+          retention-days: 2
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: sep10-reviewed-source
+          path: /tmp/sep10-reviewed-source.tgz
+          retention-days: 2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sep10-primary-sources
-          path: .source-review/
-          include-hidden-files: true
+          name: sep10-browser-review
+          path: review-output/
           retention-days: 2

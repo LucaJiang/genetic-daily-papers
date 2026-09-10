@@ -1,0 +1,23 @@
+{
+  "issue": "2026-09-10",
+  "reviewedAt": "2026-09-10",
+  "sourceArtifact": {"runId": 34487150577, "artifactId": 10156118626, "name": "sep10-primary-sources"},
+  "note": "Native PNGs are copied byte-for-byte. scAtlasPy appendix figure pages are rendered complete at scale 3, without redrawing, recoloring or panel rearrangement. All 35 pages of the public and user-provided PDFs have identical extracted text; the four selected figures have identical rendered pixels at scale 3. Whole-file hashes differ, so no claim of byte-identical PDFs is made.",
+  "nativeFigures": [
+    {"asset":"fm-gpt-fig3.png","sourceFile":"fm-gpt-fig3.png","url":"https://journals.plos.org/plosgenetics/article/figure/image?size=large&id=10.1371/journal.pgen.1012126.g003","sha256":"11619a68e57edcc0c8723fe415b0fbfb34f8eb674bdee2e541cd1022d3def20f"},
+    {"asset":"fm-gpt-fig4.png","sourceFile":"fm-gpt-fig4.png","url":"https://journals.plos.org/plosgenetics/article/figure/image?size=large&id=10.1371/journal.pgen.1012126.g004","sha256":"6c8ec1c2118b718388d82660f7ade21426996d614a7cc453642bfb6304ee6580"},
+    {"asset":"fm-gpt-fig5.png","sourceFile":"fm-gpt-fig5.png","url":"https://journals.plos.org/plosgenetics/article/figure/image?size=large&id=10.1371/journal.pgen.1012126.g005","sha256":"705550cb7f87a7af7a9e19339b1f79dbaaa23f135b9e22cdb8401917e80a7421"},
+    {"asset":"ms-spatiocellular-fig1.png","sourceFile":"ms-fig1.png","url":"https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02741-5/MediaObjects/41588_2026_2741_Fig1_HTML.png","sha256":"7174719e3846bac3aa6200a0282c171b6a4113c44e81801f1276491bddecdaee"},
+    {"asset":"ms-spatiocellular-fig3.png","sourceFile":"ms-fig3.png","url":"https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02741-5/MediaObjects/41588_2026_2741_Fig3_HTML.png","sha256":"579e41754f6c3975bd3fbeebff983e35018653b49ece2ff69ec476b7b7e1e7af"}
+  ],
+  "pdfFigures": [
+    {"sourceFile":"scatlaspy.pdf","url":"https://www.biorxiv.org/content/10.64898/2026.09.03.748766v1.full.pdf","sha256":"0458fb2412c705db5e818d385c3659d47dd6377818848f3cd1562df2ad8da9e9","userProvidedSha256":"01cc781ef90284d25208875183be6fe1b227ceae4e78d503fd8857b821cab1a0","scale":3,
+      "figures":[
+        {"asset":"scatlaspy-fig2.png","pageIndex":27,"rect":[0,0,465.9649963378906,511.95001220703125]},
+        {"asset":"scatlaspy-edfig2.png","pageIndex":29,"rect":[0,0,465.9649963378906,447.70599365234375]},
+        {"asset":"scatlaspy-edfig3.png","pageIndex":30,"rect":[0,0,330.4410095214844,366.6990051269531]},
+        {"asset":"scatlaspy-edfig6.png","pageIndex":33,"rect":[0,0,457.27801513671875,422.0610046386719]}
+      ]
+    }
+  ]
+}
