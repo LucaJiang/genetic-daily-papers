@@ -1,0 +1,408 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "success": true,
+  "checks": [
+    {
+      "route": "/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-10/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/papers/fm-gpt-phenome-twas/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 3,
+      "math": 22
+    },
+    {
+      "route": "/papers/ms-spatiocellular-genetics/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 2,
+      "math": 2
+    },
+    {
+      "route": "/papers/scatlaspy-disk-resident/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 4,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-09/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/archive/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/resources/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 1,
+      "math": 0
+    },
+    {
+      "route": "/search/?q=FM-GPT",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/topics/fine-mapping/",
+      "width": 1440,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-10/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/papers/fm-gpt-phenome-twas/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 3,
+      "math": 22
+    },
+    {
+      "route": "/papers/ms-spatiocellular-genetics/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 2,
+      "math": 2
+    },
+    {
+      "route": "/papers/scatlaspy-disk-resident/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 4,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-09/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/archive/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/resources/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 1,
+      "math": 0
+    },
+    {
+      "route": "/search/?q=FM-GPT",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/topics/fine-mapping/",
+      "width": 1024,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-10/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/papers/fm-gpt-phenome-twas/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 3,
+      "math": 22
+    },
+    {
+      "route": "/papers/ms-spatiocellular-genetics/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 2,
+      "math": 2
+    },
+    {
+      "route": "/papers/scatlaspy-disk-resident/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 4,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-09/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/archive/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/resources/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 1,
+      "math": 0
+    },
+    {
+      "route": "/search/?q=FM-GPT",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/topics/fine-mapping/",
+      "width": 768,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-10/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/papers/fm-gpt-phenome-twas/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 3,
+      "math": 22
+    },
+    {
+      "route": "/papers/ms-spatiocellular-genetics/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 2,
+      "math": 2
+    },
+    {
+      "route": "/papers/scatlaspy-disk-resident/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 4,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-09/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/archive/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/resources/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 1,
+      "math": 0
+    },
+    {
+      "route": "/search/?q=FM-GPT",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/topics/fine-mapping/",
+      "width": 390,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-10/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/papers/fm-gpt-phenome-twas/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 3,
+      "math": 22
+    },
+    {
+      "route": "/papers/ms-spatiocellular-genetics/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 2,
+      "math": 2
+    },
+    {
+      "route": "/papers/scatlaspy-disk-resident/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 4,
+      "math": 0
+    },
+    {
+      "route": "/daily/2026-09-09/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/archive/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/resources/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 1,
+      "math": 0
+    },
+    {
+      "route": "/search/?q=FM-GPT",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    },
+    {
+      "route": "/topics/fine-mapping/",
+      "width": 320,
+      "status": 200,
+      "overflow": 0,
+      "images": 0,
+      "math": 0
+    }
+  ],
+  "pageErrors": [],
+  "failure": null
+}
