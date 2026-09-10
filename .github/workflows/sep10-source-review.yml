@@ -21,4 +21,5 @@ jobs:
         with:
           name: sep10-primary-sources
           path: .source-review/
+          include-hidden-files: true
           retention-days: 2
