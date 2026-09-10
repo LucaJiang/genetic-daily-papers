@@ -9,7 +9,7 @@
   "doi": "10.1038/s41588-026-02741-5",
   "paperUrl": "https://www.nature.com/articles/s41588-026-02741-5",
   "pdfUrl": "https://www.nature.com/articles/s41588-026-02741-5.pdf",
-  "resourceUrl": "https://humandbs.dbcls.jp/hum0197",
+  "resourceUrl": "https://humandbs.biosciencedbc.jp/en/hum0197-latest",
   "priority": "must-read",
   "readingType": "本周新作",
   "kind": "paper",
@@ -67,7 +67,7 @@
 
 跨祖源汇总的报告样本量为 **29,374 个病例、1,843,563 个对照**。欧洲祖源仍提供绝大多数病例；不能仅根据总对照数很大，就认为各祖源都有相近的检验功效。补充表也注明部分既往欧洲研究样本重叠，因此简单相加每一行并不能自动得到独立样本量。
 
-作者将汇总统计统一到 hg19，核对链方向，按 MAF>0.5%、插补质量 R²>0.7 筛选，并要求变异至少出现在两个数据集。主要采用 METAL 固定效应 meta-analysis；涉及样本重叠时使用 RE2C 中的 Lin–Sullivan 方法。FUMA 定义独立关联位点，新位点按 lead variant 周围 ±250 kb 是否含既往报告变异判定。[Methods，GWAS meta-analysis](https://www.nature.com/articles/s41588-026-02741-5#Sec12)
+作者将汇总统计统一到 hg19，核对链方向，按 MAF>0.5%、插补质量 R²>0.7 筛选，并要求变异至少出现在两个数据集。主要采用 METAL 固定效应 meta-analysis；涉及样本重叠时使用 RE2C 中的 Lin–Sullivan 方法。FUMA 定义独立关联位点，新位点按 lead variant 周围 ±250 kb 是否含既往报告变异判定。[Methods，GWAS meta-analysis](https://www.nature.com/articles/s41588-026-02741-5#Sec16)
 
 ## 新位点与祖源差异：先分清发现口径
 
@@ -125,7 +125,7 @@ PBMC 中，CD4⁺ T 细胞达到显著；细分后包括 naive CD4 T、中央记
 
 ## 细胞组成与细胞状态尚未被分解成因果贡献
 
-作者将 gsMap 显著性与原研究的细胞比例反卷积结果对照。VI 中基质细胞比例的 Spearman 相关为 **0.43**，LR 中髓系细胞比例的相关为 **0.69**，但没有一种细胞比例单独解释全部空间模式。作者据此提出细胞组成和细胞间空间关系可能共同参与。[Extended Data Figure 9](https://www.nature.com/articles/s41588-026-02741-5#MOESM1)
+作者将 gsMap 显著性与原研究的细胞比例反卷积结果对照。VI 中基质细胞比例的 Spearman 相关为 **0.43**，LR 中髓系细胞比例的相关为 **0.69**，但没有一种细胞比例单独解释全部空间模式。作者据此提出细胞组成和细胞间空间关系可能共同参与。[Extended Data Figure 9](https://www.nature.com/articles/s41588-026-02741-5#Fig12)
 
 这仍不是对“组成变化”和“细胞内状态变化”的正式分解；相关图也不是对细胞间作用的直接检验。更稳妥的解读是：空间结果提供了下一步需验证的组织情境，尚不能从一个显著 niche 直接跳到特定基因、细胞间配体–受体作用或表达介导机制。
 

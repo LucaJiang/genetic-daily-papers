@@ -96,7 +96,7 @@ $$
 Y=F\Lambda^\mathsf{T}+E,
 $$
 
-其中 $B=(\beta_{jl})$ 描述基因到因子的关系，$\Lambda$ 描述因子到表型的关系；主文采用对角的表型残差协方差，并用额外模拟考察相关残差。离散结局则需要下文的数据增广，不能直接当作同方差高斯响应。[Methods，Model of FM-GPT](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1012126#sec005)
+其中 $B=(\beta_{jl})$ 描述基因到因子的关系，$\Lambda$ 描述因子到表型的关系；主文采用对角的表型残差协方差，并用额外模拟考察相关残差。离散结局则需要下文的数据增广，不能直接当作同方差高斯响应。[Methods，Model of FM-GPT](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1012126#sec009)
 
 **因子和载荷按位点分别估计。** 因子 1 在两个位点不必具有同一含义。正文将这种设计描述为因子空间受局部 GReX 张成空间约束，但其式 (2) 同时保留了非零残差 $\epsilon_l$；因此，按所写方程，直接受 GReX 约束的是条件均值，不能不加区分地把整个 $f_l$ 写成严格的无残差线性组合。这是原文表述与方程之间需要保留的区别。
 
