@@ -12,46 +12,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python -m pip install requests beautifulsoup4
-      - name: Follow official PDF links
+      - name: Read publisher PDF and XML links
         run: |
           python - <<'PY'
           from pathlib import Path
-          import requests, json, hashlib, time, re
-          from bs4 import BeautifulSoup
+          import requests,json,hashlib,time
           from urllib.parse import urljoin
-          out=Path('source-assets');out.mkdir(exist_ok=True)
-          records=[]
-          for key,doi,node,expected in [('alpha','2026.09.08.750172','5772442','2d94bcfe47ad5b8870c92f56e498e3042b2753e97f9db23a62e74c9f57fc1333'),('mikado','2026.09.10.750583','5777735','ee1e51d44c58db3555bbecbe207cf45c9dca41aefba547f3c68ef09e7d6368c4')]:
-              s=requests.Session();s.headers['User-Agent']='Mozilla/5.0'
-              article=f'https://www.biorxiv.org/content/10.64898/{doi}v1.full'
-              r=s.get(article,timeout=60);r.raise_for_status()
-              soup=BeautifulSoup(r.content,'html.parser')
-              preview=f'https://www.biorxiv.org/panels_ajax_tab/biorxiv_tab_pdf/node:{node}/1'
-              q=s.get(preview,timeout=60,headers={'Referer':article})
-              (out/(key+'-preview.txt')).write_text(q.text)
-              urls=[]
-              for el in BeautifulSoup(q.content,'html.parser').select('[src],[href],[data]'):
-                  u=el.get('src') or el.get('href') or el.get('data')
-                  if u and 'pdf' in u:urls.append(urljoin(preview,u))
-              meta=soup.select_one('meta[name="citation_pdf_url"]')
-              urls += [meta['content'],f'https://www.biorxiv.org/content/10.64898/{doi}v1.full.pdf'] if meta else []
-              for n,url in enumerate(dict.fromkeys(urls)):
+          from bs4 import BeautifulSoup
+          out=Path('source-assets');out.mkdir(exist_ok=True);records=[]
+          for key,doi,date,node,expected in [('alpha','2026.09.08.750172','2026/09/11','5772442','2d94bcfe47ad5b8870c92f56e498e3042b2753e97f9db23a62e74c9f57fc1333'),('mikado','2026.09.10.750583','2026/09/12','5777735','ee1e51d44c58db3555bbecbe207cf45c9dca41aefba547f3c68ef09e7d6368c4')]:
+              article=f'https://www.biorxiv.org/content/10.64898/{doi}v1'
+              urls=[f'https://www.biorxiv.org/panels_ajax_tab/biorxiv_tab_pdf/node:{node}/1',f'https://www.biorxiv.org/content/early/{date}/{doi}.source.xml',f'https://www.biorxiv.org/content/biorxiv/early/{date}/{doi}.full.pdf',article+'.full.pdf?download=true',article+'.full.pdf+html']
+              for n,url in enumerate(urls):
                   rec={'key':key,'url':url}
                   try:
-                      r=s.get(url,timeout=90,headers={'Referer':article,'Accept':'application/pdf,*/*'})
+                      r=requests.get(url,timeout=75,headers={'User-Agent':'Mozilla/5.0','Referer':article})
                       rec.update(status=r.status_code,type=r.headers.get('Content-Type'),bytes=len(r.content),resolvedUrl=r.url)
-                      if r.ok and r.content.startswith(b'%PDF'):
-                          sha=hashlib.sha256(r.content).hexdigest();rec.update(sha256=sha,matchesUploaded=(sha==expected));(out/(key+'.pdf')).write_bytes(r.content)
-                          records.append(rec);print(json.dumps(rec),flush=True);break
-                      elif r.ok:(out/(key+f'-link{n}.txt')).write_text(r.text)
+                      if r.ok:
+                          if r.content.startswith(b'%PDF'):
+                              sha=hashlib.sha256(r.content).hexdigest();rec.update(sha256=sha,matchesUploaded=sha==expected);(out/(key+'.pdf')).write_bytes(r.content)
+                              records.append(rec);print(json.dumps(rec),flush=True);break
+                          (out/(key+f'-{n}.txt')).write_text(r.text)
+                          soup=BeautifulSoup(r.content,'html.parser')
+                          rec['links']=[urljoin(r.url,e.get('src') or e.get('href') or e.get('data')) for e in soup.select('[src],[href],[data]') if any(x in str(e.get('src') or e.get('href') or e.get('data')) for x in ['pdf','large','graphic'])]
                       print(json.dumps(rec),flush=True)
                   except Exception as e:rec['error']=str(e);print(str(e),flush=True)
-                  records.append(rec);time.sleep(15)
+                  records.append(rec);time.sleep(20)
           (out/'manifest.json').write_text(json.dumps(records,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sep14-official-pdfs
+          name: sep14-publisher-links
           path: source-assets/
           retention-days: 2
