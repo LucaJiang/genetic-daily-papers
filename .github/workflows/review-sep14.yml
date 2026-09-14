@@ -1,0 +1,61 @@
+name: September 14 isolated publication review
+on:
+  push:
+    branches: [review-sep14-papers]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: review-sep14
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: python -m pip install pymupdf==1.26.7 requests
+      - name: Retrieve version-pinned public primary PDFs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, requests, concurrent.futures
+          out = Path('.source-review-sep14'); out.mkdir(exist_ok=True)
+          sources = [
+            ('alpha', 'https://www.biorxiv.org/content/10.64898/2026.09.08.750172v1.full.pdf', '2d94bcfe47ad5b8870c92f56e498e3042b2753e97f9db23a62e74c9f57fc1333'),
+            ('mikado', 'https://www.biorxiv.org/content/10.64898/2026.09.10.750583v1.full.pdf', 'ee1e51d44c58db3555bbecbe207cf45c9dca41aefba547f3c68ef09e7d6368c4'),
+            ('mitotic', 'https://www.medrxiv.org/content/10.64898/2026.09.08.26362505v1.full.pdf', '969d8aea27076eb64e704c1fa06b1272c729596e6cc53da87b285b9b2b688022')]
+          def get(row):
+              key, url, expected = row
+              record = {'id': key, 'url': url, 'expectedSha256': expected}
+              try:
+                  r = requests.get(url, timeout=100, headers={'User-Agent':'Mozilla/5.0 academic source verification'})
+                  r.raise_for_status()
+                  assert r.content.startswith(b'%PDF') and len(r.content) < 60000000, 'not a size-valid PDF'
+                  actual = hashlib.sha256(r.content).hexdigest()
+                  record.update(sha256=actual, bytes=len(r.content), resolvedUrl=r.url, matchesUploaded=(actual==expected))
+                  (out / (key+'.pdf')).write_bytes(r.content)
+                  print(key, actual, 'matches uploaded:', actual==expected, flush=True)
+              except Exception as e:
+                  record['error'] = str(e)
+                  print(key, str(e), flush=True)
+              return record
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
+              records = list(ex.map(get,sources))
+          (out/'sources.json').write_text(json.dumps(records,indent=2))
+          PY
+      - name: Build current checkout
+        run: npm run build
+      - name: Export review environment
+        if: always()
+        run: tar --exclude=.git --exclude=.astro --exclude=dist -czf /tmp/sep14-review-environment.tgz .
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sep14-review-environment
+          path: /tmp/sep14-review-environment.tgz
+          retention-days: 2
