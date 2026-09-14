@@ -23,36 +23,40 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import hashlib, json, requests, concurrent.futures
+          import hashlib, json, requests, time
           out = Path('.source-review-sep14'); out.mkdir(exist_ok=True)
           sources = [
-            ('alpha', 'https://www.biorxiv.org/content/10.64898/2026.09.08.750172v1.full.pdf', '2d94bcfe47ad5b8870c92f56e498e3042b2753e97f9db23a62e74c9f57fc1333'),
-            ('mikado', 'https://www.biorxiv.org/content/10.64898/2026.09.10.750583v1.full.pdf', 'ee1e51d44c58db3555bbecbe207cf45c9dca41aefba547f3c68ef09e7d6368c4'),
-            ('mitotic', 'https://www.medrxiv.org/content/10.64898/2026.09.08.26362505v1.full.pdf', '969d8aea27076eb64e704c1fa06b1272c729596e6cc53da87b285b9b2b688022')]
-          def get(row):
-              key, url, expected = row
-              record = {'id': key, 'url': url, 'expectedSha256': expected}
-              try:
-                  r = requests.get(url, timeout=100, headers={'User-Agent':'Mozilla/5.0 academic source verification'})
-                  r.raise_for_status()
-                  assert r.content.startswith(b'%PDF') and len(r.content) < 60000000, 'not a size-valid PDF'
-                  actual = hashlib.sha256(r.content).hexdigest()
-                  record.update(sha256=actual, bytes=len(r.content), resolvedUrl=r.url, matchesUploaded=(actual==expected))
-                  (out / (key+'.pdf')).write_bytes(r.content)
-                  print(key, actual, 'matches uploaded:', actual==expected, flush=True)
-              except Exception as e:
-                  record['error'] = str(e)
-                  print(key, str(e), flush=True)
-              return record
-          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
-              records = list(ex.map(get,sources))
+            ('alpha', 'www.biorxiv.org', '2026.09.08.750172', '2026/09/11', '2d94bcfe47ad5b8870c92f56e498e3042b2753e97f9db23a62e74c9f57fc1333'),
+            ('mikado', 'www.biorxiv.org', '2026.09.10.750583', '2026/09/12', 'ee1e51d44c58db3555bbecbe207cf45c9dca41aefba547f3c68ef09e7d6368c4'),
+            ('mitotic', 'www.medrxiv.org', '2026.09.08.26362505', '2026/09/09', '969d8aea27076eb64e704c1fa06b1272c729596e6cc53da87b285b9b2b688022')]
+          records=[]
+          for key, host, doi, date, expected in sources:
+              canonical=f'https://{host}/content/10.64898/{doi}v1.full.pdf'
+              urls=[canonical, canonical+'?download=1', f'https://{host}/content/{host.split(".")[1]}/early/{date}/{doi}.full.pdf']
+              record={'id':key,'expectedSha256':expected,'attempts':[]}
+              for url in urls:
+                  try:
+                      r=requests.get(url,timeout=90,headers={'User-Agent':'Mozilla/5.0'})
+                      r.raise_for_status()
+                      assert r.content.startswith(b'%PDF') and len(r.content)<60000000,'not a size-valid PDF'
+                      actual=hashlib.sha256(r.content).hexdigest()
+                      record.update(sha256=actual,bytes=len(r.content),resolvedUrl=r.url,matchesUploaded=(actual==expected))
+                      (out/(key+'.pdf')).write_bytes(r.content)
+                      print(key,actual,'matches uploaded:',actual==expected,flush=True)
+                      break
+                  except Exception as e:
+                      record['attempts'].append({'url':url,'error':str(e)})
+                      print(key,str(e),flush=True)
+                      time.sleep(20)
+              records.append(record)
+              time.sleep(5)
           (out/'sources.json').write_text(json.dumps(records,indent=2))
           PY
       - name: Build current checkout
         run: npm run build
-      - name: Export review environment
+      - name: Export complete review environment
         if: always()
-        run: tar --exclude=.git --exclude=.astro --exclude=dist -czf /tmp/sep14-review-environment.tgz .
+        run: tar --exclude=./.git --exclude=./.astro --exclude=./dist -czf /tmp/sep14-review-environment.tgz .
       - uses: actions/upload-artifact@v4
         if: always()
         with:
