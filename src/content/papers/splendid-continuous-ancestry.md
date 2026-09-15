@@ -23,7 +23,13 @@
     "非欧洲祖源验证样本中，九性状平均partial R²相对PRS-CSx提高65.8%；LDL-C的具体比较为0.068对0.041，而不是增加65.8个百分点。",
     "平均选择1,803个变异；LDL-C的无交互消融表现几乎不变，说明不能把全部预测收益归于连续祖源交互。"
   ],
-  "topics": ["statistical-genetics", "gwas", "multi-ancestry", "polygenic-risk", "methods"],
+  "topics": [
+    "polygenic-prediction",
+    "statistical-genetics",
+    "QTL",
+    "statistical-methods",
+    "algorithm-acceleration"
+  ],
   "inlineFigures": false,
   "reviewedAt": "2026-09-15",
   "readingDepth": "核读期刊全文、Methods、Extended Data 1–5、补充算法与关键性能/样本量表；未重跑个体水平数据。"
@@ -187,6 +193,6 @@ Figure 4 的个体效应分布来自拟合的 $B_{ij}$，其祖源组间差异�
 - [Supplementary Information：算法与补充图](https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41592-026-03235-2/MediaObjects/41592_2026_3235_MOESM1_ESM.pdf)
 - [补充数据表](https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41592-026-03235-2/MediaObjects/41592_2026_3235_MOESM3_ESM.xlsx)
 - [作者软件和教程](https://github.com/chen-tony/SPLENDID)
-- [配套阅读：AoU 中训练数据组合与遗传架构](../aou-multiancestry-prs-context/)
+- [配套阅读：AoU 中训练数据组合与遗传架构](/papers/aou-multiancestry-prs-context/)
 
 期刊图像为出版商专有许可；本页提供对应原图链接，不重新分发该文图像或全文 PDF。
