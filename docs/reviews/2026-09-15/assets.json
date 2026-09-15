@@ -1,0 +1,45 @@
+[
+  {
+    "asset": "apoe-stratified-gwas-fig1.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02713-9/MediaObjects/41588_2026_2713_Fig1_HTML.png",
+    "sha256": "276f8c4d67e5d43e8c09a47a6b4c4439ad1af2be7d9d09e16421d569aae5153b",
+    "operation": "original publisher image bytes"
+  },
+  {
+    "asset": "apoe-stratified-gwas-fig3.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02713-9/MediaObjects/41588_2026_2713_Fig3_HTML.png",
+    "sha256": "c5b464fe8e67fb5da27284447426c938bfb793d3a880a2c342ed7e692da995fe",
+    "operation": "original publisher image bytes"
+  },
+  {
+    "asset": "apoe-stratified-gwas-fig4.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02713-9/MediaObjects/41588_2026_2713_Fig4_HTML.png",
+    "sha256": "77b608a25d0f4bab5d84a0f91783ef360ededd4f80ad070b4758d5140c2a3ccc",
+    "operation": "original publisher image bytes"
+  },
+  {
+    "asset": "proximal-variant-pairs-mpra-fig2.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf#page=10",
+    "sha256": "a8d3fdd23851f574e8b46a3d52532cf7a086c26a90cd0089802db9c8b0d5ffd1",
+    "pixel_sha256": "b7ec65eac44676482b6c4e066f1194e3109680bcda0043c93d335c99c04df5e7",
+    "operation": "lossless embedded figure raster and alpha extraction; pixels match uploaded PDF; no crop, annotation, or resampling"
+  },
+  {
+    "asset": "proximal-variant-pairs-mpra-fig5.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf#page=17",
+    "sha256": "4f272f75a493e8f698f3978f32f2986db5f35a83d37e80d2378ef28da82c5230",
+    "pixel_sha256": "f6e1ecc45b053471f07c6a996c2ce13d31657b1a63be71bcab7247d3bee4ebf2",
+    "operation": "lossless embedded figure raster and alpha extraction; pixels match uploaded PDF; no crop, annotation, or resampling"
+  },
+  {
+    "asset": "proximal-variant-pairs-mpra-fig6.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf#page=21",
+    "sha256": "d41a22479c9b69506e3011ba12c2ce77a7bde2c6130f855b2b20fcad7c102a98",
+    "pixel_sha256": "7c45d481dc5319e9acc43d45d2cb2ed4da129b7f76ceda4b985e6b96888a8b25",
+    "operation": "lossless embedded figure raster and alpha extraction; pixels match uploaded PDF; no crop, annotation, or resampling"
+  },
+  {
+    "supplement": "https://www.biorxiv.org/content/biorxiv/early/2026/09/11/2026.09.10.750584/DC1/embed/media-1.pdf?download=true",
+    "error": "429 Client Error: Too Many Requests for url: https://www.biorxiv.org/content/biorxiv/early/2026/09/11/2026.09.10.750584/DC1/embed/media-1.pdf?download=true"
+  }
+]
