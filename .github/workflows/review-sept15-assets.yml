@@ -5,6 +5,7 @@ on:
     paths: [.github/workflows/review-sept15-assets.yml]
 permissions:
   contents: write
+  actions: read
 jobs:
   figures:
     runs-on: ubuntu-latest
@@ -14,11 +15,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 34955872226
+          name: sept15-source-review
+          path: /tmp/review-source
       - run: pip install --quiet requests pymupdf
       - name: Fetch and verify original pixels
         run: |
           python - <<'PY'
-          import requests,fitz,hashlib,json,pathlib
+          import requests,pymupdf as fitz,hashlib,json,pathlib
           root=pathlib.Path('/tmp/sept15-assets');root.mkdir()
           dest=pathlib.Path('public/figures');dest.mkdir(exist_ok=True)
           records=[]
@@ -29,7 +36,7 @@ jobs:
               name=f'apoe-stratified-gwas-fig{no}.png';(dest/name).write_bytes(b);(root/name).write_bytes(b)
               records.append({'asset':name,'url':url,'sha256':hashlib.sha256(b).hexdigest(),'operation':'original publisher image bytes'})
           url='https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf'
-          r=requests.get(url,timeout=60);r.raise_for_status();b=r.content
+          b=pathlib.Path('/tmp/review-source/mpra-full.pdf').read_bytes()
           d=fitz.open(stream=b,filetype='pdf');assert len(d)==45
           hashes={2:'b7ec65eac44676482b6c4e066f1194e3109680bcda0043c93d335c99c04df5e7',5:'f6e1ecc45b053471f07c6a996c2ce13d31657b1a63be71bcab7247d3bee4ebf2',6:'7c45d481dc5319e9acc43d45d2cb2ed4da129b7f76ceda4b985e6b96888a8b25'}
           for no,page in [(2,9),(5,16),(6,20)]:
