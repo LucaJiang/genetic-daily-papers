@@ -1,0 +1,60 @@
+name: September 15 original figure assets
+on:
+  push:
+    branches: [research-2026-09-15]
+    paths: [.github/workflows/review-sept15-assets.yml]
+permissions:
+  contents: write
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet requests pymupdf
+      - name: Fetch originals and extract unchanged MPRA figure rasters
+        run: |
+          python - <<'PY'
+          import requests,fitz,hashlib,json,pathlib
+          root=pathlib.Path('/tmp/sept15-assets');root.mkdir()
+          dest=pathlib.Path('public/figures');dest.mkdir(exist_ok=True)
+          records=[]
+          for no in [1,3,4]:
+              url=f'https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02713-9/MediaObjects/41588_2026_2713_Fig{no}_HTML.png'
+              r=requests.get(url,timeout=60);r.raise_for_status();b=r.content
+              assert b.startswith(b'\x89PNG')
+              name=f'apoe-stratified-gwas-fig{no}.png';(dest/name).write_bytes(b);(root/name).write_bytes(b)
+              records.append({'asset':name,'url':url,'sha256':hashlib.sha256(b).hexdigest(),'operation':'original publisher image bytes'})
+          url='https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf'
+          r=requests.get(url,timeout=60);r.raise_for_status();b=r.content
+          assert hashlib.sha256(b).hexdigest()=='b9ac84fa1ff5d14a4d1c475043286a5ed5bbc79dbcd0b6dd65da4768009a1921'
+          d=fitz.open(stream=b,filetype='pdf')
+          for no,page in [(2,9),(5,16),(6,20)]:
+              im=d[page].get_images(full=True)[0];pix=fitz.Pixmap(d,im[0])
+              if im[1]: pix=fitz.Pixmap(pix,fitz.Pixmap(d,im[1]))
+              name=f'proximal-variant-pairs-mpra-fig{no}.png';pix.save(str(dest/name));b=(dest/name).read_bytes();(root/name).write_bytes(b)
+              records.append({'asset':name,'url':url+f'#page={page+1}','sha256':hashlib.sha256(b).hexdigest(),'operation':'lossless embedded figure raster and alpha extraction; no crop, annotation, or resampling'})
+          u='https://www.biorxiv.org/content/biorxiv/early/2026/09/11/2026.09.10.750584/DC1/embed/media-1.pdf?download=true'
+          try:
+              r=requests.get(u,timeout=60);r.raise_for_status();assert r.content.startswith(b'%PDF');(root/'mpra-supp.pdf').write_bytes(r.content)
+          except Exception as e: records.append({'supplement':u,'error':str(e)})
+          (root/'assets.json').write_text(json.dumps(records,indent=2))
+          p=pathlib.Path('docs/reviews/2026-09-15');p.mkdir(parents=True,exist_ok=True);(p/'assets.json').write_text(json.dumps(records,indent=2)+'\n')
+          print(json.dumps(records,indent=2))
+          PY
+      - name: Store licensed assets on review branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/figures/apoe-stratified-gwas-fig*.png public/figures/proximal-variant-pairs-mpra-fig*.png docs/reviews/2026-09-15/assets.json
+          git commit -m 'assets: add six licensed original figures for September 15 reviews'
+          git push origin HEAD:research-2026-09-15
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept15-original-assets
+          path: /tmp/sept15-assets
+          retention-days: 1
