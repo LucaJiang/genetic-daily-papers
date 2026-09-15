@@ -1,0 +1,96 @@
+name: September 15 source and figure review
+on:
+  push:
+    branches: [research-2026-09-15]
+    paths: [.github/workflows/review-sept15.yml]
+permissions:
+  contents: write
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet requests beautifulsoup4 pymupdf
+      - name: Fetch official sources and licensed figure assets
+        run: |
+          python - <<'PY'
+          import requests, json, hashlib, pathlib, fitz
+          from bs4 import BeautifulSoup
+          from urllib.parse import urljoin, urlparse
+          root=pathlib.Path('/tmp/sept15-sources'); root.mkdir()
+          dest=pathlib.Path('public/figures'); dest.mkdir(exist_ok=True)
+          session=requests.Session(); session.headers['User-Agent']='Mozilla/5.0 (academic literature review)'
+          report=[]
+          def get(url,name):
+              try:
+                  r=session.get(url,timeout=45); r.raise_for_status()
+                  b=r.content; (root/name).write_bytes(b)
+                  report.append({'file':name,'url':url,'resolved':r.url,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+                  return b
+              except Exception as e:
+                  report.append({'file':name,'url':url,'error':str(e)}); return None
+          for doi,key in [('s41592-026-03235-2','splendid'),('s41588-026-02734-4','aou'),('s41588-026-02713-9','apoe')]:
+              url='https://www.nature.com/articles/'+doi
+              b=get(url,key+'.html')
+              if not b: continue
+              soup=BeautifulSoup(b,'html.parser')
+              (root/(key+'.txt')).write_text(soup.get_text('\n',strip=True))
+              links=[]
+              for a in soup.select('a[href]'):
+                  u=urljoin(url,a['href'])
+                  if 'MediaObjects/' in u and 'ESM.' in u:
+                      links.append({'url':u,'label':a.get_text(' ',strip=True)})
+              unique={x['url']:x for x in links}
+              (root/(key+'-supplement-links.json')).write_text(json.dumps(list(unique.values()),indent=2))
+              for i,x in enumerate(unique.values()):
+                  if i>=5: break
+                  ext=urlparse(x['url']).path.rsplit('.',1)[-1]
+                  get(x['url'],key+'-supp-'+str(i)+'.'+ext)
+              if key=='apoe':
+                  get(url+'.pdf','apoe-full.pdf')
+                  for no in [1,3,4]:
+                      node=soup.find('figure',id='Fig'+str(no))
+                      if not node: continue
+                      image=node.find('img')
+                      if not image: continue
+                      u=urljoin(url,image.get('src') or image.get('data-src',''))
+                      import re
+                      u=re.sub(r'/(?:lw|m)\d+/', '/full/',u)
+                      name='apoe-stratified-gwas-fig'+str(no)+'.'+urlparse(u).path.rsplit('.',1)[-1]
+                      data=get(u,name)
+                      if data and (data.startswith(b'\x89PNG') or data.startswith(b'\xff\xd8')):
+                          (dest/name).write_bytes(data)
+          url='https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf'
+          b=get(url,'mpra-full.pdf')
+          if b and hashlib.sha256(b).hexdigest()=='00013ba2c51ebee44e9535b8c4ac97039324d26ade3f39bb62addcbffc0a9601':
+              d=fitz.open(stream=b,filetype='pdf')
+              for no,page in [(2,9),(3,11),(5,16),(6,20)]:
+                  image=d[page].get_images(full=True)[0]
+                  pix=fitz.Pixmap(d,image[0])
+                  if image[1]: pix=fitz.Pixmap(pix,fitz.Pixmap(d,image[1]))
+                  name='proximal-variant-pairs-mpra-fig'+str(no)+'.png'
+                  pix.save(str(dest/name))
+                  (root/name).write_bytes((dest/name).read_bytes())
+          get('https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.supplementary-material','mpra-supplements.html')
+          (root/'retrieval.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Store only newly retrieved licensed figures on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          find public/figures -maxdepth 1 -type f \( -name 'apoe-stratified-gwas-fig*' -o -name 'proximal-variant-pairs-mpra-fig*' \) -print0 | xargs -0 -r git add --
+          if ! git diff --cached --quiet; then
+            git commit -m 'assets: stage licensed September 15 figures for source review'
+            git push origin HEAD:research-2026-09-15
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept15-source-review
+          path: /tmp/sept15-sources
+          retention-days: 1
