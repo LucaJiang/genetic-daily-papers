@@ -1,0 +1,93 @@
+name: September 15 browser validation
+on:
+  push:
+    branches: [research-2026-09-15]
+    paths: [.github/workflows/review-sept15-browser.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 34958246574
+          name: sept15-reviewed-dist
+          path: /tmp/site-dist
+      - run: pip install --quiet playwright
+      - run: python -m playwright install --with-deps chromium
+      - run: sudo apt-get update -qq && sudo apt-get install -y fonts-noto-cjk
+      - name: Check routes, formulas, figures, navigation and search
+        run: |
+          mkdir -p /tmp/browser-review
+          python -m http.server 8765 --directory /tmp/site-dist >/tmp/browser-review/http.log 2>&1 &
+          python - <<'PY'
+          import json,pathlib,hashlib
+          from playwright.sync_api import sync_playwright
+          out=pathlib.Path('/tmp/browser-review');results=[];errors=[]
+          ids=['splendid-continuous-ancestry','proximal-variant-pairs-mpra','apoe-stratified-gwas','aou-multiancestry-prs-context']
+          routes=['/','/daily/2026-09-15/']+['/papers/'+i+'/' for i in ids]+['/archive/','/topics/','/resources/','/search/']
+          widths=[1440,1024,768,390,320]
+          try:
+            with sync_playwright() as p:
+              b=p.chromium.launch(headless=True)
+              for w in widths:
+                page=b.new_page(viewport={'width':w,'height':1000},device_scale_factor=1)
+                page.set_default_timeout(15000)
+                page.on('pageerror',lambda e:errors.append(str(e)))
+                for route in routes:
+                  resp=page.goto('http://127.0.0.1:8765'+route,wait_until='networkidle')
+                  page.evaluate('document.fonts.ready');assert resp.status==200
+                  page.evaluate("document.querySelectorAll('img').forEach(i=>i.loading='eager')")
+                  page.wait_for_function('Array.from(document.images).every(i=>i.complete)')
+                  overflow=page.evaluate('document.documentElement.scrollWidth>innerWidth+1')
+                  badimages=page.evaluate('Array.from(document.images).filter(i=>!i.naturalWidth).map(i=>i.src)')
+                  badmath=page.locator('.katex-error').count()
+                  badanchors=page.evaluate('Array.from(document.querySelectorAll("a[href^=\\\"#\\\"]")).map(a=>a.getAttribute("href").slice(1)).filter(h=>h&&!document.getElementById(decodeURIComponent(h)))')
+                  results.append({'width':w,'route':route,'overflow':overflow,'badImages':badimages,'mathErrors':badmath,'badAnchors':badanchors})
+                  assert not overflow and not badimages and not badmath and not badanchors,results[-1]
+                  if '/papers/' in route:
+                    toc=page.locator('details.mobile-toc')
+                    if w<=768 and toc.is_visible():
+                      toc.locator('summary').click();assert toc.get_attribute('open') is not None
+                      a=toc.locator('nav a').nth(1);href=a.get_attribute('href');a.click()
+                      assert page.evaluate('decodeURIComponent(location.hash)')==href
+                      page.goto('http://127.0.0.1:8765'+route,wait_until='networkidle')
+                    for a in page.locator('figure.inline-figure > a').all():
+                      with page.expect_popup() as pop: a.click()
+                      popup=pop.value;popup.wait_for_load_state('load')
+                      assert popup.locator('img').evaluate('(i)=>i.complete && i.naturalWidth>0')
+                      popup.close()
+                  if w in [1440,390] and route in routes[:6]:
+                    page.evaluate('scrollTo(0,0)')
+                    name=str(w)+'-'+(route.strip('/').replace('/','-') or 'home')
+                    page.screenshot(path=str(out/(name+'.png')))
+                    if page.locator('figure.inline-figure').count():
+                      page.locator('figure.inline-figure').nth(1).scroll_into_view_if_needed()
+                      page.screenshot(path=str(out/(name+'-figure.png')))
+                  if route=='/daily/2026-09-15/':
+                    linked=page.eval_on_selector_all('a[href^="/papers/"]','as=>Array.from(new Set(as.map(a=>a.pathname)))')
+                    assert set(linked)==set('/papers/'+i+'/' for i in ids),linked
+                for q,expect in [('SPLENDID',ids[0]),('DDHD1',ids[2]),('105/178',ids[1])]:
+                  page.goto('http://127.0.0.1:8765/search/',wait_until='networkidle')
+                  page.locator('#search-query').fill(q);page.locator('.search-submit').click()
+                  page.wait_for_selector('#search-results a[href="/papers/'+expect+'/"]')
+                page.close()
+              b.close()
+            assert not errors,errors
+            print('PASS: 50 route/viewport combinations, 15 search checks, mobile TOCs and all figure originals')
+          finally:
+            (out/'results.json').write_text(json.dumps({'applicationTree':'f083e9e466efd343afecb1128a329d6de62c6f02','routeViewportCombinations':len(results),'results':results,'pageErrors':errors},ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept15-browser-review
+          path: /tmp/browser-review
+          retention-days: 1
