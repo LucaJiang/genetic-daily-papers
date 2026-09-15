@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install --quiet requests pymupdf
-      - name: Fetch originals and extract unchanged MPRA figure rasters
+      - name: Fetch and verify original pixels
         run: |
           python - <<'PY'
           import requests,fitz,hashlib,json,pathlib
@@ -30,13 +30,14 @@ jobs:
               records.append({'asset':name,'url':url,'sha256':hashlib.sha256(b).hexdigest(),'operation':'original publisher image bytes'})
           url='https://www.biorxiv.org/content/10.64898/2026.09.10.750584v1.full.pdf'
           r=requests.get(url,timeout=60);r.raise_for_status();b=r.content
-          assert hashlib.sha256(b).hexdigest()=='b9ac84fa1ff5d14a4d1c475043286a5ed5bbc79dbcd0b6dd65da4768009a1921'
-          d=fitz.open(stream=b,filetype='pdf')
+          d=fitz.open(stream=b,filetype='pdf');assert len(d)==45
+          hashes={2:'b7ec65eac44676482b6c4e066f1194e3109680bcda0043c93d335c99c04df5e7',5:'f6e1ecc45b053471f07c6a996c2ce13d31657b1a63be71bcab7247d3bee4ebf2',6:'7c45d481dc5319e9acc43d45d2cb2ed4da129b7f76ceda4b985e6b96888a8b25'}
           for no,page in [(2,9),(5,16),(6,20)]:
               im=d[page].get_images(full=True)[0];pix=fitz.Pixmap(d,im[0])
               if im[1]: pix=fitz.Pixmap(pix,fitz.Pixmap(d,im[1]))
+              assert hashlib.sha256(pix.samples).hexdigest()==hashes[no],f'Figure {no} pixel mismatch'
               name=f'proximal-variant-pairs-mpra-fig{no}.png';pix.save(str(dest/name));b=(dest/name).read_bytes();(root/name).write_bytes(b)
-              records.append({'asset':name,'url':url+f'#page={page+1}','sha256':hashlib.sha256(b).hexdigest(),'operation':'lossless embedded figure raster and alpha extraction; no crop, annotation, or resampling'})
+              records.append({'asset':name,'url':url+f'#page={page+1}','sha256':hashlib.sha256(b).hexdigest(),'pixel_sha256':hashes[no],'operation':'lossless embedded figure raster and alpha extraction; pixels match uploaded PDF; no crop, annotation, or resampling'})
           u='https://www.biorxiv.org/content/biorxiv/early/2026/09/11/2026.09.10.750584/DC1/embed/media-1.pdf?download=true'
           try:
               r=requests.get(u,timeout=60);r.raise_for_status();assert r.content.startswith(b'%PDF');(root/'mpra-supp.pdf').write_bytes(r.content)
