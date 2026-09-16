@@ -1,0 +1,55 @@
+name: September 16 exact figure verification
+on:
+  push:
+    branches: [research-2026-09-16]
+    paths: [.github/workflows/review-sept16-figure-fix.yml]
+permissions:
+  contents: write
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet requests pillow
+      - name: Repair Figure 1 and verify all article identifiers
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,requests,io
+          from PIL import Image
+          p=pathlib.Path('docs/reviews/2026-09-16/assets.json');rows=json.loads(p.read_text())
+          for x in rows:
+              if x['asset'].startswith('ifna-'):
+                  x['license']='CC BY-NC-ND 4.0'
+                  x['licenseUrl']='https://creativecommons.org/licenses/by-nc-nd/4.0/'
+              else:x['licenseUrl']='https://creativecommons.org/licenses/by/4.0/'
+              if x['asset']=='ifna-clonal-hematopoiesis-fig1.png':
+                  u='https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02751-3/MediaObjects/41588_2026_2751_Fig1_HTML.png'
+                  r=requests.get(u,timeout=60);r.raise_for_status();b=r.content
+                  im=Image.open(io.BytesIO(b));assert min(im.size)>400;im.verify()
+                  pathlib.Path('public/figures',x['asset']).write_bytes(b)
+                  x['url']=u;x['sha256']=hashlib.sha256(b).hexdigest()
+              expected='s41588-026-02751-3' if x['asset'].startswith('ifna-') else 's41588-026-02732-6'
+              assert expected in x['url'] and expected in x['sourceUrl']
+              b=pathlib.Path('public/figures',x['asset']).read_bytes()
+              assert hashlib.sha256(b).hexdigest()==x['sha256']
+          p.write_text(json.dumps(rows,indent=2)+'\n')
+          PY
+      - name: Commit verified assets to review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/figures/ifna-clonal-hematopoiesis-fig1.png docs/reviews/2026-09-16/assets.json
+          git commit -m 'fix: use correct IFN Figure 1 and preserve CC BY-NC-ND attribution'
+          git push origin HEAD:research-2026-09-16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sept16-verified-figures
+          path: |
+            public/figures/eas-schizophrenia-cnv-fig*.png
+            public/figures/ifna-clonal-hematopoiesis-fig*.png
+            docs/reviews/2026-09-16/assets.json
+          retention-days: 2
