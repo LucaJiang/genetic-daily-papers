@@ -1,0 +1,76 @@
+name: September 16 CellDot source and figure review
+on:
+  push:
+    branches: [research-2026-09-16]
+    paths: [.github/workflows/review-sept16-celldot.yml]
+permissions:
+  contents: write
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet requests beautifulsoup4 pymupdf==1.26.7
+      - name: Retrieve and verify CellDot primary material
+        run: |
+          python - <<'PY'
+          import pathlib,requests,hashlib,json,time,pymupdf
+          from bs4 import BeautifulSoup
+          from urllib.parse import urljoin
+          root=pathlib.Path('/tmp/sept16-celldot');root.mkdir()
+          report=[]
+          def get(u,name,timeout=50):
+              try:
+                  r=requests.get(u,timeout=timeout);r.raise_for_status()
+                  (root/name).write_bytes(r.content)
+                  report.append({'file':name,'url':u,'sha256':hashlib.sha256(r.content).hexdigest()})
+                  return r.content
+              except Exception as e:
+                  report.append({'file':name,'url':u,'error':str(e)});return None
+          base='https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1'
+          pdf=None
+          for u in [base+'.full.pdf','https://www.biorxiv.org/content/biorxiv/early/2026/09/15/2026.09.09.750350.full.pdf']:
+              pdf=get(u,'celldot.pdf')
+              if pdf and pdf.startswith(b'%PDF'):break
+              time.sleep(5)
+          html=get(base+'.full','celldot.html')
+          sups=[]
+          if html:
+              soup=BeautifulSoup(html,'html.parser')
+              sups=sorted({urljoin(base,a['href']) for a in soup.find_all('a',href=True) if 'DC' in a['href'] and ('.pdf' in a['href'] or '.xlsx' in a['href'])})
+          if not sups:sups=['https://www.biorxiv.org/content/biorxiv/early/2026/09/15/2026.09.09.750350/DC1/embed/media-1.pdf?download=true']
+          for i,u in enumerate(sups[:4]):get(u,f'celldot-supp-{i+1}.pdf')
+          for file in ['engine.py','config.py','run.py','prep.py']:
+              get('https://raw.githubusercontent.com/YangLabHKUST/CellDot/main/celldot/'+file,file)
+          get('https://raw.githubusercontent.com/YangLabHKUST/CellDot/main/README.md','README.md')
+          (root/'sources.json').write_text(json.dumps(report,indent=2)+'\n')
+          assert pdf and pdf.startswith(b'%PDF'),'PDF unavailable; do not publish incomplete figures'
+          d=pymupdf.open(stream=pdf,filetype='pdf');assert len(d)==29
+          specs=[(2,6,'6b3df6970b51c864170cdbd92808925a13f723fe4a3dc5a21cf8bc27d239912a'),(3,8,'c0ef43dac53ee89e02282458a9e203c8382b086ae36ea8421ed0cfbc90af6a3c'),(6,15,'baf6109f2ac9b9bda45a8563aa4c9ee6c73d6e85083cf2346e6ff35726893fbe')]
+          out=pathlib.Path('public/figures');out.mkdir(exist_ok=True)
+          manifest=pathlib.Path('docs/reviews/2026-09-16/assets.json');rows=json.loads(manifest.read_text())
+          for no,page,expected in specs:
+              pix=d[page].get_pixmap(dpi=144,alpha=False)
+              assert hashlib.sha256(pix.samples).hexdigest()==expected,f'Full-page pixel mismatch: {no}'
+              name=f'celldot-ot-decontamination-fig{no}.png';pix.save(str(out/name));b=(out/name).read_bytes();(root/name).write_bytes(b)
+              rows.append({'asset':name,'url':base+'.full.pdf#page='+str(page+1),'sourceUrl':base+'.full.pdf#page='+str(page+1),'sha256':hashlib.sha256(b).hexdigest(),'pixel_sha256':expected,'operation':'complete original figure-containing PDF page rendered at 144 dpi; matches uploaded PDF; no cropping, annotation, recoloring, or panel reconstruction','license':'CC BY-NC-ND 4.0','licenseUrl':'https://creativecommons.org/licenses/by-nc-nd/4.0/'})
+          manifest.write_text(json.dumps(rows,indent=2)+'\n')
+          (root/'assets.json').write_text(json.dumps(rows,indent=2)+'\n')
+          PY
+      - name: Store verified original figure pages on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/figures/celldot-ot-decontamination-fig*.png docs/reviews/2026-09-16/assets.json
+          git commit -m 'assets: include three unmodified CellDot figure pages with verified pixels'
+          git push origin HEAD:research-2026-09-16
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept16-celldot-sources
+          path: /tmp/sept16-celldot
+          retention-days: 2
