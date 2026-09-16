@@ -1,0 +1,79 @@
+name: September 16 decoded figure inspection
+on:
+  push:
+    branches: [research-2026-09-16]
+    paths: [.github/workflows/review-sept16-paint.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  paint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: sept16-reviewed-dist
+          path: site
+          run-id: 35099859466
+          github-token: ${{ github.token }}
+          repository: LucaJiang/genetic-daily-papers
+      - run: |
+          pip install --quiet playwright pillow
+          python -m playwright install --with-deps chromium
+          sudo apt-get update -qq && sudo apt-get install -y fonts-noto-cjk
+      - name: Wait for decoding and painting, then inspect all original figures
+        run: |
+          python - <<'PY'
+          import pathlib,json,http.server,threading,functools,io,traceback
+          from playwright.sync_api import sync_playwright
+          from PIL import Image,ImageStat
+          out=pathlib.Path('/tmp/sept16-paint');out.mkdir()
+          class Quiet(http.server.SimpleHTTPRequestHandler):
+              def log_message(self,*args):pass
+          server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(Quiet,directory='site'))
+          threading.Thread(target=server.serve_forever,daemon=True).start()
+          slugs=['eas-schizophrenia-cnv','ifna-clonal-hematopoiesis','celldot-ot-decontamination'];rows=[];errors=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch()
+              version=browser.version
+              for width in [1440,390,320]:
+                  page=browser.new_page(viewport={'width':width,'height':1050},device_scale_factor=1)
+                  for slug in slugs:
+                      response=page.goto('http://127.0.0.1:8765/papers/'+slug+'/',wait_until='networkidle');assert response.status==200
+                      page.evaluate("document.querySelectorAll('img').forEach(x=>x.loading='eager')")
+                      page.evaluate('Promise.all(Array.from(document.images).map(x=>x.decode()))')
+                      page.evaluate('document.fonts.ready')
+                      page.screenshot(path=str(out/f'{width}-{slug}-top.png'))
+                      for i,fig in enumerate(page.locator('.inline-figure').all()):
+                          try:
+                              fig.scroll_into_view_if_needed()
+                              page.evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))')
+                              page.wait_for_timeout(500)
+                              im=fig.locator('img');png=im.screenshot()
+                              (out/f'{width}-{slug}-image-{i+1}.png').write_bytes(png)
+                              stat=ImageStat.Stat(Image.open(io.BytesIO(png)).convert('RGB'))
+                              assert max(stat.stddev)>15,('blank raster',stat.stddev)
+                              page.screenshot(path=str(out/f'{width}-{slug}-figure-{i+1}.png'))
+                              rows.append({'paper':slug,'width':width,'figure':i+1,'stddev':stat.stddev,'natural':im.evaluate('(x)=>[x.naturalWidth,x.naturalHeight]')})
+                          except Exception as e:errors.append({'paper':slug,'width':width,'figure':i+1,'error':str(e)})
+                      assert page.locator('.katex-error').count()==0
+                      assert page.evaluate('document.documentElement.scrollWidth-window.innerWidth')<=1
+                  page.goto('http://127.0.0.1:8765/daily/2026-09-16/',wait_until='networkidle')
+                  page.screenshot(path=str(out/f'{width}-daily.png'))
+                  page.close()
+              browser.close()
+          server.shutdown()
+          (out/'paint-validation.json').write_text(json.dumps({'browser':version,'sourceRun':35099859466,'reviewedSource':'b9bafa969ef1751979babe3b2a1e272951fab894','checks':rows,'errors':errors},indent=2)+'\n')
+          assert len(rows)==30 and not errors,errors
+          print('PASS: 30 decoded image raster checks on the exact reviewed site artifact')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept16-decoded-figure-inspection
+          path: /tmp/sept16-paint
+          retention-days: 2
