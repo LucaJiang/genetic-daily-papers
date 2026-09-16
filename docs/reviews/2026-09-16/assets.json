@@ -61,5 +61,35 @@
     "operation": "unchanged original publisher image bytes",
     "license": "CC BY-NC-ND 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+  },
+  {
+    "asset": "celldot-ot-decontamination-fig2.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=7",
+    "sourceUrl": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=7",
+    "sha256": "0b11e1fa36f5d11f6463897b83391d008b5c0fe56a2c082c6e280a64967b462a",
+    "pixel_sha256": "6b3df6970b51c864170cdbd92808925a13f723fe4a3dc5a21cf8bc27d239912a",
+    "operation": "complete original figure-containing PDF page rendered at 144 dpi; matches uploaded PDF; no cropping, annotation, recoloring, or panel reconstruction",
+    "license": "CC BY-NC-ND 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+  },
+  {
+    "asset": "celldot-ot-decontamination-fig3.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=9",
+    "sourceUrl": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=9",
+    "sha256": "7f262103f6e4274268a809a0ac9ec7910bb9d4c48efe6c428dd81d31de73930a",
+    "pixel_sha256": "c0ef43dac53ee89e02282458a9e203c8382b086ae36ea8421ed0cfbc90af6a3c",
+    "operation": "complete original figure-containing PDF page rendered at 144 dpi; matches uploaded PDF; no cropping, annotation, recoloring, or panel reconstruction",
+    "license": "CC BY-NC-ND 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+  },
+  {
+    "asset": "celldot-ot-decontamination-fig6.png",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=16",
+    "sourceUrl": "https://www.biorxiv.org/content/10.64898/2026.09.09.750350v1.full.pdf#page=16",
+    "sha256": "eee24f429816529f793b7e01ec7e858bd6cd40c02afbecb1f3b1411d40139404",
+    "pixel_sha256": "baf6109f2ac9b9bda45a8563aa4c9ee6c73d6e85083cf2346e6ff35726893fbe",
+    "operation": "complete original figure-containing PDF page rendered at 144 dpi; matches uploaded PDF; no cropping, annotation, recoloring, or panel reconstruction",
+    "license": "CC BY-NC-ND 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
   }
 ]
