@@ -1,0 +1,135 @@
+name: September 16 full build and browser review
+on:
+  push:
+    branches: [research-2026-09-16]
+    paths:
+      - '.github/workflows/review-sept16-build.yml'
+      - 'src/content/papers/eas-schizophrenia-cnv.md'
+      - 'src/content/papers/ifna-clonal-hematopoiesis.md'
+      - 'src/content/daily/2026-09-16.md'
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Full production build
+        run: |
+          mkdir -p /tmp/sept16-evidence
+          npm ci --no-audit --no-fund
+          npm run build 2>&1 | tee /tmp/sept16-evidence/build.log
+          git rev-parse HEAD > /tmp/sept16-evidence/source-commit.txt
+          git rev-parse HEAD^{tree} > /tmp/sept16-evidence/source-tree.txt
+          cp docs/reviews/2026-09-16/assets.json /tmp/sept16-evidence/assets.json
+      - name: Prepare browser
+        run: |
+          pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Validate actual pages and original images
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,threading,http.server,functools,traceback
+          from urllib.parse import unquote
+          from playwright.sync_api import sync_playwright
+          root=pathlib.Path('/tmp/sept16-evidence');shots=root/'screenshots';shots.mkdir()
+          manifest=json.loads(pathlib.Path('docs/reviews/2026-09-16/assets.json').read_text())
+          for f in manifest:
+              b=pathlib.Path('dist/figures',f['asset']).read_bytes()
+              assert hashlib.sha256(b).hexdigest()==f['sha256'],f['asset']
+          class Quiet(http.server.SimpleHTTPRequestHandler):
+              def log_message(self,*args):pass
+          server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(Quiet,directory='dist'))
+          threading.Thread(target=server.serve_forever,daemon=True).start()
+          slugs=['eas-schizophrenia-cnv','ifna-clonal-hematopoiesis']
+          routes=['/','/daily/2026-09-16/']+['/papers/'+s+'/' for s in slugs]+['/archive/','/topics/','/resources/','/search/','/daily/2026-09-15/','/papers/splendid-continuous-ancestry/']
+          errors=[];rows=[];searches=[];math={};figures={};js=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch()
+              for width in [1440,1024,768,390,320]:
+                  page=browser.new_page(viewport={'width':width,'height':1000},device_scale_factor=1)
+                  page.on('pageerror',lambda e:js.append(str(e)))
+                  for route in routes:
+                      name=route.strip('/').replace('/','-') or 'home'
+                      try:
+                          r=page.goto('http://127.0.0.1:8765'+route,wait_until='networkidle')
+                          assert r.status==200,(route,r.status)
+                          page.evaluate("document.querySelectorAll('img').forEach(x=>x.loading='eager')")
+                          page.wait_for_function("Array.from(document.images).every(x=>x.complete && x.naturalWidth>0)")
+                          page.evaluate('document.fonts.ready')
+                          assert page.locator('.katex-error').count()==0,'KaTeX error'
+                          overflow=page.evaluate('document.documentElement.scrollWidth-window.innerWidth')
+                          assert overflow<=1,('overflow',overflow)
+                          if route=='/daily/2026-09-16/':
+                              ids=page.locator('.paper-list .paper-card').evaluate_all('(xs)=>xs.map(x=>x.dataset.paperId)')
+                              assert ids==slugs,ids
+                          if route in ['/papers/'+s+'/' for s in slugs]:
+                              math[route]=page.locator('.review-article .katex').count()
+                              figures[route]=page.locator('.inline-figure').count()
+                              assert math[route]>5,'missing math'
+                              assert figures[route]==(3 if slugs[0] in route else 4),'figure count'
+                              for href in page.locator('.mobile-toc a').evaluate_all('(xs)=>xs.map(x=>x.getAttribute("href"))'):
+                                  assert page.evaluate('(id)=>Boolean(document.getElementById(id))',unquote(href[1:])),href
+                              if width<=768 and page.locator('.mobile-toc summary').is_visible():
+                                  page.locator('.mobile-toc summary').click()
+                                  link=page.locator('.mobile-toc a').first
+                                  target=link.get_attribute('href')
+                                  link.click();page.wait_for_timeout(150)
+                                  assert unquote(page.url.split('#')[-1])==unquote(target[1:])
+                                  page.locator('.mobile-toc').evaluate('(x)=>x.open=false')
+                              if width==1440:
+                                  for a in page.locator('.inline-figure > a').all():
+                                      with page.expect_popup() as pop:a.click()
+                                      image=pop.value;image.wait_for_load_state()
+                                      image.wait_for_function('document.images.length>0 && document.images[0].complete && document.images[0].naturalWidth>0')
+                                      image.close()
+                              if width in [1440,390]:
+                                  page.evaluate('window.scrollTo(0,0)');page.wait_for_timeout(100)
+                                  page.screenshot(path=str(shots/f'{width}-{name}.png'))
+                                  page.locator('.inline-figure').first.scroll_into_view_if_needed()
+                                  page.screenshot(path=str(shots/f'{width}-{name}-figure.png'))
+                          if route=='/daily/2026-09-16/' and width in [1440,390]:
+                              page.screenshot(path=str(shots/f'{width}-{name}.png'))
+                          rows.append({'route':route,'width':width,'status':r.status,'overflow':overflow,'images':page.locator('img').count()})
+                      except Exception as e:
+                          errors.append({'route':route,'width':width,'error':str(e),'trace':traceback.format_exc()})
+                          page.screenshot(path=str(shots/f'ERROR-{width}-{name}.png'))
+                  for query,target in [('NGENE','eas-schizophrenia-cnv'),('RFX3','ifna-clonal-hematopoiesis'),('51/51','eas-schizophrenia-cnv')]:
+                      try:
+                          page.goto('http://127.0.0.1:8765/search/',wait_until='networkidle')
+                          page.locator('#search-query').fill(query)
+                          page.locator('#search-results a[href="/papers/'+target+'/"]').first.wait_for(state='visible',timeout=15000)
+                          searches.append({'width':width,'query':query,'target':target,'passed':True})
+                      except Exception as e:errors.append({'width':width,'query':query,'error':str(e)})
+                  page.close()
+              browser.close()
+          server.shutdown()
+          result={'routes':rows,'searches':searches,'math':math,'figures':figures,'errors':errors,'javascriptErrors':js,'imageSHA256Verified':len(manifest)}
+          (root/'browser.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in result.items() if k not in ['routes','searches']},ensure_ascii=False,indent=2))
+          assert len(rows)==50 and len(searches)==15 and not errors and not js,'Browser checks failed; see evidence'
+          PY
+      - name: Export source for final integrity check
+        if: always()
+        run: tar --exclude=.git --exclude=node_modules --exclude=dist --exclude=.astro --exclude=public/figures -czf /tmp/sept16-evidence/source.tgz .
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept16-build-browser-evidence
+          path: /tmp/sept16-evidence
+          retention-days: 2
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: sept16-reviewed-dist
+          path: dist
+          retention-days: 2
