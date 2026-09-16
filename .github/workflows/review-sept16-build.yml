@@ -6,9 +6,10 @@ on:
       - '.github/workflows/review-sept16-build.yml'
       - 'src/content/papers/eas-schizophrenia-cnv.md'
       - 'src/content/papers/ifna-clonal-hematopoiesis.md'
+      - 'src/content/papers/celldot-ot-decontamination.md'
       - 'src/content/daily/2026-09-16.md'
 permissions:
-  contents: read
+  contents: write
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -21,6 +22,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Use existing canonical topic taxonomy
+        run: |
+          python - <<'PY'
+          import pathlib,json
+          p=pathlib.Path('src/content/papers/celldot-ot-decontamination.md')
+          raw=p.read_text();_,header,body=raw.split('---\n',2);data=json.loads(header)
+          data['topics']=['single-cell','statistical-methods','algorithm-acceleration','QTL']
+          p.write_text('---\n'+json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n---\n'+body)
+          PY
+          if ! git diff --quiet -- src/content/papers/celldot-ot-decontamination.md; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src/content/papers/celldot-ot-decontamination.md
+            git commit -m 'content: classify CellDot under existing single-cell and algorithm topics'
+            git push origin HEAD:research-2026-09-16
+          fi
       - name: Full production build
         run: |
           mkdir -p /tmp/sept16-evidence
@@ -35,14 +52,14 @@ jobs:
           python -m playwright install --with-deps chromium
           sudo apt-get update -qq
           sudo apt-get install -y fonts-noto-cjk
-      - name: Validate actual pages and original images
+      - name: Validate all three articles and actual original images
         run: |
           python - <<'PY'
           import pathlib,json,hashlib,threading,http.server,functools,traceback
           from urllib.parse import unquote
           from playwright.sync_api import sync_playwright
           root=pathlib.Path('/tmp/sept16-evidence');shots=root/'screenshots';shots.mkdir()
-          manifest=json.loads(pathlib.Path('docs/reviews/2026-09-16/assets.json').read_text())
+          manifest=json.loads(pathlib.Path('docs/reviews/2026-09-16/assets.json').read_text());assert len(manifest)==10
           for f in manifest:
               b=pathlib.Path('dist/figures',f['asset']).read_bytes()
               assert hashlib.sha256(b).hexdigest()==f['sha256'],f['asset']
@@ -50,7 +67,8 @@ jobs:
               def log_message(self,*args):pass
           server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(Quiet,directory='dist'))
           threading.Thread(target=server.serve_forever,daemon=True).start()
-          slugs=['eas-schizophrenia-cnv','ifna-clonal-hematopoiesis']
+          slugs=['eas-schizophrenia-cnv','ifna-clonal-hematopoiesis','celldot-ot-decontamination']
+          expected_figures=dict(zip(slugs,[3,4,3]))
           routes=['/','/daily/2026-09-16/']+['/papers/'+s+'/' for s in slugs]+['/archive/','/topics/','/resources/','/search/','/daily/2026-09-15/','/papers/splendid-continuous-ancestry/']
           errors=[];rows=[];searches=[];math={};figures={};js=[]
           with sync_playwright() as p:
@@ -73,16 +91,16 @@ jobs:
                               ids=page.locator('.paper-list .paper-card').evaluate_all('(xs)=>xs.map(x=>x.dataset.paperId)')
                               assert ids==slugs,ids
                           if route in ['/papers/'+s+'/' for s in slugs]:
+                              slug=route.strip('/').split('/')[-1]
                               math[route]=page.locator('.review-article .katex').count()
                               figures[route]=page.locator('.inline-figure').count()
                               assert math[route]>5,'missing math'
-                              assert figures[route]==(3 if slugs[0] in route else 4),'figure count'
+                              assert figures[route]==expected_figures[slug],'figure count'
                               for href in page.locator('.mobile-toc a').evaluate_all('(xs)=>xs.map(x=>x.getAttribute("href"))'):
                                   assert page.evaluate('(id)=>Boolean(document.getElementById(id))',unquote(href[1:])),href
                               if width<=768 and page.locator('.mobile-toc summary').is_visible():
                                   page.locator('.mobile-toc summary').click()
-                                  link=page.locator('.mobile-toc a').first
-                                  target=link.get_attribute('href')
+                                  link=page.locator('.mobile-toc a').first;target=link.get_attribute('href')
                                   link.click();page.wait_for_timeout(150)
                                   assert unquote(page.url.split('#')[-1])==unquote(target[1:])
                                   page.locator('.mobile-toc').evaluate('(x)=>x.open=false')
@@ -103,7 +121,7 @@ jobs:
                       except Exception as e:
                           errors.append({'route':route,'width':width,'error':str(e),'trace':traceback.format_exc()})
                           page.screenshot(path=str(shots/f'ERROR-{width}-{name}.png'))
-                  for query,target in [('NGENE','eas-schizophrenia-cnv'),('RFX3','ifna-clonal-hematopoiesis'),('51/51','eas-schizophrenia-cnv')]:
+                  for query,target in [('NGENE',slugs[0]),('RFX3',slugs[1]),('51/51',slugs[0]),('CellDot',slugs[2])]:
                       try:
                           page.goto('http://127.0.0.1:8765/search/',wait_until='networkidle')
                           page.locator('#search-query').fill(query)
@@ -116,7 +134,7 @@ jobs:
           result={'routes':rows,'searches':searches,'math':math,'figures':figures,'errors':errors,'javascriptErrors':js,'imageSHA256Verified':len(manifest)}
           (root/'browser.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
           print(json.dumps({k:v for k,v in result.items() if k not in ['routes','searches']},ensure_ascii=False,indent=2))
-          assert len(rows)==50 and len(searches)==15 and not errors and not js,'Browser checks failed; see evidence'
+          assert len(rows)==55 and len(searches)==20 and not errors and not js,'Browser checks failed; see evidence'
           PY
       - name: Export source for final integrity check
         if: always()
