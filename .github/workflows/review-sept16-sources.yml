@@ -1,0 +1,77 @@
+name: September 16 primary source review
+on:
+  push:
+    branches: [research-2026-09-16]
+    paths: [.github/workflows/review-sept16-sources.yml]
+permissions:
+  contents: write
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet requests beautifulsoup4 pillow
+      - name: Fetch primary full text, supplements and original figure bytes
+        run: |
+          python - <<'PY'
+          import requests, pathlib, json, hashlib, io
+          from bs4 import BeautifulSoup
+          from PIL import Image
+          from urllib.parse import urljoin, urlparse
+          root=pathlib.Path('/tmp/sept16-review');root.mkdir()
+          dest=pathlib.Path('public/figures');dest.mkdir(exist_ok=True)
+          records=[];sources=[]
+          session=requests.Session()
+          specs=[('s41588-026-02732-6','eas-schizophrenia-cnv',[2,3,4]),('s41588-026-02751-3','ifna-clonal-hematopoiesis',[1,4,6,7])]
+          for aid,slug,figs in specs:
+              base='https://www.nature.com/articles/'+aid
+              r=session.get(base,timeout=90);r.raise_for_status();(root/(slug+'.html')).write_bytes(r.content)
+              soup=BeautifulSoup(r.content,'html.parser')
+              try:
+                  r=session.get(base+'.pdf',timeout=90);r.raise_for_status();assert r.content.startswith(b'%PDF');(root/(slug+'.pdf')).write_bytes(r.content)
+                  sources.append({'file':slug+'.pdf','url':base+'.pdf','sha256':hashlib.sha256(r.content).hexdigest()})
+              except Exception as e:sources.append({'url':base+'.pdf','error':str(e)})
+              links={urljoin(base,a['href']) for a in soup.find_all('a',href=True) if 'MOESM' in a['href'] and ('ESM.pdf' in a['href'] or 'ESM.xlsx' in a['href'])}
+              for u in sorted(links):
+                  name=slug+'-'+pathlib.Path(urlparse(u).path).name
+                  try:
+                      r=session.get(u,timeout=90);r.raise_for_status();(root/name).write_bytes(r.content)
+                      sources.append({'file':name,'url':u,'sha256':hashlib.sha256(r.content).hexdigest()})
+                  except Exception as e:sources.append({'url':u,'error':str(e)})
+              allurls=[]
+              for im in soup.find_all('img'):
+                  for attr in ['src','data-src']:
+                      if im.get(attr): allurls.append(urljoin(base,im[attr]))
+              for no in figs:
+                  matches=[u for u in allurls if f'_Fig{no}_HTML.' in u]
+                  if not matches:raise RuntimeError(f'Missing original Figure {no} in {aid}')
+                  u=matches[0]
+                  import re
+                  u=re.sub(r'/(?:lw|m)\d+/','/full/',u)
+                  r=session.get(u,timeout=90);r.raise_for_status();b=r.content
+                  im=Image.open(io.BytesIO(b));im.verify()
+                  ext='png' if b.startswith(b'\x89PNG') else 'jpg'
+                  name=f'{slug}-fig{no}.{ext}';(dest/name).write_bytes(b);(root/name).write_bytes(b)
+                  records.append({'asset':name,'url':u,'sourceUrl':base+f'/figures/{no}','sha256':hashlib.sha256(b).hexdigest(),'operation':'unchanged original publisher image bytes','license':'CC BY 4.0'})
+          (root/'sources.json').write_text(json.dumps(sources,indent=2)+'\n')
+          (root/'assets.json').write_text(json.dumps(records,indent=2)+'\n')
+          audit=pathlib.Path('docs/reviews/2026-09-16');audit.mkdir(parents=True,exist_ok=True)
+          (audit/'assets.json').write_text(json.dumps(records,indent=2)+'\n')
+          PY
+      - name: Store only licensed figures on review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/figures/eas-schizophrenia-cnv-fig* public/figures/ifna-clonal-hematopoiesis-fig* docs/reviews/2026-09-16/assets.json
+          git commit -m 'assets: add seven original figures for September 16 reviews'
+          git push origin HEAD:research-2026-09-16
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sept16-primary-sources
+          path: /tmp/sept16-review
+          retention-days: 2
