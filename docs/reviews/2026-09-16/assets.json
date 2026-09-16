@@ -1,0 +1,58 @@
+[
+  {
+    "asset": "eas-schizophrenia-cnv-fig2.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02732-6/MediaObjects/41588_2026_2732_Fig2_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02732-6/figures/2",
+    "sha256": "4ad25a3de7e6018acaf78a78829387d605b21baa29a745ac1fda214ef7488803",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "eas-schizophrenia-cnv-fig3.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02732-6/MediaObjects/41588_2026_2732_Fig3_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02732-6/figures/3",
+    "sha256": "46a7af65783178d3bd0a483564237eca57159eae469bd0bb1608264718ef5282",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "eas-schizophrenia-cnv-fig4.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02732-6/MediaObjects/41588_2026_2732_Fig4_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02732-6/figures/4",
+    "sha256": "41cb1c87015153dce45345c19e74c798cca844f5872199a8374767662af04235",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "ifna-clonal-hematopoiesis-fig1.png",
+    "url": "https://media.springernature.com/w215h120/springer-static/image/art%3A10.1038%2Fs41467-022-35318-x/MediaObjects/41467_2022_35318_Fig1_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02751-3/figures/1",
+    "sha256": "b94cbc5ac378c5a7b38b70a7a53a409f28c4c6a28ddb44e2dc0989710c999b69",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "ifna-clonal-hematopoiesis-fig4.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02751-3/MediaObjects/41588_2026_2751_Fig4_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02751-3/figures/4",
+    "sha256": "73f42c9a694e741a62e3ddf9911fa9ebfe745c6740db0e4e47f8a5d163e00f8d",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "ifna-clonal-hematopoiesis-fig6.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02751-3/MediaObjects/41588_2026_2751_Fig6_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02751-3/figures/6",
+    "sha256": "064759b7cc68e129f607f88d7312145642b054b03524117dd94fcd823598c414",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  },
+  {
+    "asset": "ifna-clonal-hematopoiesis-fig7.png",
+    "url": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41588-026-02751-3/MediaObjects/41588_2026_2751_Fig7_HTML.png",
+    "sourceUrl": "https://www.nature.com/articles/s41588-026-02751-3/figures/7",
+    "sha256": "5196388606a6cb089df203626fb28f28d14bb6aa58b1cffd3f716275768b1bc4",
+    "operation": "unchanged original publisher image bytes",
+    "license": "CC BY 4.0"
+  }
+]
