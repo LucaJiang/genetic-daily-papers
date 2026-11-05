@@ -1,6 +1,6 @@
 import { catalog, isoDate } from './catalog';
 import { topicBySlug } from '../data/topics';
-import qtlResources from '../data/qtl-resources.json';
+import qtlResources from '../data/qtl-catalog.mjs';
 import { qtlGroups } from '../data/qtl-groups';
 import { qtlAncestries } from '../data/qtl-ancestries';
 import type { SearchDocument } from './search';

@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import ts from 'typescript';
+import resources, { resourceUpdateDate } from '../src/data/qtl-catalog.mjs';
 
 // Transpile the dependency-free search engine using the existing TypeScript dependency.
 // This keeps the checks compatible with the site's Node 20/22 build environments.
@@ -17,7 +18,18 @@ const serialized = await readFile('dist/search-index.json', 'utf8');
 const { version, documents } = JSON.parse(serialized);
 assert.equal(version, 1);
 assert.equal(new Set(documents.map(document => document.id)).size, documents.length, 'Duplicate search records');
-const resources = JSON.parse(await readFile('src/data/qtl-resources.json', 'utf8'));
+const historicalResources = JSON.parse(await readFile('src/data/qtl-resources.json', 'utf8'));
+const update = JSON.parse(await readFile('src/data/qtl-resource-updates-2026-11-06.json', 'utf8'));
+assert.equal(resources.length, historicalResources.length + update.additions.length, 'Resource update must preserve catalog size');
+const patchedIds = new Set(update.patches.map(patch => patch.id));
+for (const original of historicalResources) {
+  const current = resources.find(resource => resource.id === original.id);
+  assert.ok(current, `Historical resource removed: ${original.id}`);
+  if (!patchedIds.has(original.id)) assert.deepEqual(current, original, `Unrelated resource changed: ${original.id}`);
+}
+const resourcePage = await readFile('dist/resources/index.html', 'utf8');
+assert.ok(resourcePage.includes(`datetime="${resourceUpdateDate}"`), 'Resource update date must render');
+assert.equal((resourcePage.match(/class="qtl-resource"/g) ?? []).length, resources.length, 'Every resource must render once');
 assert.deepEqual(documents.filter(d => d.id.startsWith('resource:')).map(d => d.id).sort(),
   resources.map(resource => `resource:${resource.id}`).sort(), 'Every QTL resource must be searchable');
 
@@ -49,6 +61,11 @@ assert.equal(search('eQTL Catalogue')[0]?.id, 'resource:eqtl-catalogue', 'Named 
 for (const id of ['resource:tenk10k-phase1-eqtl', 'resource:tenk10k-phase1-caqtl']) {
   assert.ok(search('TenK10K').some(document => document.id === id), `Missing ${id}`);
 }
+for (const [query, id] of [['scMRdb', 'scmrdb-2026'], ['scTraitReg', 'sctraitreg-2026'],
+  ['PathoEvo', 'pathoevo-2026'], ['STRAND', 'strand-spatial-2026'], ['PsychAD', 'psychad-sneqtl-2026'],
+  ['tandem repeat', 'tenk10k-tandem-repeat-eqtl']]) {
+  assert.ok(search(query).some(document => document.id === `resource:${id}`), `New resource is not searchable: ${id}`);
+}
 assert.ok(search('BBJ').some(document => document.type === 'resource'));
 assert.ok(search('BLNK').some(document => document.id === 'paper:colocboost-multiomics'), 'Paper body must be searchable');
 assert.match(searchSnippet(search('BLNK').find(document => document.id === 'paper:colocboost-multiomics'), queryTokens('BLNK')), /BLNK/);
@@ -69,5 +86,6 @@ assert.deepEqual(overlapping, [{ text: 'eQTL Catalogue', matched: true }], 'Merg
 assert.ok(!/\.innerHTML\s*=|insertAdjacentHTML/.test(await readFile('src/pages/search.astro', 'utf8')),
   'Render queries and search snippets as text');
 
+console.log(`[resources] ${resources.length} entries; ${update.additions.length} additions, ${update.patches.length} patches; historical records preserved`);
 console.log(`[search] ${documents.length} records: published coverage, resource anchors, ranking, Chinese/English queries, highlights and index version checked`);
 console.log(`[search] index ${Math.round(Buffer.byteLength(serialized) / 1024)} KiB; gzip ${Math.round(gzipSync(serialized).length / 1024)} KiB`);

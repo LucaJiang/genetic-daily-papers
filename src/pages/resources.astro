@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import QtlResource from '../components/QtlResource.astro';
 import QtlDirectory from '../components/QtlDirectory.astro';
-import qtlResources from '../data/qtl-resources.json';
+import qtlResources, { resourceUpdateDate } from '../data/qtl-catalog.mjs';
 import { qtlGroups } from '../data/qtl-groups';
 import { qtlAncestries } from '../data/qtl-ancestries';
 import ResourceBrief from '../components/ResourceBrief.astro';
@@ -26,7 +26,7 @@ const ancestries = qtlAncestries.map(ancestry => ({
 <Base title="QTL 与单细胞数据资源 · Genetic Daily Papers" description="按祖源、组织和实验类型浏览 single-cell、single-nucleus 与 bulk QTL 资源及单细胞参考图谱，比较 donor 数、细胞数、测序方法、深度、数据版本及访问条件。">
   <header class="page-heading qtl-head" id="resources-top">
     <div class="eyebrow">QTL & SINGLE-CELL RESOURCES</div>
-    <div class="qtl-heading-row"><h1>QTL 与单细胞数据资源</h1><span class="qtl-updated">更新 <time datetime="2026-09-10">2026-09-10</time></span></div>
+    <div class="qtl-heading-row"><h1>QTL 与单细胞数据资源</h1><span class="qtl-updated">更新 <time datetime={resourceUpdateDate}>{resourceUpdateDate}</time></span></div>
     <p>{qtlResources.length} 项资源 · {groups.length} 个分类 · 论文、数据入口与方法参数</p>
   </header>
   <section class="ancestry-filter" hidden aria-labelledby="ancestry-heading">
