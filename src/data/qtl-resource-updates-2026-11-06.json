@@ -1,0 +1,211 @@
+{
+  "checkedAt": "2026-11-06",
+  "additions": [
+    {
+      "id": "scmrdb-2026",
+      "name": "scMRdb — 细胞类型分辨的 MR 与共定位结果库",
+      "navLabel": "scMRdb",
+      "version": "NAR 在线发表 2026-10-29；2026-11-06 核验；首次数据开放日未独立确认",
+      "category": "single-cell genetic integration",
+      "group": "directories",
+      "tissue": "11 类组织 / 细胞体系，110 类标准化细胞类型",
+      "qtlTypes": ["cis-eQTL（整合）"],
+      "resourceTypes": ["sc-eQTL × GWAS", "MR", "coloc.abf"],
+      "summary": "整合单细胞 eQTL 与 GWAS，在统一流程下提供 MR、方向性检验及显著关联的共定位结果。适合检索候选基因与细胞类型，并回到原始 QTL 研究核查证据。",
+      "sampleSize": "24 个来源形成 585 个细胞类型层面的 sc-eQTL 数据集，对接 5,206 套 GWAS。585 是分析数据集数；独立 donor 总数未核实，同一研究内的细胞类型共享供体。",
+      "cellsPerDonor": "需回到各来源队列查询；整合结果库没有统一的 cells/donor，不能由 585 个数据集推算。",
+      "assay": "复用公开 cis-eQTL 和 GWAS 汇总统计；统一等位基因、工具变量选择、MR 与 Steiger 检验。共定位使用 coloc.abf。原始单细胞测序平台依来源而异。",
+      "depth": "无统一测序深度；各来源的 RNA 测量、细胞捕获及 reads/cell 需分别核实。",
+      "ancestry": "sc-eQTL 数据集：欧洲祖源 468、东亚祖源 117；这些是数据集数量，不能解释为人数。",
+      "ancestryTags": ["MULTI", "EUR", "EAS"],
+      "access": "论文提供 NGDC 门户，支持结果检索、可视化和下载。本轮核验了论文中的入口与方法说明，未成功打开交互门户或逐一下载结果；原始表达与基因型仍按来源队列的权限获取。",
+      "limitations": "当前收录 cis-eQTL。coloc.abf 使用每性状每区域至多一个因果变异的假设；多信号区域需进一步分析。MR 与共定位仍受 LD、水平多效性及样本重叠影响，数据库关联和药物靶点注释不构成功能实验验证。",
+      "sources": [
+        {"label": "NAR 正式论文：数据构成、方法与访问说明", "url": "https://doi.org/10.1093/nar/gkag1063"},
+        {"label": "官方结果数据库入口（本轮未完成交互访问验证）", "url": "https://ngdc.cncb.ac.cn/scmrdb"}
+      ],
+      "fieldSources": {"sampleSize": [0], "assay": [0], "ancestry": [0], "access": [0, 1]},
+      "dataUrl": "https://ngdc.cncb.ac.cn/scmrdb",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Publisher-indexed abstract, methods, ancestry counts and limitations inspected. Interactive portal, supplemental workbook and result downloads were not successfully validated. Publication date is not asserted as first data release."}
+    },
+    {
+      "id": "sctraitreg-2026",
+      "name": "scTraitReg — GWAS 与单细胞 multiome 调控网络",
+      "navLabel": "scTraitReg",
+      "version": "NAR 在线发表 2026-10-22；2026-11-06 核验；首次数据开放日未独立确认",
+      "category": "single-cell multiomic integration",
+      "group": "directories",
+      "tissue": "34 种组织、252 类细胞；人类同细胞 RNA–ATAC 配对数据",
+      "qtlTypes": [],
+      "resourceTypes": ["paired RNA–ATAC", "GWAS annotation", "TF eRegulons"],
+      "summary": "将 GWAS 与同细胞 RNA / 染色质可及性联系起来，提供 TF、候选靶基因和顺式调控区域组成的 eRegulon 网络及评分，可用于筛选后续功能验证对象。",
+      "sampleSize": "111 个 multiome 数据集、2,081,538 个细胞，对接 655 套 GWAS。数据集并非独立供体；去重后的 donor 总数尚未核实。",
+      "cellsPerDonor": "逐数据集 donor 构成与细胞分布待查原始元数据；不将 111 作为 donor 分母。",
+      "assay": "同一细胞配对的 scRNA-seq 与 scATAC-seq；计算细胞类型特异性、遗传相关性与性状相关 regulon 分数。推断网络和评分属于派生分析结果。",
+      "depth": "平台与文库依原研究而异；本轮没有取得统一或逐文库 reads/cell 深度表。",
+      "ancestry": "GWAS 中 624/655 为欧洲祖源，另含多个其他祖源来源；该比例描述 GWAS，不能用于推断单细胞供体的祖源组成。",
+      "ancestryTags": ["MULTI", "NR"],
+      "access": "论文称官方门户无需注册并提供整理后的数据下载，包括网络、评分与基因集结果。已核对论文提供的地址，门户在本轮未成功打开；完整原始表达、ATAC 与供体元数据覆盖范围尚未逐文件检查。",
+      "limitations": "网络和遗传相关评分不能直接作为 eQTL 效应、fine-mapping PIP 或因果验证。跨队列使用时需检查单细胞来源与评估数据的重叠、GWAS 祖源和 LD 参考匹配。",
+      "sources": [
+        {"label": "NAR 正式论文：配对设计、规模、祖源与数据说明", "url": "https://doi.org/10.1093/nar/gkag1017"},
+        {"label": "官方网络与结果入口（本轮未完成交互访问验证）", "url": "https://www.sctraitreg.bio/"}
+      ],
+      "fieldSources": {"sampleSize": [0], "assay": [0], "ancestry": [0], "access": [0, 1]},
+      "dataUrl": "https://www.sctraitreg.bio/",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Publisher-indexed abstract, GWAS ancestry and data availability inspected. No claim of a complete primary-PDF or supplementary-table review; portal interaction and full downloads were unavailable."}
+    },
+    {
+      "id": "pathoevo-2026",
+      "name": "PathoEvo — 疾病进展单细胞 / 单核表达数据库",
+      "navLabel": "PathoEvo",
+      "version": "NAR 在线发表 2026-10-31；2026-11-06 核验；首次数据开放日未独立确认",
+      "category": "single-cell reference atlas",
+      "group": "sc-reference",
+      "tissue": "多组织疾病数据；18 种疾病，27 套疾病进展 / 分期框架",
+      "qtlTypes": [],
+      "resourceTypes": ["scRNA-seq", "snRNA-seq", "disease progression"],
+      "summary": "将分散的疾病单细胞数据按临床或病理分期整理，支持比较细胞组成、样本层面的表达变化与基因程序。适合挑选有阶段标签的真实数据进行方法评估。",
+      "sampleSize": "59 个数据集、981 个样本，合计 7,452,971 个细胞或细胞核。独立 donor 数未核实；样本数与供体数分开记录。",
+      "cellsPerDonor": "逐供体分布未核实；不能用 7,452,971 ÷ 981 解释为每 donor 细胞数。",
+      "assay": "汇集 scRNA-seq 与 snRNA-seq，统一处理、细胞注释与阶段标签。文库平台和测量差异需按原始研究检查。",
+      "depth": "没有经本轮核实的统一 reads/cell 或逐文库实测深度；细胞数与基因检出数均不代替测序深度。",
+      "ancestry": "跨研究汇集；逐供体遗传祖源未核实，不根据疾病、医院或招募地区推断祖源。",
+      "ancestryTags": ["MULTI", "NR"],
+      "access": "论文说明门户无需登录，并提供处理后的 h5ad 数据及分期相关分析结果。入口已由原文核对；本轮未成功打开门户、下载 h5ad 或核查逐样本元数据。",
+      "limitations": "分期组织与跨样本排序可用于形成研究假设；横断面样本的分期差异不能直接解释为同一人的纵向变化。合并分析需控制研究、组织、平台、疾病状态及 donor 层级，逐细胞检验需处理供体内相关性。该条目不标记为已发布 QTL 队列。",
+      "sources": [
+        {"label": "NAR 正式论文：数据规模、进展框架与 h5ad 下载说明", "url": "https://doi.org/10.1093/nar/gkag1075"},
+        {"label": "官方数据入口（本轮未完成交互访问验证）", "url": "https://biomedlab-ai.com/pathoevo/"}
+      ],
+      "fieldSources": {"sampleSize": [0], "assay": [0], "access": [0, 1]},
+      "dataUrl": "https://biomedlab-ai.com/pathoevo/",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Publisher-indexed abstract, database-content and data-access descriptions inspected. Donor-level metadata, supplemental tables and h5ad downloads were not inspected. No claim that publication is the first release date."}
+    },
+    {
+      "id": "strand-spatial-2026",
+      "name": "STRAND — 亚细胞空间转录组与 RNA 定位数据库",
+      "navLabel": "STRAND · 空间 RNA",
+      "version": "NAR 在线发表 2026-10-30；数据仓库早于正式论文；2026-11-06 核验",
+      "category": "spatial single-cell reference",
+      "group": "sc-reference",
+      "tissue": "人类与小鼠，17 类组织；跨平台分子坐标与细胞分割数据",
+      "qtlTypes": [],
+      "resourceTypes": ["spatial transcriptomics", "RNA localization", "human + mouse"],
+      "summary": "统一空间转录本坐标、细胞边界与定位分析结果，支持研究 RNA 亚细胞分布及空间方法评估。使用前应按物种、平台、探针面板与切片选择数据。",
+      "sampleSize": "35 个数据集，论文汇总约 1,480 万个细胞及约 49 亿条 RNA 分子坐标。细胞和分子均不作为独立 donor 数；去重的生物学样本 / 个体总数未核实。",
+      "cellsPerDonor": "未取得统一的逐 donor 分布。原数据包含切片和样本层级，需先建立样本—供体对应关系。",
+      "assay": "覆盖 Xenium、MERFISH、CosMx 等空间平台。官方仓库提供标准化 .pkl；同名细胞、坐标轴和探针覆盖需按各数据集说明处理。",
+      "depth": "此处主要测量空间分子坐标；reads/cell 不适合作为跨平台统一深度。探针数、检测分子数与测序 reads 的含义不同。",
+      "ancestry": "混合人类与小鼠数据；人类遗传祖源未核实，小鼠不适用人类祖源标签。",
+      "ancestryTags": ["MULTI", "NR"],
+      "access": "论文及作者 Hugging Face 数据卡列出处理数据下载和原始来源；提供分析代码。整理数据标注 CC BY 4.0，原始来源条款仍需遵守。本轮核验了可检索的数据卡，未下载大型数据或逐一核对文件。",
+      "limitations": "RNA 空间共定位与遗传学共定位是不同分析对象。细胞分割、平台探针覆盖和二维投影会影响定位比较；跨切片测试应避免把同一来源的细胞随机分到训练与测试集。",
+      "sources": [
+        {"label": "NAR 正式论文：范围、规模与方法", "url": "https://doi.org/10.1093/nar/gkag1054"},
+        {"label": "作者处理数据、文件说明与原始来源", "url": "https://huggingface.co/datasets/Rooneyxu/STRAND"},
+        {"label": "官方浏览入口", "url": "https://strand.phasep.pro/"},
+        {"label": "作者分析代码", "url": "https://github.com/TingtingLiGroup/STRAND"}
+      ],
+      "fieldSources": {"sampleSize": [0], "assay": [0, 1], "access": [0, 1, 3]},
+      "dataUrl": "https://huggingface.co/datasets/Rooneyxu/STRAND",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Publisher-indexed article passages and official Hugging Face dataset-card excerpts inspected. Repository data predate the article; the precise first-release date was not established. No binary dataset download or interactive portal validation."}
+    },
+    {
+      "id": "psychad-sneqtl-2026",
+      "name": "PsychAD — 多祖源脑单核遗传调控图谱",
+      "navLabel": "PsychAD · sn-eQTL",
+      "version": "Nature Genetics 正式发表 2026-09-23；既有预印本资源的正式版；2026-11-06 补录",
+      "category": "single-nucleus",
+      "group": "sc-brain",
+      "tissue": "人类死后背外侧前额叶皮层（DLPFC）；8 个主要细胞类别与 27 个亚类",
+      "qtlTypes": ["cis-eQTL", "trans-eQTL", "dynamic eQTL"],
+      "summary": "大样本、多祖源的脑细胞类型遗传调控资源，可用于细胞类型 eQTL、fine-mapping 和疾病共定位。论文分析涵盖 14,258 个有遗传调控证据的基因。",
+      "sampleSize": "1,384 名同时通过基因型与 snRNA 质控的 donor，约 560 万个细胞核。逐细胞类别和亚类有效 N 见原文 Supplementary Table 4，本轮未逐项取得。",
+      "cellsPerDonor": "约 4,000 nuclei/donor 为按取整总数计算的粗略均值；逐供体及细胞亚类的分布未核实。稀有细胞亚类的有效 N 小于总体 N。",
+      "assay": "snRNA-seq 配合 Infinium Psych Chip 基因分型及 TOPMed 填补；cis 检验采用 TSS ±1 Mb。具体 RNA 建库版本本轮未逐队列核实。",
+      "depth": "未核实逐文库 RNA reads/nucleus 深度；不能将核数、UMI 或基因检出数作为深度。",
+      "ancestry": "1,384 人中 493 人（35.6%）为非欧洲祖源。具体非欧洲祖源分组和分组内人数未逐项核实，暂不进一步细分标签。",
+      "ancestryTags": ["MULTI", "EUR"],
+      "access": "论文将分析结果指向 Synapse syn61929918；原始及处理后个体数据通过 PsychAD / Synapse syn60084804 按相应权限申请。本轮未下载个体数据、汇总统计或检查每类文件的可访问权限。",
+      "limitations": "与 PsychAD 总图谱及部分脑资源共享来源，meta-analysis 或外部验证需先核查 donor 重叠。发育动态关联来自跨年龄供体的推断轨迹；有效样本单位和各细胞类型的检出功效需要分别处理。",
+      "sources": [
+        {"label": "Nature Genetics 正式论文与数据获取说明", "url": "https://www.nature.com/articles/s41588-026-02733-5"},
+        {"label": "论文指定分析结果入口", "url": "https://www.synapse.org/Synapse:syn61929918/wiki/629719"},
+        {"label": "PsychAD 数据与访问要求", "url": "https://www.synapse.org/Synapse:syn60084804/wiki/628473"},
+        {"label": "作者分析代码", "url": "https://github.com/DiseaseNeuroGenomics/nps_ad"}
+      ],
+      "fieldSources": {"sampleSize": [0], "assay": [0], "ancestry": [0], "access": [0, 1, 2]},
+      "dataUrl": "https://www.synapse.org/Synapse:syn61929918/wiki/629719",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Publisher and PMC indexed primary article passages inspected, including sample QC, ancestry and data availability. Supplementary Table 4 and Synapse file permissions were not checked. The 5600000/1384 ratio is approximate because the numerator is rounded."}
+    },
+    {
+      "id": "tenk10k-tandem-repeat-eqtl",
+      "name": "TenK10K — 串联重复变异单细胞 eQTL",
+      "navLabel": "TenK10K · tandem repeats",
+      "version": "Nature 正式发表 2026-10-28；既有 TenK10K 队列的 TR 调控资源；2026-11-06 补录",
+      "category": "single-cell",
+      "group": "sc-immune",
+      "tissue": "外周血免疫细胞；TenK10K Phase 1 两个来源队列",
+      "qtlTypes": ["tandem-repeat eQTL", "sc-eTR"],
+      "summary": "以串联重复（TR）长度变异研究细胞类型特异表达调控，补充 SNP / indel 为主的 QTL 结果。提供关联汇总统计与多态性 TR 目录。",
+      "sampleSize": "1,925 名个体、超过 540 万个血液细胞；分析超过 170 万个 TR 位点。复用 TenK10K Phase 1，不能与主 eQTL 条目的人数相加。",
+      "cellsPerDonor": "配套 Phase 1 表达研究报告均值 2,825 cells/donor；TR 分析逐位点、基因及细胞类型有效 N 需查实际统计文件。",
+      "assay": "WGS 进行 TR 分型，联合 scRNA-seq 并作跨队列关联整合；坐标 GRCh38，基因注释 GENCODE v44 / Ensembl 110。",
+      "depth": "沿用 Phase 1 数据；RNA reads/cell 与 TR 特异分型覆盖未在本轮单独核实。调用前应检查 TR 位点级缺失和分型质量。",
+      "ancestry": "与 TenK10K Phase 1 的欧洲祖源表达分析队列对应；逐 TR 可用样本可能因分型和质控而变化。",
+      "ancestryTags": ["EUR"],
+      "access": "原文提供 Zenodo 15009519 的汇总关联与变异目录，以及 TR Explorer 查询。WGS / 基因型为 EGA EGAS50000001654，scRNA 为 EGAS50000001653，个体数据按非商业研究受控访问。已核对发表文章的数据声明，未下载归档文件。",
+      "limitations": "属于同一队列的新增变异类型分析。与 SNP / indel 做联合解释时需核对等位基因编码、重复长度单位、基因组坐标及 LD；不能直接把 TR 效应单位当作 SNP 每等位基因效应。",
+      "sources": [
+        {"label": "Nature 正式论文：TR 调控与数据声明", "url": "https://www.nature.com/articles/s41586-026-10438-2"},
+        {"label": "公开汇总关联与多态性变异目录", "url": "https://doi.org/10.5281/zenodo.15009519"},
+        {"label": "TR Explorer", "url": "https://trexplorer.broadinstitute.org/"},
+        {"label": "配套 TenK10K 表达研究", "url": "https://www.nature.com/articles/s41586-026-10721-2"},
+        {"label": "WGS 与 TR 基因型受控归档", "url": "https://ega-archive.org/studies/EGAS50000001654"},
+        {"label": "单细胞表达受控归档", "url": "https://ega-archive.org/studies/EGAS50000001653"}
+      ],
+      "fieldSources": {"sampleSize": [0], "cellsPerDonor": [3], "assay": [0], "ancestry": [3], "access": [0, 1, 2, 4, 5]},
+      "dataUrl": "https://doi.org/10.5281/zenodo.15009519",
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Indexed Nature abstract, publication date, data availability and code availability inspected. No file-level validation of the Zenodo archive or controlled EGA data. This is a new catalog entry for an overlapping cohort, not a new set of donors."}
+    }
+  ],
+  "patches": [
+    {
+      "id": "tenk10k-phase1-eqtl",
+      "set": {
+        "version": "Nature 正式发表 2026-10-28；保留 Zenodo v2（2026-01-30）数据入口；2026-11-06 更新",
+        "limitations": "正式论文已发表；论文发表时间与现有数据归档日期分别记录。与 OneK1K、TenK10K caQTL / TR 研究有 donor 重叠，不能相加或当作独立验证集。保留既有 v2 下载入口，本轮未逐文件确认正式论文对应的归档增量；使用时固定 cis 窗口、分析模型及不收敛重跑版本。"
+      },
+      "appendSources": [
+        {"label": "Nature 正式版：Rare and common genetic variants shape single-cell immune gene expression", "url": "https://www.nature.com/articles/s41586-026-10721-2"}
+      ],
+      "appendDetails": [
+        {
+          "title": "2026-11 正式发表更新",
+          "paragraphs": ["2026-10-28 正式发表于 Nature。正式版仍以约 540 万个细胞、1,925 名匹配 WGS 的欧洲祖源个体、28 类免疫细胞为核心分析规模。Phase 1 总体 2,103 人与进入 eQTL 分析的 1,925 人继续分开记录。", "本次增加正式论文来源并保留已核验的历史数据入口、测序信息及 EGA 权限说明。正式发表不代表新增了另一批独立供体；本轮没有重新下载完整统计归档或逐项对比预印本和正式版的所有结果。"],
+          "sourceIndices": [6]
+        }
+      ],
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Formal Nature publication date and indexed sample descriptions verified. Existing detailed assay/archive provenance is retained from September. Complete final PDF, supplements and archive-version differences were not exhaustively reviewed."}
+    },
+    {
+      "id": "tenk10k-phase1-caqtl",
+      "set": {
+        "version": "Nature 正式发表 2026-10-28；保留 2026-06-27 等位基因修订提醒；2026-11-06 更新",
+        "limitations": "主要发现数据为 donor 层面的 scATAC / scRNA 匹配；同细胞 RNA–ATAC 配对来自 multiome 子集。总体生成数据的 1,042 人与发现分析的 922 人需区分。保留作者 2026-06-27 caQTL–eQTL coloc 等位基因翻转修订提醒，使用该日期后的结果；本轮未重新下载全部统计文件。"
+      },
+      "appendSources": [
+        {"label": "Nature 正式版：Genetic variants shape single-cell chromatin accessibility and disease risk", "url": "https://www.nature.com/articles/s41586-026-11173-4"}
+      ],
+      "appendDetails": [
+        {
+          "title": "2026-11 正式发表与样本口径",
+          "paragraphs": ["2026-10-28 正式发表于 Nature。正式版区分总体 1,042 名供体与质控后的主分析：922 名 TOB 供体、3,472,552 个细胞核；对应平均每人 3,766 个细胞核。保留既有发现队列与独立 multiome 子集的分层记录。", "正式论文继续提供作者 Hugging Face 汇总结果入口。该入口涵盖 caQTL、fine-mapping、共定位及模型输出；基因型和原始测序数据仍按 EGA 规则申请。本轮核对了论文索引中的方法和数据说明，未重新下载全量文件。"],
+          "sourceIndices": [6, 2, 4, 5]
+        }
+      ],
+      "evidence": {"checkedAt": "2026-11-06", "primaryAccess": "Indexed final Nature QC and data availability confirmed: 1042 generated donors versus 922/3472552 main-analysis donors/nuclei. Historical assay, access and June allele-flip provenance retained; complete final supplements and binary downloads not revalidated."}
+    }
+  ]
+}
